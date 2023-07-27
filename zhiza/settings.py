@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-2oiu7*m__18g5kr9b+h6k805%_$r_vj9dcfs!7tx#a(q58fr(w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -43,9 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'customer_request',
-    'shop',
     'feedback',
     'customers',
+    'organizations',
+    'integrations',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -76,8 +78,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'zhiza.wsgi.application'
-
+# WSGI_APPLICATION = 'zhiza.wsgi.application'
+ASGI_APPLICATION = 'zhiza.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -132,3 +134,13 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)],
+        },
+    },
+}

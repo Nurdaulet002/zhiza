@@ -1,0 +1,15 @@
+{% load request_tags %}
+{% for request in requests %}
+
+<button class="sent-request-button  {% get_customer_request_status_color request.status %}"
+        style="width:400px; height:400px; font-size:180px; color:white; text-align:center; "
+        data-phone_number="{{request.customer.phone_number}}" data-request_id="{{request.id}}">
+    {{request.card_number}}
+</button>
+
+{% endfor %}
+
+
+
+
+

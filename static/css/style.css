@@ -1,0 +1,11 @@
+.waiting-status-color{
+    background-color: #1bc068;
+}
+
+.sent-status-color{
+    background-color: darkgrey;
+}
+
+.d-none{
+    display:none;
+}

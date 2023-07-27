@@ -1,0 +1,69 @@
+{% extends 'customer_request/base.html' %}
+{% load request_tags %}
+{% load static %}
+{% block title %} Zhiza {% endblock %}
+
+{% block content %}
+<input type="search" id="search-input">
+<div id="customer-request-list-content">
+    <div id="card-list" >
+        {% for card in cards %}
+            <button class="{% get_actual_card_color card branch %} sent-request-button"
+                    style="width:400px; height:400px; font-size:180px; color:white; text-align:center; padding: 15px;"
+                    data-id="{{card}}" >{{card}}
+            </button>
+        {% endfor %}
+    </div>
+</div>
+<div id="branch-id">{{branch}}</div>
+{% endblock %}
+
+{% block domready %}
+var branch_id = document.getElementById('branch-id').textContent;
+const url = 'wss://' + window.location.host + '/ws/whatsapp/' + branch_id + '/branch/'
+const whatsappSocket = new WebSocket(url)
+
+whatsappSocket.onmessage = function(event) {
+  const data = JSON.parse(event.data);
+  var card_number = data.card_number;
+  var card = document.querySelector('#card-list [data-id="' + card_number + '"]');
+  card.style.background = "#1bc068";
+}
+
+whatsappSocket.onclose = function(event) {
+    console.error('Whatsapp socket closed unexpectedly')
+}
+
+
+$(document).on('click', '.sent-request-button', function(){
+    var card_number = $(this).data('id');
+    $.ajax({
+      url: '{% url 'customer_request:send_message' %}',
+      type: 'POST',
+      data: {
+        'card_number': card_number,
+        'csrfmiddlewaretoken': '{{ csrf_token }}'
+      },
+      success: function(data) {
+        var card = document.querySelector('#card-list [data-id="' + card_number + '"]');
+        card.style.background = "darkgrey";
+      }
+    });
+});
+
+$(document).on('input', '#search-input', function(){
+    const searchValue = $(this).val().toLowerCase();
+    const cards = $('#card-list button');
+    cards.each(function () {
+        const cardId = $(this).data('id').toString().toLowerCase();
+        if (cardId.indexOf(searchValue) > -1) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+});
+{% endblock %}
+
+
+

@@ -13,4 +13,4 @@ class LoginView(auth_views.LoginView):
         elif self.request.user.role == 2:
             return reverse_lazy('')
         elif self.request.user.role == 3:
-            return reverse_lazy('')
+            return reverse_lazy('customer_request:employee_index')

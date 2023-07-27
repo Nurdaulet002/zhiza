@@ -1,0 +1,17 @@
+USERTYPE_OWNER = 1
+USERTYPE_MANAGER = 2
+USERTYPE_EMPLOYEE = 3
+
+USER_ROLE_CHOICES = (
+    (USERTYPE_OWNER, 'owner'),
+    (USERTYPE_MANAGER, 'manager'),
+    (USERTYPE_EMPLOYEE, 'employee'),
+)
+
+STATUS_WAITING = 1
+STATUS_SENT = 2
+
+STATUS_CHOICES = (
+        (STATUS_WAITING, 'Ожидание'),
+        (STATUS_SENT, 'Отправлен'),
+    )
