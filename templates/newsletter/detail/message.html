@@ -1,0 +1,27 @@
+{% extends 'newsletter/detail/base.html' %}
+{% load static %}
+{% load newsletter_tags %}
+{% block title %} Сообщения {% endblock %}
+
+{% block content %}
+{% if newsletter.text %}
+    <div style="background-color: #dcf8c6; padding:10px;border-radius:5px;">
+        {{newsletter.text}}
+    </div>
+    <a href="{% url 'newsletter:message_create' newsletter.id %}">РЕДАКТИРОВАТЬ СООБЩЕНИЯ</a>
+{% else %}
+<div style="background-color: #f8f4c6; padding:10px;border-radius:5px;">
+        Сообщения еще не добавлена
+    </div>
+<a href="{% url 'newsletter:message_create' newsletter.id %}">Добавить сообщения</a>
+{% endif %}
+{% endblock %}
+
+{% block domready %}
+{% endblock %}
+
+
+
+
+
+

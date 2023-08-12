@@ -1,0 +1,39 @@
+{% extends 'newsletter/detail/base.html' %}
+{% load static %}
+{% load newsletter_tags %}
+{% block title %} Сообщения {% endblock %}
+
+{% block content %}
+{% if form.errors %}
+        <div class="error-message">
+            <p>There are some errors in the form:</p>
+            <ul>
+                {% for field_errors in form.errors %}
+                    {% for error in field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+<form action="{% url 'newsletter:message_create' newsletter_id %}" method="post">
+    {% csrf_token %}
+    Текстовое сообщение:
+    {{form.text}}
+    <input type="hidden" name="active_last_month" value="{{newsletter.active_last_month}}">
+    <input type="hidden" name="active_last_week" value="{{newsletter.active_last_week}}">
+    <input type="hidden" name="active_last_day" value="{{newsletter.active_last_day}}">
+
+    <input type="submit" value="СОХРАНИТЬ">
+    <a href="{% url 'newsletter:draft_list' %}">ОТМЕНА</a>
+</form>
+{% endblock %}
+
+{% block domready %}
+{% endblock %}
+
+
+
+
+
+

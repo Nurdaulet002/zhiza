@@ -1,0 +1,27 @@
+{% extends 'newsletter/base.html' %}
+{% load static %}
+{% load newsletter_tags %}
+{% block title %} ЗАВЕРШЁННЫЕ {% endblock %}
+
+{% block content %}
+{% for newsletter in newsletters %}
+    <h3>{{newsletter.title}} </h3>
+    {% if newsletter.branches.all %}
+    Рассылка на {% get_count_customers_number newsletter.id %} телефонных номера
+    <div style="background-color: #dcf8c6; padding:10px;border-radius:5px;">
+        {{newsletter.text}}
+    </div>
+    <b>Рассылка выполнена</b>
+    <a href="{% url 'newsletter:detail_summary' newsletter.id %}">ОТКРЫТЬ</a>
+    {% endif %}
+{% endfor %}
+{% endblock %}
+
+{% block domready %}
+{% endblock %}
+
+
+
+
+
+

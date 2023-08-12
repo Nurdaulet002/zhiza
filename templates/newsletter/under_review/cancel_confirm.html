@@ -1,0 +1,13 @@
+<h1>Отмена рассылки</h1>
+Название рассылки: <b>{{newsletter.title}}</b><br>
+Сообщений на получателя: <b>{{newsletter.text}}</b><br>
+<h2>Подтвердите отмену рассылки</h2>
+<p>Рассылка будет перемещена обратно в черновики, вы сможете её редактировать и снова запустить.</p>
+<p>Все списанные и не израсходованные средства за рассылку будут возвращены на баланс Вашего аккаунта.</p>
+<form action="{% url 'newsletter:under_review_cancel_confirm' newsletter.id %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="ОТМЕНИТЬ">
+</form>
+
+<a href="{% url 'newsletter:draft_list' %}">ОТМЕНА</a>
+

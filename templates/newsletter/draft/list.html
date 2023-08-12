@@ -1,0 +1,39 @@
+{% extends 'newsletter/base.html' %}
+{% load static %}
+{% load newsletter_tags %}
+{% block title %} Черновики{% endblock %}
+
+{% block content %}
+{% for newsletter in newsletters %}
+    <h3>{{newsletter.title}} </h3>
+    {% if newsletter.branches.all %}
+    {% get_count_customers_number newsletter.id %}
+    {% else %}
+    Номера получателей не добавлены
+    {% endif %}
+    {% if newsletter.text %}
+    <div style="background-color: #dcf8c6; padding:10px;border-radius:5px;">
+        {{newsletter.text}}
+    </div>
+    <b>Рассылка готова к отправке на проверку и последующему запуску</b>
+    {% else %}
+    <b>Чтобы отправить рассылку на проверку, необходимо добавить сообщения</b>
+    {% endif %}
+
+    <a href="{% url 'newsletter:detail_summary' newsletter.id %}">ОТКРЫТЬ</a>
+    {% if newsletter.text %}
+    <a href="{% url 'newsletter:under_review_confirm' newsletter.id %}">ОТПРАВИТЬ НА ПРОВЕРКУ</a>
+    {% else %}
+    <a href="{% url 'newsletter:message_create' newsletter.id %}">ДОБАВИТЬ СООБЩЕНИЯ</a>
+    {% endif %}
+{% endfor %}
+{% endblock %}
+
+{% block domready %}
+{% endblock %}
+
+
+
+
+
+

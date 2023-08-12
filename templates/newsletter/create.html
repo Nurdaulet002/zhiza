@@ -1,0 +1,15 @@
+<h2>Новая рассылка</h2>
+
+<form action="{% url 'newsletter:create' %}" method="post">
+    {% csrf_token %}
+    <label for="">Название рассылки</label>
+    {{form.title}}
+    Оно будет отображаться в списке рассылок и его будете видеть только вы.
+    <input type="submit" value="СОЗДАТЬ">
+
+    <input type="hidden" value="False" name="active_last_month">
+    <input type="hidden" value="False" name="active_last_week">
+    <input type="hidden" value="False" name="active_last_day">
+
+    <a href="{% url 'newsletter:draft_list' %}">ОТМЕНА</a>
+</form>

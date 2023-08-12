@@ -73,7 +73,7 @@ def process_incoming_message(data):
         card_number = get_card_number_choice(card_number)
         if card_number != 'Not Card Number':
 
-            customer, created = Customer.objects.get_or_create(phone_number=phone_number)
+            customer, created = Customer.objects.get_or_create(phone_number=phone_number, branch=integration.branch)
             customer_request = get_active_customer_request(customer, integration.branch)
 
             if customer_request:
@@ -87,7 +87,7 @@ def process_incoming_message(data):
                 greenAPI.sending.sendMessage(f'{phone_number}@c.us', message)
 
         else:
-            customer, created = Customer.objects.get_or_create(phone_number=phone_number)
+            customer, created = Customer.objects.get_or_create(phone_number=phone_number, branch=integration.branch)
             customer_request = get_active_customer_request(customer, integration.branch)
             if customer_request:
                 process_customer_rating(greenAPI, customer_request, text_message_data.get('textMessage'))

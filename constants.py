@@ -15,3 +15,21 @@ STATUS_CHOICES = (
         (STATUS_WAITING, 'Ожидание'),
         (STATUS_SENT, 'Отправлен'),
     )
+
+STATUS_DRAFT = 1
+STATUS_UNDER_REVIEW = 2
+STATUS_READY = 3
+STATUS_STOPPED = 4
+STATUS_IN_PROGRESS = 5
+STATUS_COMPLETED = 6
+STATUS_DELETED = 7
+
+NEWSLETTER_STATUS = (
+    (STATUS_DRAFT, 'Черновик'),
+    (STATUS_UNDER_REVIEW, 'На проверке'),
+    (STATUS_READY, 'Готовы к запуску'),
+    (STATUS_STOPPED, 'Остановлены'),
+    (STATUS_IN_PROGRESS, 'Выполняются'),
+    (STATUS_COMPLETED, 'Завершённые'),
+    (STATUS_DELETED, 'Удалённые'),
+)

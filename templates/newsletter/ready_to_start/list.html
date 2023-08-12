@@ -1,0 +1,49 @@
+{% extends 'newsletter/base.html' %}
+{% load static %}
+{% load newsletter_tags %}
+{% block title %} Готовы к запуску{% endblock %}
+
+{% block content %}
+{% for newsletter in newsletters %}
+    <h3>{{newsletter.title}} </h3>
+    {% if newsletter.branches.all %}
+    {% get_count_customers_number newsletter.id %} номера добавлены
+    <div style="background-color: #dcf8c6; padding:10px;border-radius:5px;">
+        {{newsletter.text}}
+    </div>
+    <b>Рассылка готова к запуску</b>
+
+    <a href="{% url 'newsletter:detail_summary' newsletter.id %}">ОТКРЫТЬ</a>
+    <button type="button" id="start-newsletter-button" class="btn btn-primary" data-toggle="modal"
+            data-target="#exampleModal" data-id="{{newsletter.id}}" data-url="{% url 'newsletter:start_newsletter' %}">
+        ЗАПУСТИТЬ
+    </button>
+    <a href="{% url 'newsletter:under_review_cancel_confirm' newsletter.id %}">ОТМЕНИТЬ</a>
+    {% else %}
+    Номера получателей не добавлены
+    <div style="background-color: #dcf8c6; padding:10px;border-radius:5px;">
+        {{newsletter.text}}
+    </div>
+    <b>Загрузите для рассылки базу контактов</b>
+
+    <a href="{% url 'newsletter:detail_summary' newsletter.id %}">ОТКРЫТЬ</a>
+    <a href="{% url 'newsletter:recipient_create_update' newsletter.id %}">ЗАГРУЗИТЬ БАЗУ</a>
+    <a href="{% url 'newsletter:under_review_cancel_confirm' newsletter.id %}">ОТМЕНИТЬ</a>
+    {% endif %}
+
+
+{% endfor %}
+
+
+
+{% endblock %}
+
+{% block domready %}
+
+{% endblock %}
+
+
+
+
+
+

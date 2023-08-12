@@ -1,0 +1,65 @@
+{% extends 'newsletter/detail/base.html' %}
+{% load static %}
+{% load newsletter_tags %}
+{% block title %} ПОЛУЧАТЕЛИ {% endblock %}
+
+{% block content %}
+<div class="row">
+	<form action="{{ request.path }}" method="POST" id="form-universal-modal" >
+		{% csrf_token %}
+		<div id="form-universal-modal-content">
+			<div class="row">
+				<div class="formset">
+					<div class="formset-forms">
+						<div class="col-md-12 mb-1">
+							<p class="form-label requiredField">
+								<b>{% get_customers_count newsletter_id %}</b><br>
+								Добавленные филиалы: <span class="asteriskField">* </span>
+							</p>
+							<a class="btn btn-default border w-100 add-demand_file-formset float-right">+ Добавить филиал</a><br><br>
+						</div>
+						{{ recipient_form_set }}
+						{% for formset_form in recipient_form_set %}
+						<div class="form-group formset-form d-flex">
+							{% for hidden in formset_form.hidden_fields %}
+							{{ hidden }}
+							{% endfor %}
+							<div class="d-none">{{ formset_form.DELETE }}</div>
+						</div>
+						{% endfor %}
+
+						<div class="form-group empty-form d-none">
+							<div class="service-content">
+								<div class="d-flex">
+									<select name="branches-__prefix__-branch" id="branches-__prefix__-branch">
+										{% get_user_branch_list request.user.id as branches %}
+										{% for branch in branches %}
+										<option value="{{branch.id}}"> {{branch.title}} </option>
+										{% endfor %}
+									</select>
+									{{recipient_form_set.empty_form.DELETE}}
+
+									<div class="input-group-append  delete-content" data-id="">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br><br>
+		Активный последний месяц {{newsletter_form.active_last_month}}<br>
+		Активный последний неделя {{newsletter_form.active_last_week}}<br>
+		Активный последний день {{newsletter_form.active_last_day}}<br>
+		<input type="hidden" name="text" value="{{newsletter.text}}">
+
+		<input class="btn btn-primary w-100 mt-2" type="submit" value="СОХРАНИТЬ">
+
+
+	</form>
+</div>
+{% endblock %}
+
+{% block domready %}
+{% endblock %}

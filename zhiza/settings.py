@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'customers',
     'organizations',
     'integrations',
+    'newsletter',
     'channels',
 ]
 

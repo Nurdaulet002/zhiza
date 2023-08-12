@@ -1,0 +1,31 @@
+{% extends 'newsletter/base.html' %}
+{% load static %}
+{% load newsletter_tags %}
+{% block title %} Черновики{% endblock %}
+
+{% block content %}
+{% for newsletter in newsletters %}
+    <h3>{{newsletter.title}} </h3>
+    {% if newsletter.branches.all %}
+    {% get_count_customers_number newsletter.id %} номера добавлены
+    {% else %}
+    Номера получателей не добавлены
+    {% endif %}
+    <div style="background-color: #dcf8c6; padding:10px;border-radius:5px;">
+        {{newsletter.text}}
+    </div>
+    <b>Рассылка проходит проверку (это займёт не более 5 минут)</b>
+
+    <a href="{% url 'newsletter:detail_summary' newsletter.id %}">ОТКРЫТЬ</a>
+    <a href="{% url 'newsletter:under_review_cancel_confirm' newsletter.id %}">ОТМЕНИТЬ ПРОВЕРКУ</a>
+{% endfor %}
+{% endblock %}
+
+{% block domready %}
+{% endblock %}
+
+
+
+
+
+
