@@ -11,6 +11,6 @@ class LoginView(auth_views.LoginView):
         if self.request.user.role == 1:
             return reverse_lazy('')
         elif self.request.user.role == 2:
-            return reverse_lazy('newsletter:draft_list')
+            return reverse_lazy('organization:branch_list')
         elif self.request.user.role == 3:
             return reverse_lazy('customer_request:employee_index')

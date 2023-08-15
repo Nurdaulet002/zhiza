@@ -33,3 +33,11 @@ NEWSLETTER_STATUS = (
     (STATUS_COMPLETED, 'Завершённые'),
     (STATUS_DELETED, 'Удалённые'),
 )
+
+PLAYED = 1
+NOT_PLAYED = 2
+
+RAFFLE_PRIZE_STATUS = (
+    (PLAYED, 'Разыграно'),
+    (NOT_PLAYED, 'Не разыграно'),
+)

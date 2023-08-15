@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'integrations',
     'newsletter',
     'channels',
+    'raffle_prizes',
 ]
 
 MIDDLEWARE = [

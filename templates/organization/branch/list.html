@@ -1,0 +1,53 @@
+{% extends 'organization/base.html' %}
+{% load static %}
+{% load organization_tags %}
+{% block title %}Точки{% endblock %}
+
+{% block content %}
+<form action="{% url 'organization:branch_list' %}" method="get">
+  <input type="text" name="search_text" placeholder="Поиск" {% if search_text %} value="{{search_text}}" {% endif %}>
+  <input type="submit" value="Искать">
+</form>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Название</th>
+      <th scope="col">Адрес</th>
+      <th scope="col">Рейтинг</th>
+      <th scope="col">Отзывы</th>
+      <th scope="col">Клиенты</th>
+      <th scope="col">Заказы</th>
+      <th scope="col">Отчет</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for branch in branches %}
+    <tr>
+      <th scope="row">{{forloop.counter}}</th>
+      <td>{{branch.title}}</td>
+      <td>{{branch.address}}</td>
+      <td>{% get_avg_rating branch.id %}</td>
+      <td>{% get_count_rating_with_comment branch.id %}</td>
+      <td>{% get_count_customers branch.id %}</td>
+      <td>{% get_count_customer_requests branch.id %}</td>
+      <td scope="col">
+        <a href="{% url 'organization:branch_detail' branch.id %}">Отчет</a>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+
+
+{% endblock %}
+
+{% block domready %}
+{% endblock %}
+
+
+
+
+
+

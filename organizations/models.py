@@ -8,6 +8,7 @@ class Branch(models.Model):
     Филиал
     """
     title = models.CharField(max_length=180)
+    address = models.CharField(max_length=180, null=True, blank=True)
     cards_number = models.PositiveIntegerField(default=10)
 
     def __str__(self):
