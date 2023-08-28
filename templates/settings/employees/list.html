@@ -27,9 +27,9 @@
 
   {% if employees %}
     {% for employee in employees %}
-      <tr class="employee-item" data-title="{% get_full_name employee.first_name employee.last_name %}">
+      <tr class="employee-item" data-title="{{ employee.get_full_name }}">
         <th scope="row">{{ forloop.counter }}</th>
-        <td>{% get_full_name employee.first_name employee.last_name %}</td>
+        <td>{{ employee.get_full_name }}</td>
         <td>{{ employee.branch.title }}</td>
         <td>{{ employee.get_role_display }}</td>
         <td>{{ employee.username }}</td>
@@ -75,7 +75,7 @@ $(document).on('input', '#employee-search-input', function(){
     const employees = $('.employee-item');
 
     employees.each(function () {
-        const employeeTitle = $(this).data('title');
+        const employeeTitle = $(this).data('title').toLowerCase();
 
         if (employeeTitle.indexOf(searchValue) > -1) {
             $(this).removeClass('d-none');
