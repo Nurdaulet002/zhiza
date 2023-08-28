@@ -1,0 +1,30 @@
+<form action="{% url 'organization:employee_update' pk=object.id %}" method="post">
+  {% csrf_token %}
+  <div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">Обнавить работника</h5>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+    <label for="">Имя: </label>
+    {{form.first_name}}<br>
+    <label for="">Фамилия: </label>
+    {{form.last_name}}<br>
+    <label for="">Филиал: </label>
+    {{form.branch}}<br>
+    <label for="">Роль: </label>
+    {{form.role}}<br>
+    <label for="">Логин: </label>
+    {{form.username}}<br>
+    <label for="">Старый пароль: </label>
+    {{form.old_password}}<br>
+    <label for="">Новый пароль: </label>
+    {{form.password}}<br>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+  <button type="submit" class="btn btn-primary" >Сохранить</button>
+</div>
+</form>

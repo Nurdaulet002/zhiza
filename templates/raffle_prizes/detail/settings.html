@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load organization_tags %}
+{% block title %}Акция{% endblock %}
+
+{% block content %}
+
+Участники розыгрыша:
+<a type="button" class="company-branch-list-form" data-toggle="modal"
+        data-target="#exampleModal" data-url="{% url 'raffle_prizes:participating_branch_list' raffle_prize.id %}">
+        Добавить / Удалить
+</a><br>
+{% for participating_branch in raffle_prize.participatingbranch_set.all %}
+    {{participating_branch.branch.title}}
+{% endfor %} <br><br>
+
+Количество победителей: <br>
+{{raffle_prize.number_winners}} <br><br>
+
+Дата начало: <br>
+{{raffle_prize.date_start}} <br><br>
+
+Дата конец: <br>
+{{raffle_prize.date_end}} <br><br>
+
+Сообщение победителю: <br>
+{{raffle_prize.message_winner}} <br><br>
+
+Коментарий: <br>
+{{raffle_prize.comment}} <br>
+
+<a href="{% url 'raffle_prizes:settings_form' pk=raffle_prize.id %}">Редактировать</a>
+{% endblock %}
+
+{% block domready %}
+$(document).on('click', '.company-branch-list-form', function(){
+    var url = $(this).data('url')
+    $.ajax({
+            url: url,
+            type: 'GET',
+            success: function(data) {
+                $('#modal-content').html(data)
+            }
+        })
+});
+
+$(document).on('input', '#branch-search-input', function(){
+    const searchValue = $(this).val().toLowerCase();
+    const branches = $('.branch-item');
+
+    branches.each(function () {
+        const branchTitle = $(this).data('title');
+
+        if (branchTitle.indexOf(searchValue) > -1) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+});
+{% endblock %}
+
+

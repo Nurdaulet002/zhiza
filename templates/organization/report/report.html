@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Отчет{% endblock %}
+
+{% block content %}
+<form method="get" action="{% url 'organization:report' %}">
+    <label for="branch">Выберите филиал:</label>
+    <select name="branch" id="branch">
+        <option value="all">Все филиалы</option>
+        {% for branch in branches %}
+        <option value="{{ branch.id }}" {% if branch_id == branch.id %}selected{% endif %}>{{ branch.title }}</option>
+        {% endfor %}
+    </select>
+    <label for="range_type">Выберите период:</label>
+    <select name="range_type" id="range_type">
+        <option value="week" {% if range_type == 'week' %}selected{% endif %}>За неделю</option>
+        <option value="month" {% if range_type == 'month' %}selected{% endif %}>За месяц</option>
+        <option value="half-year" {% if range_type == 'half-year' %}selected{% endif %}>За полгода</option>
+        <option value="year" {% if range_type == 'year' %}selected{% endif %}>За 1 год</option>
+    </select>
+    <input type="submit" value="ПОИСК">
+</form>
+<b>Количество рейтингов:</b>   <br>
+{% for rating, count in ratings_counts.items %}
+
+<b>{{ rating }}</b>  - {{ count }}<br>
+
+{% endfor %}
+<b>Количество клиентов, сделавших заказ только один раз</b>: {{customers_purchase_only_once}}<br>
+<b>Количество клиентов, сделавших заказ более одного раза</b>: {{customers_purchase_more_than_one}}<br>
+<b>Частота покупок</b>: {{purchase_frequency}}<br>
+<b>Частота повторных покупок</b>: {{repeat_purchase_frequency}}
+<canvas id="avgRatingChart" width="400" height="200"></canvas>
+
+
+
+
+
+{% endblock %}
+
+{% block domready %}
+var ctx = document.getElementById('avgRatingChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ labels|safe }},
+            datasets: [{
+                label: 'Средний рейтинг',
+                data: {{ data|safe }},
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        }
+    });
+{% endblock %}
+
+
+
+
+
+

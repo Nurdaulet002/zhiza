@@ -1,9 +1,20 @@
-{% extends 'newsletter/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% load newsletter_tags %}
 {% block title %} Черновики{% endblock %}
 
 {% block content %}
+<h2>Мои рассылки</h2>
+<a href="{% url 'newsletter:create' %}" style="float:right">Новая рассылка</a>
+<ul>
+    <li><a href="{% url 'newsletter:draft_list' %}">Черновики</a></li>
+    <li><a href="{% url 'newsletter:under_review_list' %}">На проверке</a></li>
+    <li><a href="{% url 'newsletter:ready_to_start_list' %}">Готовы к запуску</a></li>
+<!--    <li><a href="">Остановлены</a></li>-->
+    <li><a href="{% url 'newsletter:in_progress_list' %}">Выполняются</a></li>
+    <li><a href="{% url 'newsletter:completed_list' %}">Завершённые</a></li>
+<!--    <li><a href="">Удалённые</a></li>-->
+</ul>
 {% for newsletter in newsletters %}
     <h3>{{newsletter.title}} </h3>
     {% if newsletter.branches.all %}

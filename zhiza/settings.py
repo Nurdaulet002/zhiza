@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'newsletter',
     'channels',
     'raffle_prizes',
+    'django_plotly_dash.apps.DjangoPlotlyDashConfig',
 ]
 
 MIDDLEWARE = [

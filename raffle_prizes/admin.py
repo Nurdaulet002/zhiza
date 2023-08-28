@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from raffle_prizes.models import RafflePrize, ParticipatingBranch, Winner, PromoCode
+
+admin.site.register(RafflePrize)
+admin.site.register(ParticipatingBranch)
+admin.site.register(Winner)
+admin.site.register(PromoCode)

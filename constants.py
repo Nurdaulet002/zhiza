@@ -41,3 +41,13 @@ RAFFLE_PRIZE_STATUS = (
     (PLAYED, 'Разыграно'),
     (NOT_PLAYED, 'Не разыграно'),
 )
+
+ACTIVE = 1
+NOT_ACTIVE = 2
+WAITING_PAIMENT = 3
+
+BRANCH_STATUS = (
+    (ACTIVE, 'Активен'),
+    (NOT_ACTIVE, 'Не активен'),
+    (WAITING_PAIMENT, 'Ожидается оплата'),
+)

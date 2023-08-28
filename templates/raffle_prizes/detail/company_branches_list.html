@@ -1,0 +1,36 @@
+<form action="{% url 'raffle_prizes:participating_branch_save' %}" method="post">
+  {% csrf_token %}
+  <div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">Добавить / Удалить филиалов</h5>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+    <label><input type="checkbox" id="select-all"> Выбрать все</label><br>
+    <input type="text" id="branch-search-input" placeholder="Поиск по филиалам..."><br><br>
+<div id="branch-list-container">
+    {% for branch in form.participating_branches.field.queryset %}
+        <div class="branch-item" data-title="{{ branch.title|lower }}">
+            <input type="checkbox" name="{{ form.participating_branches.name }}" value="{{ branch.pk }}"
+           {% if branch.pk in selected_branches %}checked{% endif %}>
+            {{ branch.title }}
+        </div>
+    {% endfor %}
+</div>
+
+    <input type="hidden" name="raffle_prize_id" value="{{raffle_prize_id}}">
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+  <button type="submit" class="btn btn-primary" >Сохранить</button>
+</div>
+</form>
+<script>
+document.getElementById('select-all').addEventListener('change', function(event) {
+    const checkboxes = document.querySelectorAll('[name="participating_branches"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = event.target.checked;
+    });
+});
+</script>

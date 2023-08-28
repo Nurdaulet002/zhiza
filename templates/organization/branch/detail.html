@@ -1,21 +1,4 @@
-{% extends 'organization/base.html' %}
-{% load static %}
-{% load organization_tags %}
-{% block title %}Точкa - {{branch.title}}{% endblock %}
 
-{% block content %}
-Частота покупок - {% get_pf branch.id %}<br>
-Частота повторных покупок - {% get_rpr branch.id %}<br>
-Новые клиенты - {% get_customers_created_month_ago branch.id %}<br>
-Сделал покупку только 1 раз - {% get_customers_purchase_only_once branch.id %}<br>
-Сделал покупку более 2 раза - {% get_customers_purchase_more_than_one branch.id %}<br><br><br>
-Отзывы <b>({{rating_count}}) {% get_avg_rating branch.id %} &#65290;</b> <br>
-
-Рейтинг 1 - {% get_rating_with_number branch.id 1 %}
-Рейтинг 2 - {% get_rating_with_number branch.id 2 %}
-Рейтинг 3 - {% get_rating_with_number branch.id 3 %}
-Рейтинг 4 - {% get_rating_with_number branch.id 4 %}
-Рейтинг 5 - {% get_rating_with_number branch.id 5 %}
 
 <table class="table">
   <thead>
@@ -23,6 +6,7 @@
       <th scope="col">#</th>
       <th scope="col">Рейтинг</th>
       <th scope="col">Отзыв</th>
+      <th scope="col">Дата</th>
     </tr>
   </thead>
   <tbody>
@@ -31,19 +15,12 @@
       <th scope="row">{{forloop.counter}}</th>
       <td>{{rating.rating}}</td>
       <td>{{rating.comment}}</td>
+      <td>{{rating.created}}</td>
     </tr>
   {% endfor %}
   </tbody>
 </table>
 
-
-
-
-
-{% endblock %}
-
-{% block domready %}
-{% endblock %}
 
 
 

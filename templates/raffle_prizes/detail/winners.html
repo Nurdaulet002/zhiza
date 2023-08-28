@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load organization_tags %}
+{% block title %}Акция{% endblock %}
+
+{% block content %}
+
+{{raffle_prize.date_start}} - {{raffle_prize.date_end}}<br><br>
+
+Участвующие филиалы
+{% for participating_branch in raffle_prize.participatingbranch_set.all %}
+    {{participating_branch.branch.title}}<br>
+{% endfor %} <br><br>
+
+Количество участников: <br>
+{{raffle_prize.customer_count}} <br><br>
+
+Количество победителей: <br>
+{{raffle_prize.number_winners}} <br><br>
+
+<form action="{% url 'raffle_prizes:participating_branch_choice_winner' raffle_prize.id %}" method="post">
+    {% csrf_token %}
+    <button type="submit" >Определить победителя</button>
+</form>
+<br><br>
+
+{% for winner in winners %}
+    <div>
+        Победилель - {{forloop.counter}} <i>{{winner.customer.phone_number}}</i> <br>
+        <b>user@{{winner.customer.id}}</b> <small>{{winner.date_win}}</small><br><br>
+
+    </div>
+{% endfor %}
+
+{% endblock %}
+
+{% block domready %}
+{% endblock %}
+
+

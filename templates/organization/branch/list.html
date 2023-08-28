@@ -1,4 +1,4 @@
-{% extends 'organization/base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% load organization_tags %}
 {% block title %}Точки{% endblock %}
@@ -6,6 +6,13 @@
 {% block content %}
 <form action="{% url 'organization:branch_list' %}" method="get">
   <input type="text" name="search_text" placeholder="Поиск" {% if search_text %} value="{{search_text}}" {% endif %}>
+  <select name="date_range" id="">
+    <option value="">Весь период</option>
+    <option value="week" {% if date_range == 'week' %}selected{% endif %}>За неделю</option>
+    <option value="month" {% if date_range == 'month' %}selected{% endif %}>За месяц</option>
+    <option value="year" {% if date_range == 'year' %}selected{% endif %}>За 1 год</option>
+</select>
+
   <input type="submit" value="Искать">
 </form>
 <table class="table">
@@ -15,35 +22,45 @@
       <th scope="col">Название</th>
       <th scope="col">Адрес</th>
       <th scope="col">Рейтинг</th>
-      <th scope="col">Отзывы</th>
-      <th scope="col">Клиенты</th>
-      <th scope="col">Заказы</th>
-      <th scope="col">Отчет</th>
+      <th scope="col">Жалобы</th>
     </tr>
   </thead>
   <tbody>
   {% for branch in branches %}
     <tr>
       <th scope="row">{{forloop.counter}}</th>
-      <td>{{branch.title}}</td>
+      <td><a href="{% url 'organization:branch_detail' %}">{{branch.title}}</a></td>
       <td>{{branch.address}}</td>
-      <td>{% get_avg_rating branch.id %}</td>
-      <td>{% get_count_rating_with_comment branch.id %}</td>
-      <td>{% get_count_customers branch.id %}</td>
-      <td>{% get_count_customer_requests branch.id %}</td>
-      <td scope="col">
-        <a href="{% url 'organization:branch_detail' branch.id %}">Отчет</a>
-      </td>
+      <td>{{branch.average_rating}}</td>
+      <td class="feedback-display-right" data-id="{{branch.id}}" data-url="{% url 'organization:branch_detail' %}">{{branch.num_ratings_with_comment}}</td>
     </tr>
   {% endfor %}
   </tbody>
 </table>
+
+<div id="feedback-content-right">
+
+</div>
 
 
 
 {% endblock %}
 
 {% block domready %}
+$(document).on('click', '.feedback-display-right', function(){
+            var branch_id = $(this).data('id')
+            var url = $(this).data('url')
+            $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {
+                    'branch_id': branch_id
+                    },
+                    success: function(data) {
+                        $('#feedback-content-right').html(data)
+                    }
+                })
+        });
 {% endblock %}
 
 

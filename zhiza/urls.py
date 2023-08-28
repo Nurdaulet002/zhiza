@@ -22,4 +22,6 @@ urlpatterns = [
     path('customer/request/', include('customer_request.urls', namespace='customer_request')),
     path('newsletter/', include('newsletter.urls', namespace='newsletter')),
     path('organization/', include('organizations.urls', namespace='organization')),
+    path('raffle-prizes/', include('raffle_prizes.urls', namespace='raffle_prizes')),
+    path('customers/', include('customers.urls', namespace='customers')),
 ]

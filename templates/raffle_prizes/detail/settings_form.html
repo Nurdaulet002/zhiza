@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load organization_tags %}
+{% block title %}Акция{% endblock %}
+
+{% block content %}
+
+<form action="{% url 'raffle_prizes:settings_form' pk=pk %}" method="post">
+    {% csrf_token %}
+    Количество победителей:
+    {{form.number_winners}}<br>
+    Сообщение победителю:
+    {{form.message_winner}}<br>
+    Дата начало:
+    {{form.date_start}}<br>
+    Дата конец:
+    {{form.date_end}}<br>
+    Коментарий:
+    {{form.comment}}
+    <input type="submit" value="Сохранить">
+</form>
+{% endblock %}
+
+{% block domready %}
+$(document).on('click', '.raffle-prize-form', function(){
+    var url = $(this).data('url')
+    $.ajax({
+            url: url,
+            type: 'GET',
+            data: {
+                'url': url,
+            },
+            success: function(data) {
+                $('#modal-content').html(data)
+            }
+        })
+});
+{% endblock %}
