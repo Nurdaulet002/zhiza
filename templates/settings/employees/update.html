@@ -2,29 +2,38 @@
   {% csrf_token %}
   <div class="modal-header">
   <h5 class="modal-title" id="exampleModalLabel">Обнавить работника</h5>
-  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
   </button>
 </div>
 <div class="modal-body">
-    <label for="">Имя: </label>
-    {{form.first_name}}<br>
-    <label for="">Фамилия: </label>
-    {{form.last_name}}<br>
-    <label for="">Филиал: </label>
-    {{form.branch}}<br>
-    <label for="">Роль: </label>
-    {{form.role}}<br>
-    <label for="">Логин: </label>
-    {{form.username}}<br>
-    <label for="">Старый пароль: </label>
-    {{form.old_password}}<br>
-    <label for="">Новый пароль: </label>
-    {{form.password}}<br>
+    <div class="mb-3">
+        <label for="recipient-name" class="col-form-label">Имя:</label>
+        {{form.first_name}}
+      </div>
+      <div class="mb-3">
+        <label for="message-text" class="col-form-label">Фамилия:</label>
+         {{form.last_name}}
+      </div>
+      <div class="mb-3">
+        <label for="message-text" class="col-form-label">Филиал:</label>
+        {{form.branch}}
+      </div>
+      <div class="mb-3">
+        <label for="message-text" class="col-form-label">Роль:</label>
+        {{form.role}}
+      </div>
+      <div class="mb-3">
+        <label for="message-text" class="col-form-label">Логин:</label>
+        {{form.username}}
+      </div>
+      <div class="mb-3">
+        <label for="message-text" class="col-form-label">Пароль:</label>
+        {{form.password}}
+      </div>
 </div>
 
 <div class="modal-footer">
-  <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
-  <button type="submit" class="btn btn-primary" >Сохранить</button>
+  <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Отменить</button>
+  <button type="submit" class="btn btn-primary btn-sm" >Сохранить</button>
 </div>
 </form>

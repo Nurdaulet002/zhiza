@@ -1,8 +1,17 @@
 <div class="modal-body">
-    <label for="">Название: </label>
-    {{form.title}}<br>
-    <label for="">Адрес: </label>
-    {{form.address}}<br>
-    <label for="">Количество карточек: </label>
-    {{form.cards_number}}<br>
+    <form>
+      <div class="mb-3">
+        <label for="recipient-name" class="col-form-label">Название:</label>
+        {{form.title}}
+      </div>
+      <div class="mb-3">
+        <label for="message-text" class="col-form-label">Адрес:</label>
+        {{form.address}}
+      </div>
+      <div class="mb-3">
+        <label for="message-text" class="col-form-label">Количество карточек:</label>
+        {{form.cards_number}}
+      </div>
+    </form>
 </div>
+

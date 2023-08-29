@@ -1,0 +1,50 @@
+
+<input type="text" id="employee-search-input" placeholder="Поиск по названию...">
+
+<button type="button" class="btn btn-primary open-modal-form" data-toggle="modal"
+        data-target="#exampleModal" data-url="{% url 'organization:employee_create' %}">
+        Добавить
+</button>
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">ФИО</th>
+      <th scope="col">Филиал</th>
+      <th scope="col">Роль</th>
+      <th scope="col">Логин</th>
+      <th scope="col">Редактирование</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  {% if employees %}
+    {% for employee in employees %}
+      <tr class="employee-item" data-title="{{ employee.get_full_name }}">
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ employee.get_full_name }}</td>
+        <td>{{ employee.branch.title }}</td>
+        <td>{{ employee.get_role_display }}</td>
+        <td>{{ employee.username }}</td>
+        <td>
+            <button type="button" class="btn btn-danger open-modal-form" data-toggle="modal"
+                data-target="#exampleModal" data-url="{% url 'organization:employee_delete' employee.id %}">
+                &#10008;
+            </button>
+            <button type="button" class="btn btn-primary open-modal-form" data-toggle="modal"
+                data-target="#exampleModal" data-url="{% url 'organization:employee_update' employee.id %}">
+                &#9998;
+            </button>
+        </td>
+      </tr>
+    {% endfor %}
+  {% else %}
+    <tr>
+      <td colspan="6" style="text-align:center">Работники отсутствуют. <a href="">Добавить новую!</a></td>
+    </tr>
+  {% endif %}
+
+  </tbody>
+</table>

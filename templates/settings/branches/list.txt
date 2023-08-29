@@ -1,0 +1,60 @@
+
+<input type="text" id="branch-search-input" placeholder="Поиск по названию...">
+
+<button type="button" class="btn btn-primary open-modal-form" data-toggle="modal"
+        data-target="#exampleModal" data-url="{% url 'organization:branch_create' %}">
+        Добавить
+</button>
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Название</th>
+      <th scope="col">Адрес</th>
+      <th scope="col">Количество карт</th>
+      <th scope="col">Статус</th>
+      <th scope="col">Период</th>
+      <th scope="col">Редактирование</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  {% if branches %}
+    {% for branch in branches %}
+      <tr class="branch-item" data-title="{{ branch.title.lower }}">
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ branch.title }}</td>
+        <td>{{ branch.address }}</td>
+        <td>{{ branch.cards_number }}</td>
+        <td>{{ branch.get_status_display }}</td>
+        <td>
+            {% if branch.start_date %}
+            {{ branch.start_date }} - {{ branch.end_date }}
+            {% else %}
+            -
+            {% endif %}
+        </td>
+        <td>
+            <button type="button" class="btn btn-danger open-modal-form" data-toggle="modal"
+                data-target="#exampleModal" data-url="{% url 'organization:branch_delete' branch.id %}">
+                &#10008;
+            </button>
+            <button type="button" class="btn btn-primary open-modal-form" data-toggle="modal"
+                data-target="#exampleModal" data-url="{% url 'organization:branch_update' branch.id %}">
+                &#9998;
+            </button>
+        </td>
+      </tr>
+    {% endfor %}
+  {% else %}
+    <tr>
+      <td colspan="6" style="text-align:center">Филиалы отсутствуют. <a href="">Добавить новую!</a></td>
+    </tr>
+  {% endif %}
+
+  </tbody>
+</table>
+
+

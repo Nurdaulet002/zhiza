@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'channels',
     'raffle_prizes',
     'django_plotly_dash.apps.DjangoPlotlyDashConfig',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

@@ -1,14 +1,28 @@
 <div class="modal-body">
-    <label for="">Имя: </label>
-    {{form.first_name}}<br>
-    <label for="">Фамилия: </label>
-    {{form.last_name}}<br>
-    <label for="">Филиал: </label>
-    {{form.branch}}<br>
-    <label for="">Роль: </label>
-    {{form.role}}<br>
-    <label for="">Логин: </label>
-    {{form.username}}<br>
-    <label for="">Пароль: </label>
-    {{form.password}}<br>
+    <form>
+      <div class="mb-3">
+        <label for="recipient-name" class="col-form-label">Имя:</label>
+        {{form.first_name}}
+      </div>
+      <div class="mb-3">
+        <label for="message-text" class="col-form-label">Фамилия:</label>
+         {{form.last_name}}
+      </div>
+      <div class="mb-3">
+        <label for="message-text" class="col-form-label">Филиал:</label>
+        {{form.branch}}
+      </div>
+      <div class="mb-3">
+        <label for="message-text" class="col-form-label">Роль:</label>
+        {{form.role}}
+      </div>
+      <div class="mb-3">
+        <label for="message-text" class="col-form-label">Логин:</label>
+        {{form.username}}
+      </div>
+      <div class="mb-3">
+        <label for="message-text" class="col-form-label">Пароль:</label>
+        {{form.password}}
+      </div>
+    </form>
 </div>
