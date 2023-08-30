@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load organization_tags %}
+{% block title %}База клиентов{% endblock %}
+
+{% block content %}
+<div class="content-header d-flex align-items-center">
+  <a id="mobileMenu" href="submenu.html#" class="content-menu d-lg-none"><i data-feather="menu"></i></a>
+  <h4 class="content-menu-h">База клиентов</h4>
+</div><!-- content-header -->
+
+<div class="content-body"><!-- 
+  <h4>Cисок филиалы</h4> -->
+  <div class="card">
+    <div class="card-header card-header-white">
+      <div class="card-title">
+
+      </div>
+    </div>
+  </div>
+</div>
+<form method="get" action="{% url 'customers:customer_list' %}">
+    <label for="branch">Выберите филиал:</label>
+    <select name="branch" id="branch">
+        <option value="all">Все филиалы</option>
+        {% for branch in branches %}
+        <option value="{{ branch.id }}" {% if branch_id == branch.id %}selected{% endif %}>{{ branch.title }}</option>
+        {% endfor %}
+    </select>
+    <label for="range_type">Выберите период:</label>
+    <select name="range_type" id="range_type">
+        <option value="week" {% if range_type == 'week' %}selected{% endif %}>За неделю</option>
+        <option value="month" {% if range_type == 'month' %}selected{% endif %}>За месяц</option>
+        <option value="half-year" {% if range_type == 'half-year' %}selected{% endif %}>За полгода</option>
+        <option value="year" {% if range_type == 'year' %}selected{% endif %}>За 1 год</option>
+    </select>
+    <input type="submit" value="ПОИСК">
+</form>
+
+
+
+<a href="{% url 'customers:export_customers' %}" class="btn btn-primary">Экспорт в Excel</a>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Номер телефона</th>
+      <th scope="col">Филиал</th>
+      <th scope="col">Клиент с</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  {% if customers %}
+    {% for customer in customers %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ customer.phone_number }}</td>
+        <td>{{ customer.branch.title }}</td>
+        <td>{{ customer.created_at }}</td>
+      </tr>
+    {% endfor %}
+  {% else %}
+    <tr>
+      <td colspan="4" style="text-align:center">Клиенты отсутствуют</td>
+    </tr>
+  {% endif %}
+
+  </tbody>
+</table>
+
+
+
+{% endblock %}
+
+{% block domready %}
+
+{% endblock %}
+
+
+
+
+
+

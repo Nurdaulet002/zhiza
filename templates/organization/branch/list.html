@@ -4,6 +4,7 @@
 {% block title %}Точки{% endblock %}
 
 {% block content %}
+
 <form action="{% url 'organization:branch_list' %}" method="get">
   <input type="text" name="search_text" placeholder="Поиск" {% if search_text %} value="{{search_text}}" {% endif %}>
   <select name="date_range" id="">

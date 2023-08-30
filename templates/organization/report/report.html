@@ -3,25 +3,57 @@
 {% block title %}Отчет{% endblock %}
 
 {% block content %}
-<form method="get" action="{% url 'organization:report' %}">
-    <label for="branch">Выберите филиал:</label>
-    <select name="branch" id="branch">
-        <option value="all">Все филиалы</option>
-        {% for branch in branches %}
-        <option value="{{ branch.id }}" {% if branch_id == branch.id %}selected{% endif %}>{{ branch.title }}</option>
-        {% endfor %}
-    </select>
-    <label for="range_type">Выберите период:</label>
-    <select name="range_type" id="range_type">
-        <option value="all-time" {% if range_type == 'all-time' %}selected{% endif %}>За все время</option>
-        <option value="week" {% if range_type == 'week' %}selected{% endif %}>За неделю</option>
-        <option value="month" {% if range_type == 'month' %}selected{% endif %}>За месяц</option>
-        <option value="quarter" {% if range_type == 'quarter' %}selected{% endif %}>За квартал</option>
-        <option value="half-year" {% if range_type == 'half-year' %}selected{% endif %}>За полгода</option>
-        <option value="year" {% if range_type == 'year' %}selected{% endif %}>За 1 год</option>
-    </select>
-    <input type="submit" value="ПОИСК" id="submit-search-form">
-</form>
+<div class="content-header d-flex align-items-center">
+  <a id="mobileMenu" href="submenu.html#" class="content-menu d-lg-none"><i data-feather="menu"></i></a>
+  <h4 class="content-menu-h">Отчет</h4>
+</div><!-- content-header -->
+<div class="content-body">
+    <div class="card">
+        <div class="card-body">
+            <form method="get" action="{% url 'organization:report' %}">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="branch">Выберите филиал:</label>
+                        <select name="branch" class="form-control" id="branch">
+                            <option value="all">Все филиалы</option>
+                            {% for branch in branches %}
+                            <option value="{{ branch.id }}" {% if branch_id == branch.id %}selected{% endif %}>{{ branch.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="range_type">Выберите период:</label>
+                        <select name="range_type" id="range_type" class="form-control">
+                            <option value="all-time" {% if range_type == 'all-time' %}selected{% endif %}>За все время</option>
+                            <option value="week" {% if range_type == 'week' %}selected{% endif %}>За неделю</option>
+                            <option value="month" {% if range_type == 'month' %}selected{% endif %}>За месяц</option>
+                            <option value="quarter" {% if range_type == 'quarter' %}selected{% endif %}>За квартал</option>
+                            <option value="half-year" {% if range_type == 'half-year' %}selected{% endif %}>За полгода</option>
+                            <option value="year" {% if range_type == 'year' %}selected{% endif %}>За 1 год</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="branch">Выберите филиал:</label>
+                        <input type="submit" class="btn btn-success w-100" value="ПОИСК">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card mt-3">
+        <div class="card-body">
+            <canvas id="avgRatingChart"></canvas>
+        </div>
+        <div class="card-body">
+            <canvas id="branchRatingsCounts"></canvas>
+        </div>
+        <div class="card-body">
+            <canvas id="branchRatingsChart"></canvas>
+        </div>
+    </div>
+</div>
+
 <b>Количество рейтингов:</b>   <br>
 {% for rating, count in ratings_counts.items %}
 
@@ -33,21 +65,8 @@
 <b>Частота покупок</b>: {{purchase_frequency}}<br>
 <b>Частота повторных покупок</b>: {{repeat_purchase_frequency}}
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <canvas id="avgRatingChart"></canvas>
-        </div>
-        <div class="col-md-6">
-            <canvas id="branchRatingsCounts"></canvas>
-        </div>
-    </div>
 
-    <div class="col-md-9 ">
-        <br><br><br><br><br><br>
-            <canvas id="branchRatingsChart"></canvas>
-        </div>
-</div>
+
 
 
 {% endblock %}
