@@ -34,7 +34,13 @@
     display:none;
 }
 
-
+.form-adaptive{
+    display: flex;
+    gap: 10px;
+}
+.scrollable-tbody{
+    
+}
 
 /* Медиа-запрос для более узких экранов */
 @media (max-width: 768px) {
@@ -94,5 +100,9 @@
         font-weight: bold;
         display: inline-block;
         width: 6rem;
+    }
+    .form-adaptive {
+        flex-direction: column;
+        gap: 10px;
     }
 }
