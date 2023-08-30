@@ -1,4 +1,6 @@
 import json
+from datetime import datetime, timedelta
+
 from django.utils.timezone import now
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
@@ -70,33 +72,55 @@ def process_incoming_message(data):
 
     if type_message == 'textMessage':
         card_number = text_message_data.get('textMessage')
+        if len(card_number) >= 6:
+            try:
+                branch_code = card_number[0:6]
+                branch = Branch.objects.get(code=branch_code)
+            except ObjectDoesNotExist:
+                last_customer_request = CustomerRequest.objects.filter(customer__phone_number=phone_number,
+                                                                       is_active=True).last()
+                if last_customer_request:
+                    branch = last_customer_request.branch
+                else:
+                    return
+        else:
+            last_customer_request = CustomerRequest.objects.filter(customer__phone_number=phone_number).last()
+            if last_customer_request:
+                branch = last_customer_request.branch
+            else:
+                return
+        # Если нет последнего запроса клиента, добавьте логику для обработки этой ситуации
+
         card_number = get_card_number_choice(card_number)
+
         if card_number != 'Not Card Number':
 
-            customer, created = Customer.objects.get_or_create(phone_number=phone_number, branch=integration.branch)
-            customer_request = get_active_customer_request(customer, integration.branch)
+            customer, created = Customer.objects.get_or_create(phone_number=phone_number, branch=branch)
+            customer_request = get_active_customer_request(customer, branch)
 
             if customer_request:
                 message = f'Вы уже оставили запрос! Мы сообщим вам, когда ваш заказ будет готов!'
                 greenAPI.sending.sendMessage(f'{phone_number}@c.us', message)
+                return
             else:
-                create_customer_request(customer, card_number, integration.branch)
-                group_manager = 'whatsapp_socket_%s' % integration.branch.id
+                create_customer_request(customer, card_number, branch)
+                group_manager = 'whatsapp_socket_%s' % branch.id
                 send_group_message(group_manager, card_number)
                 message = f'Отлично! Мы сообщим вам, когда ваш заказ будет готов!'
                 greenAPI.sending.sendMessage(f'{phone_number}@c.us', message)
+                return
 
         else:
-            customer, created = Customer.objects.get_or_create(phone_number=phone_number, branch=integration.branch)
-            customer_request = get_active_customer_request(customer, integration.branch)
+            customer, created = Customer.objects.get_or_create(phone_number=phone_number, branch=branch)
+            customer_request = get_active_customer_request(customer, branch)
             if customer_request:
                 process_customer_rating(greenAPI, customer_request, text_message_data.get('textMessage'))
             else:
-                pass
+                return
 
     else:
         # Действия, выполняемые в случае, если type_message не является 'textMessage'
-        pass
+        return
 
 
 #Получить актуальную CustomerRequest
@@ -132,6 +156,8 @@ def send_group_message(group_manager, card_number):
 
 
 def process_customer_rating(greenAPI, customer_request, text_message):
+    if customer_request.status == 1:
+        return
     try:
         rating = Rating.objects.get(customer_request=customer_request)
         if rating.comment:
@@ -184,6 +210,7 @@ def send_feedback_confirmation(greenAPI, phone_number):
 
 
 def get_card_number_choice(card_number):
+    card_number = card_number[8:]
     if card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 1':
         return 1
     elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 2':
@@ -204,5 +231,45 @@ def get_card_number_choice(card_number):
         return 9
     elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 10':
         return 10
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 11':
+        return 11
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 12':
+        return 12
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 13':
+        return 13
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 14':
+        return 14
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 15':
+        return 15
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 16':
+        return 16
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 17':
+        return 17
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 18':
+        return 18
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 19':
+        return 19
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 20':
+        return 20
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 21':
+        return 21
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 22':
+        return 22
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 23':
+        return 23
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 24':
+        return 24
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 25':
+        return 25
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 26':
+        return 26
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 27':
+        return 27
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 28':
+        return 28
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 29':
+        return 29
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 30':
+        return 30
     else:
         return 'Not Card Number'

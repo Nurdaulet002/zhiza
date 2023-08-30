@@ -4,8 +4,8 @@ from . import views
 app_name = 'organization'
 
 urlpatterns = [
-    path('branch/list/', views.BranchListView.as_view(),
-         name='branch_list'),
+    path('feedback/list/', views.FeedbackListView.as_view(),
+         name='feedback_list'),
     path('branch/detail/', views.BranchDetailView.as_view(),
          name='branch_detail'),
     path('report/', views.ReportView.as_view(),

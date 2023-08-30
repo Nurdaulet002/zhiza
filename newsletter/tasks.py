@@ -10,10 +10,17 @@ def my_scheduled_job(newsletter):
     greenAPI = API.GreenApi(ID_INSTANCE, API_TOKEN_INSTANCE)
     customers = Customer.objects.all()
     message = newsletter.text
+    image_name = str(newsletter.image)
+    image_name = image_name[19:]
     for branchnewsletter in newsletter.branches.all():
         for customer in customers:
             if customer.branch == branchnewsletter.branch:
-                greenAPI.sending.sendMessage(f'{customer.phone_number}@c.us', message)
+                greenAPI.sending.sendFileByUpload(
+                    f"{customer.phone_number}@c.us",
+                    newsletter.image.path,
+                    image_name,
+                    message
+                )
     newsletter.status = 6
     newsletter.save()
     return JsonResponse({})
