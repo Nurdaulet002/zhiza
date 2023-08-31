@@ -1,17 +1,19 @@
+{% load widget_tweaks %}
 <form action="{{url}}" method="post">
   {% csrf_token %}
   <div class="modal-header">
   <h5 class="modal-title" id="exampleModalLabel">Создать новую акцию</h5>
-  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
   </button>
 </div>
 <div class="modal-body">
+  <div class="mb-3">
     <label for="">Название акций: </label>
-    {{form.title}}
+    {{form.title|add_class:"form-control"}}
+  </div>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
-  <button type="submit" class="btn btn-primary" >Сохранить</button>
+  <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Отменить</button>
+  <button type="submit" class="btn btn-primary btn-sm" >Сохранить</button>
 </div>
 </form>

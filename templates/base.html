@@ -53,8 +53,13 @@
         <div class="avatar-body">
           <div class="d-flex align-items-center justify-content-between">
             <h6>Елдос Өмірахын</h6>
-            <a href="submenu.html" class="footer-menu"><i class="ri-settings-4-line"></i></a>
+            <a href=""  class="footer-menu dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-settings-4-line"></i></a>
           </div>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
           <span>Superuser/Administrator</span>
         </div><!-- avatar-body -->
       </div><!-- sidebar-footer -->
@@ -74,10 +79,10 @@
       </div>
     </div>
     <script src="{% static 'lib/jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <!-- <script src="{% static 'lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script> -->
     <script src="{% static 'lib/feathericons/feather.min.js' %}"></script>
     <script src="{% static 'lib/perfect-scrollbar/perfect-scrollbar.min.js' %}"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
     <script src="{% static 'assets/js/script.js' %}"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
