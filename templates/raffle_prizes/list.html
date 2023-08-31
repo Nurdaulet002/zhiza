@@ -5,8 +5,8 @@
 
 {% block content %}
 
-<button type="button" class="btn btn-primary raffle-prize-form" data-toggle="modal"
-        data-target="#exampleModal" data-url="{% url 'raffle_prizes:create' %}">
+<button type="button" class="btn btn-primary raffle-prize-form open-modal-form" data-bs-toggle="modal"
+        data-bs-target="#exampleModal" data-url="{% url 'raffle_prizes:create' %}">
         Создать
 </button>
 
@@ -44,11 +44,13 @@
         <td>{{ raffle_prize.get_status_display }}</td>
         <td><a href="{% url 'raffle_prizes:settings' raffle_prize.id %}">настройки</a></td>
         <td>
-            <button type="button" class="btn btn-danger raffle-prize-form" data-toggle="modal"
+            <button type="button" class="btn btn-danger raffle-prize-form" data-bs-toggle="modal"
+        data-bs-target="#exampleModal" data-toggle="modal"
                 data-target="#exampleModal" data-url="{% url 'raffle_prizes:delete' raffle_prize.id %}">
                 &#10008;
             </button>
-            <button type="button" class="btn btn-primary raffle-prize-form" data-toggle="modal"
+            <button type="button" class="btn btn-primary raffle-prize-form" data-bs-toggle="modal"
+        data-bs-target="#exampleModal" data-toggle="modal"
                 data-target="#exampleModal" data-url="{% url 'raffle_prizes:update' raffle_prize.id %}">
                 &#9998;
             </button>

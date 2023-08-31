@@ -16,15 +16,15 @@
 
     <title>{% block title %} {% endblock %}</title>
 
-<ul>
-    <li><a href="{% url 'organization:feedback_list' %}">Отзывы</a></li>
-    <li><a href="{% url 'organization:report' %}">Отчет</a></li>
-    <li><a href="{% url 'newsletter:draft_list' %}">Мои рассылки</a></li>
-    <li><a href="{% url 'raffle_prizes:raffle_prize_list' %}">Розыгрыши</a></li>
-    <li><a href="{% url 'customers:customer_list' %}">База клиентов</a></li>
-    <li><a href="{% url 'organization:branch_list' %}">Настройка Филиалы</a></li>
-    <li><a href="{% url 'organization:employee_list' %}">Настройка Работники</a></li>
-</ul>
+<!--<ul>-->
+<!--    <li><a href="{% url 'organization:feedback_list' %}">Отзывы</a></li>-->
+<!--    <li><a href="{% url 'organization:report' %}">Отчет</a></li>-->
+<!--    <li><a href="{% url 'newsletter:draft_list' %}">Мои рассылки</a></li>-->
+<!--    <li><a href="{% url 'raffle_prizes:raffle_prize_list' %}">Розыгрыши</a></li>-->
+<!--    <li><a href="{% url 'customers:customer_list' %}">База клиентов</a></li>-->
+<!--    <li><a href="{% url 'organization:branch_list' %}">Настройка Филиалы</a></li>-->
+<!--    <li><a href="{% url 'organization:employee_list' %}">Настройка Работники</a></li>-->
+<!--</ul>-->
     <!-- Vendor CSS -->
     <link href="{% static 'lib/remixicon/fonts/remixicon.css' %}" rel="stylesheet">
 
@@ -51,10 +51,10 @@
             </nav>
           </li>
           <li class="nav-item"><a href="{% url 'customers:customer_list' %}" class="nav-link"><i data-feather="users"></i><span>База клиентов</span></a></li>
-          <li class="nav-item"><a href="{% url 'organization:branch_list' %}" class="nav-link"><i data-feather="edit-3"></i><span>Отзывы</span></a></li>
+          <li class="nav-item"><a href="{% url 'organization:feedback_list' %}" class="nav-link"><i data-feather="edit-3"></i><span>Отзывы</span></a></li>
           <li class="nav-item"><a href="{% url 'raffle_prizes:raffle_prize_list' %}" class="nav-link"><i data-feather="briefcase"></i><span>Акция</span></a></li>
           <li class="nav-item"><a href="{% url 'organization:report' %}" class="nav-link"><i data-feather="file-text"></i><span> Отчет</span></a></li>
-          <li class="nav-item"><a href="{% url 'raffle_prizes:raffle_prize_list' %}" class="nav-link"><i data-feather="file-text"></i><span> Розыгрыши</span></a></li>
+          <li class="nav-item"><a href="{% url 'newsletter:draft_list' %}" class="nav-link"><i data-feather="file-text"></i><span> Рассылка</span></a></li>
         </ul>
       </div><!-- sidebar-body -->
       <div class="sidebar-footer">
