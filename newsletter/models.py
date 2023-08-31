@@ -11,6 +11,7 @@ class Newsletter(models.Model):
     active_last_month = models.BooleanField(default=False)
     active_last_week = models.BooleanField(default=False)
     active_last_day = models.BooleanField(default=False)
+    image = models.ImageField(upload_to='newsletter_picture/', null=True, blank=True)
 
     def __str__(self):
         return self.title

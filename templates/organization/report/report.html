@@ -3,7 +3,6 @@
 {% block title %}Отчет{% endblock %}
 
 {% block content %}
-
 <div class="content-header d-flex align-items-center">
   <a id="mobileMenu" href="submenu.html#" class="content-menu d-lg-none"><i data-feather="menu"></i></a>
   <h4 class="content-menu-h">Отчет</h4>
@@ -25,8 +24,10 @@
                     <div class="col-md-4">
                         <label for="range_type">Выберите период:</label>
                         <select name="range_type" id="range_type" class="form-control">
+                            <option value="all-time" {% if range_type == 'all-time' %}selected{% endif %}>За все время</option>
                             <option value="week" {% if range_type == 'week' %}selected{% endif %}>За неделю</option>
                             <option value="month" {% if range_type == 'month' %}selected{% endif %}>За месяц</option>
+                            <option value="quarter" {% if range_type == 'quarter' %}selected{% endif %}>За квартал</option>
                             <option value="half-year" {% if range_type == 'half-year' %}selected{% endif %}>За полгода</option>
                             <option value="year" {% if range_type == 'year' %}selected{% endif %}>За 1 год</option>
                         </select>
@@ -42,7 +43,13 @@
 
     <div class="card mt-3">
         <div class="card-body">
-            <canvas id="avgRatingChart" width="400" height="200"></canvas>
+            <canvas id="avgRatingChart"></canvas>
+        </div>
+        <div class="card-body">
+            <canvas id="branchRatingsCounts"></canvas>
+        </div>
+        <div class="card-body">
+            <canvas id="branchRatingsChart"></canvas>
         </div>
     </div>
 </div>
@@ -62,24 +69,181 @@
 
 
 
-
 {% endblock %}
 
 {% block domready %}
 var ctx = document.getElementById('avgRatingChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: {{ labels|safe }},
-            datasets: [{
-                label: 'Средний рейтинг',
-                data: {{ data|safe }},
-                fill: false,
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: {{ labels|safe }},
+        datasets: [{
+            label: 'Средний рейтинг',
+            data: {{ data|safe }},
+            fill: false,
+            borderColor: 'rgb(0, 255, 0)', // Ярко-зеленый цвет
+            tension: 0.1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
             }]
+        },
+        legend: {
+            display: false  // Это уберёт легенду (название линии)
         }
-    });
+    }
+});
+
+
+
+var value = $('#branch').val();
+if (value == 'all'){
+    let ctx2 = document.getElementById('branchRatingsChart').getContext('2d');
+
+// Градиентные фоны для столбцов
+let gradient = ctx2.createLinearGradient(0, 0, 0, 400);
+gradient.addColorStop(0, '#008744'); // Темный приглушенный зеленый
+gradient.addColorStop(1, '#4CAF50'); // Светлый приглушенный зеленый
+
+let ratings = [
+    {{branch_ratings_1_count|safe}},
+    {{branch_ratings_2_count|safe}},
+    {{branch_ratings_3_count|safe}},
+    {{branch_ratings_4_count|safe}},
+    {{branch_ratings_5_count|safe}}
+];
+
+let chart = new Chart(ctx2, {
+    type: 'horizontalBar',
+    data: {
+        labels: {{ branch_ratings_dates|safe }},
+        datasets: [{
+            label: 'Средний рейтинг Филиалов',
+            data: {{ branch_ratings_avg_ratings|safe }},
+            backgroundColor: gradient,
+            borderColor: '#008744',
+            borderWidth: 2
+        }]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    fontSize: 14
+                },
+                barThickness: 15,
+                categoryPercentage: 0.5,
+                barPercentage: 1.0
+            }],
+            yAxes: [{
+                barThickness: 50,
+                ticks: {
+                    fontSize: 16
+                },
+                gridLines: {
+                    color: 'rgba(0, 135, 68, 0.05)', // Приглушенные зеленые сеточные линии
+                    zeroLineColor: 'rgba(0, 135, 68, 0.6)', // Основная линия
+                    tickMarkLength: 10
+                }
+            }]
+        },
+        tooltips: {
+            callbacks: {
+                label: function(tooltipItem, data) {
+                    let branchName = data.labels[tooltipItem.index];
+                    let ratingValue = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                    let result = [`Средний Рейтинг: ${ratingValue}`];
+
+                    for (let i = 1; i <= 5; i++) {
+                        result.push(`Количесво рейтингов ${i}: ${ratings[i - 1][tooltipItem.index]} шт`);
+                    }
+
+                    return result;
+                }
+            },
+            titleFontSize: 16,
+            bodyFontSize: 14
+        },
+        legend: {
+            display: false
+        }
+    }
+});
+
+
+} else {
+     $('#branchRatingsChart').hide();
+}
+
+
+
+var ctx3 = document.getElementById('branchRatingsCounts').getContext('2d');
+
+// Определите пять цветов для диаграммы
+var colors = [
+    'rgb(255, 99, 132)',   // Красный
+    'rgb(75, 192, 192)',   // Голубой
+    'rgb(255, 205, 86)',   // Желтый
+    'rgb(201, 203, 207)',  // Серый
+    'rgb(54, 162, 235)'    // Синий
+];
+
+Chart.defaults.global.defaultFontStyle = 'bold';
+var myChart3 = new Chart(ctx3, {
+    type: 'pie',
+    data: {
+        labels: ['Не рекомендую', 'Разочарован', 'Так себе', 'Вкусно', 'Обожаю!'],
+        datasets: [{
+            label: 'Количество рейтингов',
+            data: [{% for rating, count in ratings_counts.items %} '{{ count }}', {% endfor %}],
+            backgroundColor: colors
+        }]
+    },
+    options: {
+        legend: {
+            position: 'left'
+        },
+        animation: {
+            onComplete: function() {
+                var ctx = this.chart.ctx;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'bottom';
+
+                this.data.datasets.forEach(function (dataset) {
+                    for (var i = 0; i < dataset.data.length; i++) {
+                        var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model,
+                            total = dataset._meta[Object.keys(dataset._meta)[0]].total,
+                            mid_radius = model.innerRadius + (model.outerRadius - model.innerRadius) / 2,
+                            start_angle = model.startAngle,
+                            end_angle = model.endAngle,
+                            mid_angle = start_angle + (end_angle - start_angle) / 2;
+
+                        var x = mid_radius * Math.cos(mid_angle);
+                        var y = mid_radius * Math.sin(mid_angle);
+
+                        ctx.fillStyle = '#fff';
+                        if (i === 3) { // Darker text color for lighter background
+                            ctx.fillStyle = '#444';
+                        }
+                        // Display the label text next to the data point outside
+                        ctx.fillText(dataset.data[i], model.x + x, model.y + y);
+                    }
+                });
+            }
+        }
+    }
+});
+
+
+
+
+
 {% endblock %}
 
 

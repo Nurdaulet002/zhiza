@@ -1,5 +1,4 @@
 from django.db import models
-
 from constants import STATUS_WAITING, STATUS_CHOICES
 from customers.models import Customer
 from organizations.models import Branch
@@ -10,7 +9,7 @@ class CustomerRequest(models.Model):
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
     card_number = models.PositiveIntegerField()
     status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=STATUS_WAITING)
-    datetime = models.DateTimeField()
+    datetime = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):

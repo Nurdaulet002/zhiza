@@ -2,8 +2,8 @@ from datetime import datetime, timedelta
 
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Avg, DateField, Count
-from django.db.models.functions import Cast
+from django.db.models import Avg, DateField, Count, Case, When
+from django.db.models.functions import Cast, TruncMonth
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import TemplateResponseMixin, View
 from django.views.generic.list import ListView
@@ -18,7 +18,7 @@ from organizations.forms import BranchForm, CustomUserForm, CustomUserUpdateForm
 from organizations.models import CompanyUser, Branch
 
 
-class BranchListView(TemplateResponseMixin, View):
+class FeedbackListView(TemplateResponseMixin, View):
     template_name = 'organization/branch/list.html'
 
     @staticmethod
@@ -86,21 +86,33 @@ class BranchDetailView(TemplateResponseMixin, View):
         }
         return self.render_to_response(context)
 
+import locale
+locale.setlocale(locale.LC_ALL, 'Russian_Russia.1251')
 
 class ReportView(TemplateResponseMixin, View):
     template_name = 'organization/report/report.html'
 
     def get_date_range(self, range_type):
         today = datetime.today().date()
+        if range_type == "all-time":
+            earliest_date = Rating.objects.all().order_by('created').first().created.date()
+            return earliest_date, today, "month"
         start_date_methods = {
             "week": lambda: today - timedelta(days=6),
             "month": lambda: today.replace(day=1),
+            "quarter": lambda: today.replace(month=((today.month - 1) // 3) * 3 + 1, day=1),
             "half-year": lambda: today.replace(month=1, day=1) if today.month > 6 else today.replace(
                 year=today.year - 1, month=7, day=1),
             "year": lambda: today.replace(month=1, day=1)
         }
         start_date = start_date_methods.get(range_type, lambda: None)()
-        return start_date, today
+
+        if range_type in ["year", "half-year", "quarter"]:
+            aggregation_level = "month"
+        else:
+            aggregation_level = "day"
+
+        return start_date, today, aggregation_level
 
     def get_base_filter(self, request, start_date, end_date, branch_id):
         base_filter = {
@@ -135,17 +147,25 @@ class ReportView(TemplateResponseMixin, View):
     def get(self, request, *args, **kwargs):
         range_type = request.GET.get('range_type', 'month')
         branch_id = request.GET.get('branch', 'all')
-        start_date, end_date = self.get_date_range(range_type)
+        start_date, end_date, aggregation_level = self.get_date_range(range_type)
 
         base_filter = self.get_base_filter(request, start_date, end_date, branch_id)
 
-        daily_avg_ratings = Rating.objects.filter(**base_filter).annotate(
-            date=Cast('created', DateField())
-        ).values('date').annotate(
-            avg_rating=Avg('rating')
-        ).order_by('date')
+        if aggregation_level == "day":
+            daily_avg_ratings = Rating.objects.filter(**base_filter).annotate(
+                date=Cast('created', DateField())
+            ).values('date').annotate(
+                avg_rating=Avg('rating')
+            ).order_by('date')
+            dates = [item['date'].strftime('%Y-%m-%d') for item in daily_avg_ratings]
+        else:  # month
+            daily_avg_ratings = Rating.objects.filter(**base_filter).annotate(
+                month=TruncMonth('created')
+            ).values('month').annotate(
+                avg_rating=Avg('rating')
+            ).order_by('month')
+            dates = [item['month'].strftime('%B %Y') for item in daily_avg_ratings]
 
-        dates = [item['date'].strftime('%Y-%m-%d') for item in daily_avg_ratings]
         avg_ratings = [item['avg_rating'] for item in daily_avg_ratings]
 
         try:
@@ -161,6 +181,25 @@ class ReportView(TemplateResponseMixin, View):
         purchase_frequency = total_purchase / customers_purchase_only_once if customers_purchase_only_once else 0
         repeat_purchase_frequency = customers_purchase_more_than_one / total_purchase if total_purchase else 0
 
+        branch_ratings = (Branch.objects.filter(company__companyuser__user=self.request.user,
+                                                customerrequest__rating__created__range=(start_date, end_date))
+                          .annotate(avg_rating=Avg('customerrequest__rating__rating'),
+                                    rating_1_count=Count(Case(When(customerrequest__rating__rating=1, then=1))),
+                                    rating_2_count=Count(Case(When(customerrequest__rating__rating=2, then=1))),
+                                    rating_3_count=Count(Case(When(customerrequest__rating__rating=3, then=1))),
+                                    rating_4_count=Count(Case(When(customerrequest__rating__rating=4, then=1))),
+                                    rating_5_count=Count(Case(When(customerrequest__rating__rating=5, then=1)))
+                                    )
+                          .values('title', 'avg_rating', 'rating_1_count', 'rating_2_count', 'rating_3_count', 'rating_4_count', 'rating_5_count'))
+
+        branch_ratings_dates = [item['title'] for item in branch_ratings]
+        branch_ratings_avg_ratings = [item['avg_rating'] for item in branch_ratings]
+        branch_ratings_1_count = [item['rating_1_count'] for item in branch_ratings]
+        branch_ratings_2_count = [item['rating_2_count'] for item in branch_ratings]
+        branch_ratings_3_count = [item['rating_3_count'] for item in branch_ratings]
+        branch_ratings_4_count = [item['rating_4_count'] for item in branch_ratings]
+        branch_ratings_5_count = [item['rating_5_count'] for item in branch_ratings]
+
         if branch_id != 'all':
             branch_id = int(branch_id)
 
@@ -174,7 +213,14 @@ class ReportView(TemplateResponseMixin, View):
             'customers_purchase_only_once': customers_purchase_only_once,
             'customers_purchase_more_than_one': customers_purchase_more_than_one,
             'purchase_frequency': purchase_frequency,
-            'repeat_purchase_frequency': repeat_purchase_frequency
+            'repeat_purchase_frequency': repeat_purchase_frequency,
+            'branch_ratings_dates': branch_ratings_dates,
+            'branch_ratings_avg_ratings': branch_ratings_avg_ratings,
+            'branch_ratings_1_count': branch_ratings_1_count,
+            'branch_ratings_2_count': branch_ratings_2_count,
+            'branch_ratings_3_count': branch_ratings_3_count,
+            'branch_ratings_4_count': branch_ratings_4_count,
+            'branch_ratings_5_count': branch_ratings_5_count
         }
         return self.render_to_response(context)
 

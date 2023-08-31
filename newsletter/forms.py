@@ -1,4 +1,6 @@
 from django import forms
+
+from organizations.models import Branch
 from .models import Newsletter, BranchNewsletter
 
 
@@ -17,3 +19,10 @@ class BranchNewsletterForm(forms.ModelForm):
         model = BranchNewsletter
         fields = ['branch']
         exclude = ('newsletter', )
+
+
+class BranchNewsletterSelectForm(forms.Form):
+    branch_newsletter = forms.ModelMultipleChoiceField(
+        queryset=Branch.objects.all(),
+        widget=forms.CheckboxSelectMultiple
+    )

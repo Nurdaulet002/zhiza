@@ -48,7 +48,7 @@
 
 
     {% if newsletter.status == 1 %}
-        <b>НА ПРОВЕРКЕ</b>
+        <b>ЧЕРНОВИК </b>
         {% if newsletter.text %}
             Рассылка готова к отправке на проверку и последующему запуску
             <a href="{% url 'newsletter:under_review_confirm' newsletter.id %}">ОТПРАВИТЬ НА ПРОВЕРКУ</a>

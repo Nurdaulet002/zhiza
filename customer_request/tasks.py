@@ -1,5 +1,9 @@
+
 from whatsapp_api_client_python import API as API
 from django.http import JsonResponse
+
+from integrations.models import Integration
+
 
 def my_scheduled_job(phone_number):
     ID_INSTANCE = '1101817774'
@@ -15,3 +19,5 @@ def my_scheduled_job(phone_number):
     result = greenAPI.sending.sendMessage(f'{phone_number}@c.us', message)
     print("Job is running...")
     return JsonResponse({'data': result.data})
+
+

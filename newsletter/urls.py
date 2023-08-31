@@ -31,4 +31,9 @@ urlpatterns = [
     path('completed/list', views.CompletedListView.as_view(),
          name='completed_list'),
 
+    path('branch/newsletter/list/<int:pk>', views.BranchNewsletterListView.as_view(),
+         name='branch_newsletter_list'),
+    path('branch/newsletter', views.BranchNewsletterSaveView.as_view(),
+         name='branch_newsletter_save'),
+
 ]
