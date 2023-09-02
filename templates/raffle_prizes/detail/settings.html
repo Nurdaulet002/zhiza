@@ -4,10 +4,23 @@
 {% block title %}Акция{% endblock %}
 
 {% block content %}
+<div class="content-header d-flex align-items-center">
+  <a id="mobileMenu" href="submenu.html#" class="content-menu d-lg-none"><i data-feather="menu"></i></a>
+  <h4 class="content-menu-h">Акция</h4>
+</div><!-- content-header -->
+<div class="content-body">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Акция</a></li>
+        <li class="breadcrumb-item"><a href="#">Настройка</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Data</li>
+      </ol>
+    </nav>
+</div>
 
 Участники розыгрыша:
-<a type="button" class="company-branch-list-form" data-toggle="modal"
-        data-target="#exampleModal" data-url="{% url 'raffle_prizes:participating_branch_list' raffle_prize.id %}">
+<a type="button" class="company-branch-list-form" data-bs-toggle="modal"
+        data-bs-target="#exampleModal" data-url="{% url 'raffle_prizes:participating_branch_list' raffle_prize.id %}">
         Добавить / Удалить
 </a><br>
 {% for participating_branch in raffle_prize.participatingbranch_set.all %}

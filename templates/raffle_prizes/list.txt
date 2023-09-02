@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load organization_tags %}
+{% block title %}Акция{% endblock %}
+
+{% block content %}
+
+<button type="button" class="btn btn-primary raffle-prize-form" data-toggle="modal"
+        data-target="#exampleModal" data-url="{% url 'raffle_prizes:create' %}">
+        Создать
+</button>
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Название</th>
+      <th scope="col">Период</th>
+      <th scope="col">Участники</th>
+      <th scope="col">Победители</th>
+      <th scope="col">Статус</th>
+      <th scope="col">Настройки</th>
+      <th scope="col">Редактирование</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  {% if raffle_prizes %}
+    {% for raffle_prize in raffle_prizes %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ raffle_prize.title }}</td>
+        <td>{% if raffle_prize.date_start and raffle_prize.date_end %}  {{ raffle_prize.date_start }}-{{ raffle_prize.date_end }} {% else %}
+            <a href="">период розыгрыша не установлено</a> {% endif %}</td>
+        <td>{{ raffle_prize.customer_count }}</td>
+        <td>
+            {% if not raffle_prize.winner_set.all.exists %}
+            <a href="{% url 'raffle_prizes:participating_branch_winners' raffle_prize.id %}">Еще на разыграно</a>
+            {% else %}
+            <a href="{% url 'raffle_prizes:participating_branch_winners' raffle_prize.id %}">Победителей ({{raffle_prize.winners_count}}/{{raffle_prize.number_winners}})</a>
+            {% endif %}
+        </td>
+        <td>{{ raffle_prize.get_status_display }}</td>
+        <td><a href="{% url 'raffle_prizes:settings' raffle_prize.id %}">настройки</a></td>
+        <td>
+            <button type="button" class="btn btn-danger raffle-prize-form" data-toggle="modal"
+                data-target="#exampleModal" data-url="{% url 'raffle_prizes:delete' raffle_prize.id %}">
+                &#10008;
+            </button>
+            <button type="button" class="btn btn-primary raffle-prize-form" data-toggle="modal"
+                data-target="#exampleModal" data-url="{% url 'raffle_prizes:update' raffle_prize.id %}">
+                &#9998;
+            </button>
+        </td>
+      </tr>
+    {% endfor %}
+  {% else %}
+    <tr>
+      <td colspan="6" style="text-align:center">Акций отсутствуют. <a href="">Создать новую!</a></td>
+    </tr>
+  {% endif %}
+
+  </tbody>
+</table>
+
+
+
+{% endblock %}
+
+{% block domready %}
+$(document).on('click', '.raffle-prize-form', function(){
+            var url = $(this).data('url')
+            $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {
+                        'url': url,
+                    },
+                    success: function(data) {
+                        $('#modal-content').html(data)
+                    }
+                })
+        });
+{% endblock %}
+
+
+
+
+
+
