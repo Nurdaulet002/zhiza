@@ -8,7 +8,7 @@ scheduler.start()
 
 def schedule_my_job(newsletter):
     print('newsletter is', newsletter)
-    run_date = datetime.now() + timedelta(seconds=2)
+    run_date = datetime.now()
     scheduler.add_job(my_scheduled_job, 'date', run_date=run_date, args=[newsletter])
 
 

@@ -5,9 +5,10 @@ from .models import Newsletter, BranchNewsletter
 
 
 class NewsletterForm(forms.ModelForm):
+
     class Meta:
         model = Newsletter
-        fields = ('text', 'active_last_month', 'active_last_week', 'active_last_day')
+        fields = ('image', 'text', 'active_last_month', 'active_last_week', 'active_last_day')
 
 
 

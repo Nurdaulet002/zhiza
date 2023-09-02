@@ -50,7 +50,7 @@ class NewsletterMessageCreateUpdateView(TemplateResponseMixin, View):
     def post(self, request, *args, **kwargs):
         newsletter_id = self.kwargs.get('pk')
         instance = get_object_or_404(Newsletter, id=newsletter_id) if newsletter_id else None
-        form = NewsletterForm(request.POST, instance=instance)
+        form = NewsletterForm(request.POST, request.FILES, instance=instance)
         if form.is_valid():
             form.save()
             return redirect('newsletter:detail_summary', newsletter_id)

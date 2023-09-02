@@ -35,3 +35,8 @@ def get_customers_count(newsletter_id):
             if customer.branch == branch_newsletter.branch:
                 count += 1
     return f'Количество получатели {count}'
+
+
+@register.filter(name='filename')
+def filename(value):
+    return value.split("/")[-1]

@@ -83,14 +83,24 @@
 
 <div>
     СООБЩЕНИЯ РАССЫЛКИ
-    {% if not newsletter.text %}
-    <p>Добавьте сообщения, которые будут отправлены по базе получателей</p>
-    <a href="{% url 'newsletter:message_create' newsletter.id %}">ДОБАВИТЬ СООБЩЕНИЯ</a>
-    {% else %}
+    {% if newsletter.text %}
     <div style="background-color: #dcf8c6; padding:10px;border-radius:5px; width: 30%">
         {{newsletter.text}}
     </div>
+    {% endif %}
+
+    {% if newsletter.image %}
+    <br>Фото: <br>
+    {{ newsletter.image.url|filename }}
+    {% endif %}
+
+    {% if newsletter.text or newsletter.image %}
     <a href="{% url 'newsletter:message_create' newsletter.id %}">РЕДАКТИРОВАТЬ СООБЩЕНИЯ</a>
+    {% endif %}
+
+    {% if not newsletter.text and not newsletter.image %}
+    <p>Добавьте сообщения, которые будут отправлены по базе получателей</p>
+    <a href="{% url 'newsletter:message_create' newsletter.id %}">ДОБАВИТЬ СООБЩЕНИЯ</a>
     {% endif %}
 </div><br><br>
 
