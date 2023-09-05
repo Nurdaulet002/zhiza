@@ -5,10 +5,12 @@
 
 {% block content %}
 
-<form action="{% url 'raffle_prizes:settings_form' pk=pk %}" method="post">
+<form action="{% url 'raffle_prizes:settings_form' pk=pk %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     Количество победителей:
     {{form.number_winners}}<br>
+    Фото победителю: <br>
+    {{form.image}} <br>
     Сообщение победителю:
     {{form.message_winner}}<br>
     Дата начало:

@@ -15,6 +15,7 @@ class RafflePrize(models.Model):
     date_end = models.DateField(null=True, blank=True)
     comment = models.TextField()
     status = models.PositiveSmallIntegerField(choices=RAFFLE_PRIZE_STATUS, default=NOT_PLAYED)
+    image = models.ImageField(upload_to='raffle_prizes/', null=True, blank=True)
 
     def __str__(self):
         return self.title

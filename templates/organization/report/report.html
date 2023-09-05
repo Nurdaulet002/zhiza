@@ -14,8 +14,9 @@
                 <div class="row">
                     <div class="col-md-4">
                         <label for="branch">Выберите филиал:</label>
-                        <select name="branch" class="form-control" id="branch">
-                            <option value="all">Все филиалы</option>
+                        <select name="branch" id="branch" class="form-control">
+                            <option value="" disabled selected hidden></option>
+                            <option value="all" {% if branch_id == 'all' %}selected{% endif %}>Все филиалы</option>
                             {% for branch in branches %}
                             <option value="{{ branch.id }}" {% if branch_id == branch.id %}selected{% endif %}>{{ branch.title }}</option>
                             {% endfor %}
@@ -240,7 +241,9 @@ var myChart3 = new Chart(ctx3, {
     }
 });
 
-
+$('#branch').selectize({
+placeholder: 'Выберите опцию...'
+});
 
 
 

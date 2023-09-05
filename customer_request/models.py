@@ -13,4 +13,4 @@ class CustomerRequest(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return f'Клиент: {self.customer.phone_number} Статус: {self.status}'
+        return f'Клиент: {self.customer.phone_number} Статус: {self.status} Филиал: {self.branch.title}'

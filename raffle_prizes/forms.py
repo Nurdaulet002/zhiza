@@ -17,7 +17,7 @@ class RafflePrizeForm(forms.ModelForm):
 class RafflePrizeSettingForm(forms.ModelForm):
     class Meta:
         model = RafflePrize
-        fields = ('message_winner', 'number_winners', 'date_start', 'date_end', 'comment')
+        fields = ('message_winner', 'number_winners', 'date_start', 'date_end', 'comment', 'image')
 
 
 class ParticipatingBranchSelectForm(forms.Form):
