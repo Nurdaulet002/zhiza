@@ -4,15 +4,38 @@
 {% block title %}Точки{% endblock %}
 
 {% block content %}
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css"
+  integrity="sha512-pTaEn+6gF1IeWv3W1+7X7eM60TFu/agjgoHmYhAfLEU8Phuf6JKiiE8YmsNC0aCgQv4192s4Vai8YZ6VNM6vyQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
+  integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
 
-<form action="{% url 'organization:branch_list' %}" method="get">
-  <input type="text" name="search_text" placeholder="Поиск" {% if search_text %} value="{{search_text}}" {% endif %}>
-  <select name="date_range" id="">
-    <option value="">Весь период</option>
-    <option value="week" {% if date_range == 'week' %}selected{% endif %}>За неделю</option>
-    <option value="month" {% if date_range == 'month' %}selected{% endif %}>За месяц</option>
-    <option value="year" {% if date_range == 'year' %}selected{% endif %}>За 1 год</option>
-</select>
+<form action="{% url 'organization:feedback_list' %}" method="get">
+  <label for="branch">Выберите филиал:</label>
+  <select name="branch_search" id="branch" class="branch-search-select">
+    <option value="" disabled selected hidden></option>
+    <option value="all" {% if branch_search == 'all' %}selected{% endif %}>Все филиалы</option>
+    {% for branch in branches_selectize %}
+    <option value="{{ branch.id }}" {% if branch_search == branch.id %}selected{% endif %}>{{ branch.title }}</option>
+    {% endfor %}
+  </select>
+  <label for="date-range-select">Выберите период:</label>
+  <select name="date_range" id="date-range-select">
+    <option value="all-time" {% if date_range == 'all-time' %}selected{% endif %}>За все время</option>
+        <option value="week" {% if date_range == 'week' %}selected{% endif %}>За неделю</option>
+        <option value="month" {% if date_range == 'month' %}selected{% endif %}>За месяц</option>
+        <option value="quarter" {% if date_range == 'quarter' %}selected{% endif %}>За квартал</option>
+        <option value="half-year" {% if date_range == 'half-year' %}selected{% endif %}>За полгода</option>
+        <option value="year" {% if date_range == 'year' %}selected{% endif %}>За 1 год</option>
+  </select>
 
   <input type="submit" value="Искать">
 </form>
@@ -30,7 +53,7 @@
   {% for branch in branches %}
     <tr>
       <th scope="row">{{forloop.counter}}</th>
-      <td><a href="{% url 'organization:branch_detail' %}">{{branch.title}}</a></td>
+      <td>{{branch.title}}</td>
       <td>{{branch.address}}</td>
       <td>{{branch.average_rating}}</td>
       <td class="feedback-display-right" data-id="{{branch.id}}" data-url="{% url 'organization:branch_detail' %}">{{branch.num_ratings_with_comment}}</td>
@@ -51,17 +74,22 @@
 $(document).on('click', '.feedback-display-right', function(){
             var branch_id = $(this).data('id')
             var url = $(this).data('url')
+            var date_range = $('#date-range-select').val()
             $.ajax({
                     url: url,
                     type: 'GET',
                     data: {
-                    'branch_id': branch_id
+                    'branch_id': branch_id,
+                    'date_range': date_range
                     },
                     success: function(data) {
                         $('#feedback-content-right').html(data)
                     }
                 })
         });
+
+$('.branch-search-select').selectize({
+placeholder: 'Выберите опцию...'});
 {% endblock %}
 
 

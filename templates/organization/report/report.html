@@ -32,6 +32,7 @@
 
 <div class="content-body">
 
+
     <div class="row">
         <div class="col-md-3">
             <div class="card">
@@ -39,6 +40,7 @@
                     <div class="text-center" style="height:70px;">
                         <h5 class="font-weight-bold">{{customers_purchase_only_once}}</h5>
                         <h6 class="">Количество клиентов, сделавших заказ только один раз</h6>
+
                     </div>
                 </div>
             </div>
@@ -296,7 +298,9 @@ var myChart3 = new Chart(ctx3, {
     }
 });
 
-
+$('#branch').selectize({
+placeholder: 'Выберите опцию...'
+});
 
 
 

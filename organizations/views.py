@@ -24,14 +24,19 @@ class FeedbackListView(TemplateResponseMixin, View):
     @staticmethod
     def get_date_range(period):
         today = datetime.today()
-        if period == "week":
-            start_date = today - timedelta(days=6)
-        elif period == "month":
-            start_date = today.replace(day=1)
-        elif period == "year":
-            start_date = today.replace(day=1, month=1)
-        else:
-            return None, None
+        if period == "all-time":
+            earliest_date = Rating.objects.all().order_by('created').first().created.date()
+            return earliest_date, today
+        start_date_methods = {
+            "week": lambda: today - timedelta(days=6),
+            "month": lambda: today.replace(day=1),
+            "quarter": lambda: today.replace(month=((today.month - 1) // 3) * 3 + 1, day=1),
+            "half-year": lambda: today.replace(month=1, day=1) if today.month > 6 else today.replace(
+                year=today.year - 1, month=7, day=1),
+            "year": lambda: today.replace(month=1, day=1)
+        }
+        start_date = start_date_methods.get(period, lambda: None)()
+
         return start_date, today
 
     def compute_ratings(self, branch, date_filter):
@@ -39,18 +44,19 @@ class FeedbackListView(TemplateResponseMixin, View):
         average_rating = customer_requests.aggregate(Avg('rating__rating'))['rating__rating__avg'] or 0
         branch.average_rating = average_rating
 
-        customer_requests_with_comment = customer_requests.filter(rating__comment__isnull=False)
+        customer_requests_with_comment = customer_requests.filter(rating__comment__isnull=False).exclude(rating__comment__exact='')
         branch.num_ratings_with_comment = customer_requests_with_comment.count()
 
     def get(self, request, *args, **kwargs):
-        search_text = request.GET.get('search_text', "")
+        branch_search = request.GET.get('branch_search')
         date_range = request.GET.get('date_range', "")
 
         company_user = get_object_or_404(CompanyUser, user=request.user)
         branches_query = company_user.company.branches.all()
 
-        if search_text:
-            branches_query = branches_query.filter(title__icontains=search_text)
+        if branch_search and branch_search != 'all':
+            branch_search = int(branch_search)
+            branches_query = branches_query.filter(id=branch_search)
 
         start_date, end_date = self.get_date_range(date_range)
         date_filter = {}
@@ -62,10 +68,13 @@ class FeedbackListView(TemplateResponseMixin, View):
         for branch in branches:
             self.compute_ratings(branch, date_filter)
 
+        branches_selectize = Branch.objects.filter(company__companyuser__user=request.user)
+
         context = {
             'branches': branches,
-            'search_text': search_text,
-            'date_range': date_range
+            'branch_search': branch_search,
+            'date_range': date_range,
+            'branches_selectize': branches_selectize
         }
 
         return self.render_to_response(context)
@@ -74,10 +83,29 @@ class FeedbackListView(TemplateResponseMixin, View):
 class BranchDetailView(TemplateResponseMixin, View):
     template_name = 'organization/branch/detail.html'
 
+    @staticmethod
+    def get_date_range(period):
+        today = datetime.today()
+        if period == "week":
+            start_date = today - timedelta(days=6)
+        elif period == "month":
+            start_date = today.replace(day=1)
+        elif period == "year":
+            start_date = today.replace(day=1, month=1)
+        else:
+            return None, None
+        return start_date, today
+
     def get(self, request, *args, **kwargs):
         branch_id = request.GET.get('branch_id')
+        date_range = request.GET.get('date_range', "")
+        print(date_range)
         branch = Branch.objects.get(pk=branch_id)
-        ratings = Rating.objects.filter(customer_request__branch_id=branch_id)
+        start_date, end_date = self.get_date_range(date_range)
+        date_filter = {}
+        if start_date and end_date:
+            date_filter = {"created__range": (start_date, end_date)}
+        ratings = Rating.objects.filter(customer_request__branch_id=branch_id, comment__isnull=False, **date_filter).exclude(comment__exact='')
         rating_count = ratings.count()
         context = {
             'branch': branch,
@@ -146,9 +174,11 @@ class ReportView(TemplateResponseMixin, View):
 
     def get(self, request, *args, **kwargs):
         range_type = request.GET.get('range_type', 'month')
-        branch_id = request.GET.get('branch', 'all')
+        branch_id = request.GET.get('branch')
         start_date, end_date, aggregation_level = self.get_date_range(range_type)
 
+        if not branch_id:
+            branch_id = 'all'
         base_filter = self.get_base_filter(request, start_date, end_date, branch_id)
 
         if aggregation_level == "day":
