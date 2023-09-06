@@ -4,18 +4,75 @@
 {% block title %} Черновики{% endblock %}
 
 {% block content %}
-<h2>Мои рассылки</h2>
-<a href="{% url 'newsletter:create' %}" style="float:right">Новая рассылка</a>
-<ul>
-    <li><a href="{% url 'newsletter:draft_list' %}">Черновики</a></li>
-    <li><a href="{% url 'newsletter:under_review_list' %}">На проверке</a></li>
-    <li><a href="{% url 'newsletter:ready_to_start_list' %}">Готовы к запуску</a></li>
-<!--    <li><a href="">Остановлены</a></li>-->
-    <li><a href="{% url 'newsletter:in_progress_list' %}">Выполняются</a></li>
-    <li><a href="{% url 'newsletter:completed_list' %}">Завершённые</a></li>
-<!--    <li><a href="">Удалённые</a></li>-->
-</ul>
-{% for newsletter in newsletters %}
+<div class="content-header ">
+
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  pb-3  border-bottom">
+        <div class="d-flex align-items-center">
+            <a id="mobileMenu" href="submenu.html#" class="content-menu d-lg-none"><i data-feather="menu"></i></a>
+            <h4 class="content-menu-h">Мои рассылки</h4>
+        </div>
+        <div class="btn-group btn-order-group me-2">
+            <a href="{% url 'newsletter:create' %}" class="btn btn-bd-light" style="float:right">Новая рассылка</a>
+        </div>
+    </div>
+</div><!-- content-header -->
+
+<div class="content-body">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active">Черновики</li>
+            <li class="breadcrumb-item"><a href="{% url 'newsletter:under_review_list' %}">На проверке</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'newsletter:ready_to_start_list' %}">Готовы к запуску</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'newsletter:in_progress_list' %}">Выполняются</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'newsletter:completed_list' %}">Завершённые</a></li>
+        </ol>
+    </nav>
+
+    <div class="row mt-3"
+        {% for newsletter in newsletters %}
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mailing-list">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4>{{newsletter.title}}</h4>
+                            <i data-feather="more-vertical"></i>
+                        </div>
+                        
+                        {% if newsletter.branches.all %}
+                        {% get_count_customers_number newsletter.id %}
+                        {% else %}
+                        <p class="mb-2">Номера получателей не добавлены </p>
+                        {% endif %}
+                        {% if newsletter.text %}
+                            <div style="background-color: #dcf8c6; padding:10px;border-radius:5px;">
+                                {{newsletter.text}}
+                            </div>
+                            <span class="d-block">
+                                <b>Рассылка готова к отправке на проверку и последующему запуску</b>
+                            </span>
+                        {% else %}
+                            <span class="d-block"><b>Чтобы отправить рассылку на проверку, необходимо добавить сообщения</b></span>
+                        {% endif %}
+                            <div class="mailing-list-btn-gruop mt-1">
+                                <a href="{% url 'newsletter:detail_summary' newsletter.id %}">ОТКРЫТЬ</a>
+                                {% if newsletter.text %}
+                                    <a href="{% url 'newsletter:under_review_confirm' newsletter.id %}">ОТПРАВИТЬ НА ПРОВЕРКУ</a>
+                                {% else %}
+                                <a href="{% url 'newsletter:message_create' newsletter.id %}">ДОБАВИТЬ СООБЩЕНИЯ</a>
+                            </div>
+                            
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+    <!--
+    {% for newsletter in newsletters %}
     <h3>{{newsletter.title}} </h3>
     {% if newsletter.branches.all %}
     {% get_count_customers_number newsletter.id %}
@@ -37,11 +94,11 @@
     {% else %}
     <a href="{% url 'newsletter:message_create' newsletter.id %}">ДОБАВИТЬ СООБЩЕНИЯ</a>
     {% endif %}
-{% endfor %}
-{% endblock %}
+    {% endfor %}
+-->    {% endblock %}
 
-{% block domready %}
-{% endblock %}
+    {% block domready %}
+    {% endblock %}
 
 
 

@@ -3,57 +3,113 @@
 {% block title %}Отчет{% endblock %}
 
 {% block content %}
-<div class="content-header d-flex align-items-center">
-  <a id="mobileMenu" href="submenu.html#" class="content-menu d-lg-none"><i data-feather="menu"></i></a>
-  <h4 class="content-menu-h">Отчет</h4>
+<div class="content-header ">
+   
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  pb-3  border-bottom">
+        <div>
+            <a id="mobileMenu" href="submenu.html#" class="content-menu d-lg-none"><i data-feather="menu"></i></a>
+            <h4 class="content-menu-h">Отчет</h4>
+        </div>
+        <form method="get" class="btn-group btn-order-group me-2" action="{% url 'organization:report' %}">
+            <select name="branch" class="form-control" id="branch">
+                <option value="all">Все филиалы</option>
+                {% for branch in branches %}
+                <option value="{{ branch.id }}" {% if branch_id == branch.id %}selected{% endif %}>{{ branch.title }}</option>
+                {% endfor %}
+            </select>&nbsp;&nbsp;
+            <select name="range_type" id="range_type" class="form-control">
+                <option value="all-time" {% if range_type == 'all-time' %}selected{% endif %}>За все время</option>
+                <option value="week" {% if range_type == 'week' %}selected{% endif %}>За неделю</option>
+                <option value="month" {% if range_type == 'month' %}selected{% endif %}>За месяц</option>
+                <option value="quarter" {% if range_type == 'quarter' %}selected{% endif %}>За квартал</option>
+                <option value="half-year" {% if range_type == 'half-year' %}selected{% endif %}>За полгода</option>
+                <option value="year" {% if range_type == 'year' %}selected{% endif %}>За 1 год</option>
+            </select>&nbsp;&nbsp;
+            <input type="submit" class="btn btn-bd-light" value="ПОИСК">
+        </form>
+    </div>
 </div><!-- content-header -->
+
 <div class="content-body">
-    <div class="card">
-        <div class="card-body">
-            <form method="get" action="{% url 'organization:report' %}">
-                <div class="row">
-                    <div class="col-md-4">
-                        <label for="branch">Выберите филиал:</label>
-                        <select name="branch" class="form-control" id="branch">
-                            <option value="all">Все филиалы</option>
-                            {% for branch in branches %}
-                            <option value="{{ branch.id }}" {% if branch_id == branch.id %}selected{% endif %}>{{ branch.title }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="range_type">Выберите период:</label>
-                        <select name="range_type" id="range_type" class="form-control">
-                            <option value="all-time" {% if range_type == 'all-time' %}selected{% endif %}>За все время</option>
-                            <option value="week" {% if range_type == 'week' %}selected{% endif %}>За неделю</option>
-                            <option value="month" {% if range_type == 'month' %}selected{% endif %}>За месяц</option>
-                            <option value="quarter" {% if range_type == 'quarter' %}selected{% endif %}>За квартал</option>
-                            <option value="half-year" {% if range_type == 'half-year' %}selected{% endif %}>За полгода</option>
-                            <option value="year" {% if range_type == 'year' %}selected{% endif %}>За 1 год</option>
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <label for="branch">Выберите филиал:</label>
-                        <input type="submit" class="btn btn-success w-100" value="ПОИСК">
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center" style="height:70px;">
+                        <h5 class="font-weight-bold">{{customers_purchase_only_once}}</h5>
+                        <h6 class="">Количество клиентов, сделавших заказ только один раз</h6>
                     </div>
                 </div>
-            </form>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center" style="height:70px;">
+                        <h5 class="font-weight-bold">{{customers_purchase_more_than_one}}</h5>
+                        <h6 class="">Количество клиентов, сделавших заказ более одного раза</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body ">
+                    <div class="text-center" style="height:70px;">
+                        <h5 class="font-weight-bold">{{purchase_frequency}}</h5>
+                        <h6 class="">Частота покупок</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body ">
+                    <div class="text-center" style="height:70px;">
+                        <h5 class="font-weight-bold">{{repeat_purchase_frequency}}</h5>
+                        <h6 class="">Частота повторных покупок</h6>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="card mt-3">
-        <div class="card-body">
-            <canvas id="avgRatingChart"></canvas>
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="label">Sales Comparison</h4>
+                </div>
+                <div class="card-body">
+                    <canvas id="avgRatingChart"></canvas>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <canvas id="branchRatingsCounts"></canvas>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="label">Sales Comparison</h4>
+                </div>
+                <div class="card-body">
+                    <canvas id="branchRatingsCounts"></canvas>
+                </div>
+            </div>
         </div>
-        <div class="card-body">
-            <canvas id="branchRatingsChart"></canvas>
+    </div>
+    <div class="row mt-3 mb-3">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="label">Sales Comparison</h4>
+                </div>
+                <div class="card-body">
+                    <canvas id="branchRatingsChart"></canvas>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
+<!--
 <b>Количество рейтингов:</b>   <br>
 {% for rating, count in ratings_counts.items %}
 
@@ -66,7 +122,7 @@
 <b>Частота повторных покупок</b>: {{repeat_purchase_frequency}}
 
 
-
+-->
 
 
 {% endblock %}

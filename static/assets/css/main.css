@@ -1,8 +1,16 @@
-.card-header-white{
+.form-control {
+    appearance:auto;
+    border-radius:0px;
+}
+.btn{
+    border-radius:0px !important;
+}
+.card-header-white {
     background: #fff;
-    border-bottom:none ;
+    border-bottom: none;
     display: flex;
-    justify-content: space-between;;
+    justify-content: space-between;
+    ;
     align-items: center;
 }
 .btn-light-primary{
@@ -41,7 +49,35 @@
 .scrollable-tbody{
     
 }
-
+.btn-bd-light {
+    color: #333;
+    font-size: 14px;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+}
+.btn-order-group select,input{
+    width:200px;
+    border-radius:0;
+}
+.breadcrumb-item a {
+    color: #007c89;
+    text-transform:uppercase;
+}
+.breadcrumb-item.active {
+    color: #161616;
+    text-transform: uppercase;
+}
+.mailing-list p {
+    color: #878787;
+}
+.mailing-list-btn-gruop a {
+    color: #1ebea5;
+    font-size: 13px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-right: 20px;
+}
 /* Медиа-запрос для более узких экранов */
 @media (max-width: 768px) {
     .card-title {
