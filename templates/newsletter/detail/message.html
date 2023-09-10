@@ -56,11 +56,11 @@
                 <div><b>Готова к запуску</b><a href="{% url 'newsletter:recipient_create_update' newsletter.id %}"> Загрузить базу</a></div>
             {% endif %}
         {% elif newsletter.status == 5 %}
-            Отправка сообщений
-            <div><b>Выполняются</b></div>
+            <p>Отправка сообщений</p>
+            <div class="item-status">Выполняются</div>
             {% elif newsletter.status == 6 %}
-            Рассылка выполнена
-            <div><b>Завершена</b></div>
+            <p>Рассылка выполнена</p>
+            <div class="item-status">Завершена</div>
         {% endif %}
 
     </div>

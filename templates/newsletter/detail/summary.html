@@ -47,21 +47,25 @@
             <div class="item-status blue">{{newsletter.get_status_display}}</div>
         {% elif newsletter.status == 3 %}
             {% if newsletter.branches.all %}
-            Рассылка готова к запуску
-                <div><b>Готова к запуску</b><button type="button" id="start-newsletter-button" class="btn btn-primary" data-toggle="modal"
-                    data-target="#exampleModal" data-id="{{newsletter.id}}" data-url="{% url 'newsletter:start_newsletter' %}">
-                ЗАПУСТИТЬ
-            </button></div>
+            <p>Рассылка готова к запуску</p>
+                <div>
+                    <div style="display:inline-block;"><b>Готова к запуску</b></div>
+                    <i  data-feather="arrow-right"></i>
+                    <button type="button" id="start-newsletter-button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal" data-id="{{newsletter.id}}" data-url="{% url 'newsletter:start_newsletter' %}">
+                        ЗАПУСТИТЬ
+                    </button>
+                </div>
             {% else %}
                 Загрузите для рассылки базу контактов
                 <div><b>Готова к запуску</b><a href="{% url 'newsletter:recipient_create_update' newsletter.id %}"> Загрузить базу</a></div>
             {% endif %}
         {% elif newsletter.status == 5 %}
-        Отправка сообщений
-        <div><b>Выполняются</b></div>
+        <p>Отправка сообщений</p>
+        <div class="item-status">Выполняются</div>
         {% elif newsletter.status == 6 %}
-        Рассылка выполнена
-        <div><b>Завершена</b></div>
+        <p>Рассылка выполнена</p>
+        <div class="item-status">Завершена</div>
         {% endif %}
     </div>
 </div><!-- content-header -->
