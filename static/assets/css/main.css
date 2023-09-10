@@ -78,6 +78,45 @@
     font-weight: 600;
     margin-right: 20px;
 }
+.item-status{
+    background: grey;
+    color: #fff;
+    padding: 7px 15px;
+    display: inline-block;
+}
+.list-inline-item a{
+    color: #007c89;
+    text-transform: uppercase;
+}
+.message-fille{
+    border: 1px solid #ddd;
+    background-color: #fff;
+    padding: 9px;
+    margin-bottom: 12px;
+}
+.message-text{
+    border: 1px solid #ddd;
+    background: #dcf8c6;
+    padding: 6px;
+    height: 254px;
+}
+.blue{
+   background-color: #0075ff !important;
+}
+.message-list{
+    width: 300px;
+}
+.message-list:after {
+    width: 0;
+    height: 0;
+    content: "";
+    top: 2px;
+    left: 118px;
+    position: relative;
+    border-style: solid;
+    border-width: 14px 13px 0 0;
+    border-color: #dcf8c6 transparent transparent transparent;
+}
 /* Медиа-запрос для более узких экранов */
 @media (max-width: 768px) {
     .card-title {

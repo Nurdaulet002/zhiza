@@ -1,29 +1,31 @@
 <form action="{% url 'newsletter:branch_newsletter_save' %}" method="post">
   {% csrf_token %}
-  <div class="modal-header">
-  <h5 class="modal-title" id="exampleModalLabel">Добавить / Удалить филиалов</h5>
-  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
+
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Добавить / Удалить филиалов</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
-    <label><input type="checkbox" id="select-all"> Выбрать все</label><br>
-    <input type="text" id="branch-search-input" placeholder="Поиск по филиалам..."><br><br>
-<div id="branch-list-container">
-    {% for branch in form.branch_newsletter.field.queryset %}
-        <div class="branch-item" data-title="{{ branch.title|lower }}">
-            <input type="checkbox" name="{{ form.branch_newsletter.name }}" value="{{ branch.pk }}"
-           {% if branch.pk in selected_branches %}checked{% endif %}>
-            {{ branch.title }}
+    <input type="text" id="branch-search-input" class="form-control" placeholder="Поиск по филиалам...">
+    <div id="branch-list-container">
+        <div class="branch-item mt-3">
+            <input type="checkbox" id="select-all">
+            Выбрать все
         </div>
-    {% endfor %}
-</div>
+        {% for branch in form.branch_newsletter.field.queryset %}
+            <div class="branch-item" data-title="{{ branch.title|lower }}">
+                <input type="checkbox" name="{{ form.branch_newsletter.name }}" value="{{ branch.pk }}"
+               {% if branch.pk in selected_branches %}checked{% endif %}>
+                {{ branch.title }}
+            </div>
+        {% endfor %}
+    </div>
 
     <input type="hidden" name="newsletter_id" value="{{newsletter_id}}">
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
-  <button type="submit" class="btn btn-primary" >Сохранить</button>
+    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Отменить</button>
+    <button type="submit" class="btn btn-primary btn-sm">Сохранить</button>
 </div>
 </form>
 <script>
