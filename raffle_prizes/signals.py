@@ -26,8 +26,8 @@ def my_model_post_save(sender, instance, created, **kwargs):
 
             # Проверяем наличие промокода в базе данных
             if not PromoCode.objects.filter(promo_code=random_selection).exists():
-                promo_code = PromoCode.objects.create(promo_code=random_selection, raffle_prize=instance.raffle_prize, customer=instance.customer)
-                message = instance.raffle_prize.message_winner + f'\n Вам промо код - {promo_code.promo_code}'
+                promo_code = PromoCode.objects.create(promo_code=random_selection, winner=instance)
+                message = instance.raffle_prize.message_winner + f'\nВаш промо код - {promo_code.promo_code}'
                 if instance.raffle_prize.image:
                     data = {
                         'phone_number': instance.customer.phone_number,

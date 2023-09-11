@@ -1,6 +1,6 @@
 from django.db import models
 
-from constants import RAFFLE_PRIZE_STATUS, NOT_PLAYED
+from constants import RAFFLE_PRIZE_STATUS, NOT_PLAYED, PRIZE_STATUS, NOT_ISSUED
 from customer_request.models import CustomerRequest
 from customers.models import Customer
 from organizations.models import Branch, Company
@@ -26,15 +26,20 @@ class ParticipatingBranch(models.Model):
     raffle_prize = models.ForeignKey(RafflePrize, on_delete=models.CASCADE)
 
 
-class PromoCode(models.Model):
-    raffle_prize = models.ForeignKey(RafflePrize, on_delete=models.CASCADE)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    promo_code = models.CharField(max_length=180, unique=True)
-
 class Winner(models.Model):
     raffle_prize = models.ForeignKey(RafflePrize, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     date_win = models.DateField(auto_now=True)
+    status = models.PositiveSmallIntegerField(choices=PRIZE_STATUS, default=NOT_ISSUED)
     # ограничение уникальности, победитель не может выиграть дважды в одном розыгрыше
     class Meta:
         unique_together = ['raffle_prize', 'customer']
+
+
+class PromoCode(models.Model):
+    winner = models.OneToOneField(Winner, on_delete=models.CASCADE)
+    promo_code = models.CharField(max_length=180, unique=True)
+
+class CheckingCode(models.Model):
+    winner = models.OneToOneField(Winner, on_delete=models.CASCADE)
+    code = models.CharField(max_length=180, unique=True)

@@ -1,0 +1,43 @@
+{% extends 'customer_request/base.html' %}
+{% load request_tags %}
+{% load static %}
+{% block title %} sms check{% endblock %}
+
+{% block content %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    <input type="text" name="promocode" {% if promocode %} value="{{promocode}}" {% endif %} placeholder="Введите промокод" disabled >
+    <button type="submit" disabled>
+        поиск
+    </button>
+</form>
+
+<div>
+    <b>{{promocode_obj.promo_code}}</b><br>
+    {{promocode_obj.winner.raffle_prize.comment}}
+    <form action="" method="post">
+        {% csrf_token %}
+        <input type="text" id="sms-input" name="sms_code" placeholder="_ _ _ _">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <input type="hidden" value="{{promocode_obj.winner.id}}" name="winner_id">
+        <button type="submit">
+            Проверить &#10148;
+        </button>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block domready %}
+    $("#sms-input").inputmask({"mask": "9 9 9 9"});
+{% endblock %}
+
+
+

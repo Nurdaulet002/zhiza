@@ -1,0 +1,63 @@
+{% extends 'customer_request/base.html' %}
+{% load request_tags %}
+{% load static %}
+{% block title %} Promo Code {% endblock %}
+
+{% block content %}
+
+<form action="{% url 'raffle_prizes:search_promocode' %}" method="get">
+    <input type="text" name="promocode" {% if promocode %} value="{{promocode}}" {% endif %}
+           placeholder="Введите промокод" id="promocode-input">
+    <button type="submit">
+        поиск
+    </button>
+</form>
+
+<!--Егер приз бар болса-->
+{% if ruffle_prize %}
+    <!--Егер ойнатылған болса-->
+    {% if promocode_obj.winner.status == 1 %}
+        <div>
+            {{ruffle_prize.promocode.promo_code}}
+            <span style="color:green"> Разыграно &#10004; </span>
+        </div>
+    <!--Егер ойнатылмаған болса-->
+    {% else %}
+        <div>
+            {{ruffle_prize.promocode.promo_code}}
+            {{ruffle_prize.comment}}
+            <form action="{% url 'raffle_prizes:generate_code' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="winner_id" value="{{promocode_obj.winner.id}}">
+                <input type="hidden" name="promocode" value="{{promocode}}">
+                <button type="submit">
+                    Проверить &#10148;
+                </button>
+            </form>
+        </div>
+    {% endif %}
+{% endif %}
+
+<!--Егер призда и промокод та жок боса-->
+{% if not ruffle_prize and not promocode %}
+    <div>
+        Введите промокод чтобы искать!
+    </div>
+{% endif %}
+
+<!--Егер промокод бар, бірақ приз жоқ болса-->
+{% if promocode and not ruffle_prize %}
+    <div>
+        Промокод не существует! Введите другой промокод
+    </div>
+{% endif %}
+
+
+{% endblock %}
+
+{% block domready %}
+$("#promocode-input").inputmask({"mask": "* * * * * *"});
+{% endblock %}
+
+
+
