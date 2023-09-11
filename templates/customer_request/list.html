@@ -9,6 +9,170 @@
 
 {% endfor %}
 
+{% extends 'customer_request/base.html' %}
+{% load request_tags %}
+{% load static %}
+{% block title %} Zhiza {% endblock %}
+
+{% block content %}
+<style>
+        .container {
+            position: relative;
+            width: 350px;
+            height: 52px;
+            border: 1px solid #000;
+        }
+        .circle {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: #f00;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    </style>
+
+<input type="search" id="search-input">
+<div id="customer-request-list-content">
+    <div id="card-list" >
+        {% for card in cards %}
+            <button class="{% get_actual_card_color card branch %} sent-request-button"
+                    style="width:400px; height:400px; font-size:180px; color:white; text-align:center; padding: 15px;"
+                    data-id="{{card}}" >{{card}}
+                <div class="container">
+                    <div class="circle" data-id="{{card}}"></div>
+                </div>
+            </button>
+
+        {% endfor %}
+    </div>
+</div>
+<div id="branch-id">{{branch}}</div>
+{% endblock %}
+
+{% block domready %}
+var branch_id = document.getElementById('branch-id').textContent;
+const url = 'wss://' + window.location.host + '/ws/whatsapp/' + branch_id + '/branch/'
+const whatsappSocket = new WebSocket(url)
+
+whatsappSocket.onmessage = function(event) {
+  const data = JSON.parse(event.data);
+  var card_number = data.card_number;
+  var card = document.querySelector('#card-list [data-id="' + card_number + '"]');
+  card.style.background = "#1bc068";
+}
+
+whatsappSocket.onclose = function(event) {
+    console.error('Whatsapp socket closed unexpectedly')
+}
+
+
+$(document).on('click', '.sent-request-button', function(){
+    var card_number = $(this).data('id');
+    $.ajax({
+      url: '{% url 'customer_request:send_message' %}',
+      type: 'POST',
+      data: {
+        'card_number': card_number,
+        'csrfmiddlewaretoken': '{{ csrf_token }}'
+      },
+      success: function(data) {
+        var card = document.querySelector('#card-list [data-id="' + card_number + '"]');
+        card.style.background = "darkgrey";
+      }
+    });
+});
+
+$(document).on('input', '#search-input', function(){
+    const searchValue = $(this).val().toLowerCase();
+    const cards = $('#card-list button');
+    cards.each(function () {
+        const cardId = $(this).data('id').toString().toLowerCase();
+        if (cardId.indexOf(searchValue) > -1) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+});
+
+
+class CircleMover {
+    constructor($button) {
+        this.$button = $button;
+        this.$container = this.$button.find(".container");
+        this.$circle = this.$button.find(".circle");
+        this.isUnlocked = false;
+        this.startX = 0;
+        this.circleX = 0;
+
+        this.init();
+    }
+
+    init() {
+        this.$circle.on("mousedown touchstart", (e) => this.onCircleMouseDown(e));
+        $(document).on("mouseup touchend", () => this.onDocumentMouseUp());
+        this.$container.on("mousemove touchmove", (e) => this.moveCircle(e));
+    }
+
+    onCircleMouseDown(e) {
+        this.startX = (e.type === "mousedown") ? e.clientX : e.originalEvent.touches[0].clientX;
+        this.circleX = this.$circle.position().left;
+    }
+
+    moveCircle(e) {
+        const newX = (e.type === "mousemove") ? e.clientX : e.originalEvent.touches[0].clientX;
+        const newCircleX = this.circleX + (newX - this.startX);
+
+        if (newCircleX >= 0 && newCircleX + this.$circle.width() <= this.$container.width()) {
+            this.$circle.css("left", newCircleX + "px");
+        }
+
+        if (newCircleX > this.$container.width() - this.$circle.width() * 2) {
+            this.isUnlocked = true;
+        }
+    }
+
+    onDocumentMouseUp() {
+        if (!this.isUnlocked) {
+            this.$circle.css("left", "0px");
+        }
+
+        this.$container.off("mousemove touchmove");
+        $(document).off("mouseup touchend");
+
+        if (this.isUnlocked) {
+            var cardNumber = this.$button.data('id');
+            $.ajax({
+              url: '{% url 'customer_request:send_message' %}',
+              type: 'POST',
+              data: {
+                'card_number': cardNumber,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+              },
+              success: function(data) {
+                var card = document.querySelector('#card-list [data-id="' + cardNumber + '"]');
+                card.style.background = "darkgrey";
+                location.reload()
+              }
+            });
+
+        }
+        this.isUnlocked = false;
+    }
+}
+
+
+$(".sent-request-button").each(function() {
+    new CircleMover($(this));
+});
+
+
+
+{% endblock %}
+
+
+
 
 
 

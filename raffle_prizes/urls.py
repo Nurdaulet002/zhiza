@@ -24,5 +24,13 @@ urlpatterns = [
          name='participating_branch_winners'),
     path('detail/participating/branch/choice/winner/<int:pk>', views.ChoiceRandomWinner.as_view(),
          name='participating_branch_choice_winner'),
+    path('search/code', views.PromoCodeView.as_view(),
+         name='search_promocode'),
+    path('search/code/<promocode>', views.PromoCodeView.as_view(),
+         name='search_promocode'),
+    path('generate/code', views.GenerateCode.as_view(),
+         name='generate_code'),
+    path('checking/sms/<promocode>', views.CheckingSMSView.as_view(),
+         name='checking_sms'),
 
 ]

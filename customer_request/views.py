@@ -66,12 +66,21 @@ def process_incoming_message(data):
     integration = Integration.objects.get(instance_id=instance_id)
     greenAPI = API.GreenApi(integration.instance_id, integration.token)
     phone_number = data['senderData']['chatId'][:11]
+
+    # message_data = data.get('messageData', {})
+    # type_message = message_data.get('typeMessage')
+    # text_message_data = message_data.get('textMessageData', {})
+    #
+    # if type_message == 'textMessage':
+    #     card_number = text_message_data.get('textMessage')
+
     message_data = data.get('messageData', {})
     type_message = message_data.get('typeMessage')
-    text_message_data = message_data.get('textMessageData', {})
+    text_message_data = message_data.get('extendedTextMessageData', {})
 
-    if type_message == 'textMessage':
-        card_number = text_message_data.get('textMessage')
+    if type_message == 'extendedTextMessage':
+        card_number = text_message_data.get('text')
+        print(card_number)
         if len(card_number) >= 6:
             try:
                 branch_code = card_number[0:6]

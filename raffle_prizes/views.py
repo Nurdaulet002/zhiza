@@ -1,16 +1,21 @@
 import random
+import string
+from django.contrib import messages
 
+from django.http import HttpResponseServerError
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic.base import TemplateResponseMixin
 from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.core.exceptions import ObjectDoesNotExist
 
 from customer_request.models import CustomerRequest
 from customers.models import Customer
 from organizations.models import CompanyUser, Branch
+from raffle_prizes.apscheduler import schedule_send_winner_message
 from raffle_prizes.forms import RafflePrizeForm, RafflePrizeSettingForm, ParticipatingBranchSelectForm
-from raffle_prizes.models import RafflePrize, ParticipatingBranch, Winner
+from raffle_prizes.models import RafflePrize, ParticipatingBranch, Winner, PromoCode, CheckingCode
 
 
 class RafflePrizeListView(ListView):
@@ -223,3 +228,93 @@ class ChoiceRandomWinner(View):
         return redirect('raffle_prizes:participating_branch_winners', raffle_prize_id)
 
 
+class PromoCodeView(TemplateResponseMixin, View):
+    template_name = 'customer_request/promo_code/search_promocode.html'
+
+    def get(self, request, *args, **kwargs):
+        promocode = self.kwargs.get('promocode', None)
+        if not promocode:
+            promocode = request.GET.get('promocode', None)
+        context = {
+        }
+
+        if promocode:
+            try:
+                promocode = promocode.replace(" ", "")
+                promocode_obj = PromoCode.objects.get(promo_code=promocode)
+                ruffle_prize = promocode_obj.winner.raffle_prize
+                context = {
+                    'promocode': promocode,
+                    'ruffle_prize': ruffle_prize,
+                    'promocode_obj': promocode_obj
+                }
+            except ObjectDoesNotExist:
+                context = {
+                    'promocode': promocode,
+                }
+        return self.render_to_response(context)
+
+
+class GenerateCode(View):
+
+    def post(self, request, *args, **kwargs):
+        promocode = request.POST.get('promocode')
+        winner_id = request.POST.get('winner_id')
+
+        try:
+            winner = Winner.objects.get(id=winner_id)
+        except Winner.DoesNotExist:
+            return HttpResponseServerError("Winner not found", status=500)
+
+
+
+        characters = string.digits
+        while True:
+            # Попытка получить связанный объект CheckingCode
+            try:
+                checking_code = CheckingCode.objects.get(winner=winner)
+            except CheckingCode.DoesNotExist:
+                checking_code = None
+            if checking_code is None:
+                random_selection = ''.join(random.choice(characters) for _ in range(4))
+                if not CheckingCode.objects.filter(code=random_selection).exists():
+                    checking_code = CheckingCode.objects.create(code=random_selection, winner=winner)
+                    message = str(checking_code.code)
+                    data = {
+                        'phone_number': checking_code.winner.customer.phone_number,
+                        'message': message
+                    }
+                    schedule_send_winner_message(data=data)
+                    break
+            else:
+                try:
+                    if checking_code is not None:
+                        checking_code.delete()
+                except Exception as e:
+                    print(e)
+        return redirect('raffle_prizes:checking_sms', promocode)
+
+
+class CheckingSMSView(TemplateResponseMixin, View):
+    template_name = 'customer_request/promo_code/checking_sms.html'
+
+    def get(self, request, *args, **kwargs):
+        promocode = self.kwargs.get('promocode')
+        promocode_obj = PromoCode.objects.get(promo_code=promocode)
+        return self.render_to_response({'promocode': promocode, 'promocode_obj': promocode_obj})
+
+    def post(self, request, *args, **kwargs):
+        promocode = self.kwargs.get('promocode')
+        sms_code = request.POST.get('sms_code')
+        winner_id = request.POST.get('winner_id')
+        winner = Winner.objects.get(id=winner_id)
+        digits_only = sms_code.replace(" ", "")
+        try:
+            CheckingCode.objects.get(code=digits_only, winner=winner)
+            winner.status = 1
+            winner.save()
+            return redirect('raffle_prizes:search_promocode', promocode)
+        except CheckingCode.DoesNotExist:
+            messages.error(request, "Код не совпадает! Попробуйте еще раз")
+        promocode_obj = PromoCode.objects.get(promo_code=promocode)
+        return self.render_to_response({'promocode': promocode, 'promocode_obj': promocode_obj})
