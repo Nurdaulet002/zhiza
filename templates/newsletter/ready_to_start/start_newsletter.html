@@ -2,16 +2,14 @@
   {% csrf_token %}
   <div class="modal-header">
   <h5 class="modal-title" id="exampleModalLabel">Запустить рассылку</h5>
-  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
   Вы уверены что хотите запустить рассылку?
 </div>
 <div class="modal-footer">
   <input type="hidden" name="newsletter_id" value="{{newsletter.id}}">
-  <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
-  <button type="submit" class="btn btn-primary" >Да, запустить</button>
+  <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Отменить</button>
+  <button type="submit" class="btn btn-primary btn-sm" >Да, запустить</button>
 </div>
 </form>
