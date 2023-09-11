@@ -123,7 +123,7 @@ def process_incoming_message(data):
             customer, created = Customer.objects.get_or_create(phone_number=phone_number, branch=branch)
             customer_request = get_active_customer_request(customer, branch)
             if customer_request:
-                process_customer_rating(greenAPI, customer_request, text_message_data.get('textMessage'))
+                process_customer_rating(greenAPI, customer_request, text_message_data.get('text'))
             else:
                 return
 
