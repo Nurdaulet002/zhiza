@@ -4,79 +4,66 @@
 {% block title %}Настройка работника{% endblock %}
 
 {% block content %}
-<div class="content-header d-flex align-items-center">
-  <a id="mobileMenu" href="submenu.html#" class="content-menu d-lg-none"><i data-feather="menu"></i></a>
-  <h4 class="content-menu-h">Настройка работника</h4>
+<div class="content-header ">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  pb-3  border-bottom">
+      <div class="mb-3 d-flex align-items-center">
+          <a id="mobileMenu" href="submenu.html#" class="content-menu d-lg-none"><i data-feather="menu"></i></a>
+          <h4 class="content-menu-h">Настройка работника</h4>
+      </div>
+      <form method="get" class="btn-group btn-order-group me-2" action="">
+          <input type="text" class="form-control form-control-solid mr-8" id="branch-search-input" placeholder="Поиск по названию..."> 
+          <input type="button" class="btn btn-bd-light open-modal-form" value="Добавить" data-bs-toggle="modal"
+                data-bs-target="#exampleModal" data-url="{% url 'organization:employee_create' %}">
+      </form>
+  </div>
 </div><!-- content-header -->
 
 <div class="content-body">
   <div class="card">
-    <div class="card-header card-header-white">
-      <div class="card-title">
-        <!--begin::Search-->
-        <div class="d-flex align-items-center position-relative my-1"><input type="text" class="form-control form-control-solid w-250px ps-12"  id="employee-search-input" placeholder="Поиск по названию...">&nbsp&nbsp&nbsp
-          <button type="button" class="btn btn-primary d-lg-none open-modal-form" data-bs-toggle="modal"
-        data-bs-target="#exampleModal" data-url="{% url 'organization:employee_create' %}">
-                Добавить
-          </button>  
-        </div>
-        <!--end::Search-->
-      </div>
-      <div class="card-toolbar">
-        <div class="tolbar-btn-gruop">
-            <button type="button" class="btn btn-light-primary w-100-sm" >
-                <i data-feather="save" class=""></i>Експорт
-            </button>
-            <button type="button" class="btn btn-primary d-md-block open-modal-form" data-bs-toggle="modal"
-        data-bs-target="#exampleModal" data-url="{% url 'organization:employee_create' %}">
-                Добавить
-            </button>  
-        </div>
-      </div>
+    <div class="card-header">
+      <h5 class="card-title mb-0">Список работников</h5>
     </div>
-    <div class="card-body">
-        <div class="table-responsive">
-          <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                      <th scope="col">ФИО</th>
-                      <th scope="col">Филиал</th>
-                      <th scope="col">Роль</th>
-                      <th scope="col">Логин</th>
-                      <th scope="col">Редактирование</th>
-                </tr>
-            </thead>
-            <tbody>
-              {% if employees %}
-                {% for employee in employees %}
-                  <tr class="employee-item" data-title="{{ employee.get_full_name }}">
-                    <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ employee.get_full_name }}</td>
-                    <td>{{ employee.branch.title }}</td>
-                    <td>{{ employee.get_role_display }}</td>
-                    <td>{{ employee.username }}</td>
-                    <td>
-                        <button type="button" class="btn btn-sm btn-danger open-modal-form" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal" data-url="{% url 'organization:employee_delete' employee.id %}">
-                            &#10008;
-                        </button>
-                        <button type="button" class="btn btn-sm btn-primary open-modal-form" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal" data-url="{% url 'organization:employee_update' employee.id %}">
-                            &#9998;
-                        </button>
-                    </td>
-                  </tr>
-                {% endfor %}
-              {% else %}
-                <tr>
-                  <td colspan="6" style="text-align:center">Работники отсутствуют. <a href="">Добавить новую!</a></td>
-                </tr>
-              {% endif %}
-            </tbody>
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                  <th scope="col">ФИО</th>
+                  <th scope="col">Филиал</th>
+                  <th scope="col">Роль</th>
+                  <th scope="col">Логин</th>
+                  <th scope="col">Редактирование</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% if employees %}
+            {% for employee in employees %}
+              <tr class="employee-item" data-title="{{ employee.get_full_name }}">
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ employee.get_full_name }}</td>
+                <td>{{ employee.branch.title }}</td>
+                <td>{{ employee.get_role_display }}</td>
+                <td>{{ employee.username }}</td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-danger open-modal-form" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal" data-url="{% url 'organization:employee_delete' employee.id %}">
+                        &#10008;
+                    </button>
+                    <button type="button" class="btn btn-sm btn-primary open-modal-form" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal" data-url="{% url 'organization:employee_update' employee.id %}">
+                        &#9998;
+                    </button>
+                </td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="6" style="text-align:center">Работники отсутствуют. <a href="">Добавить новую!</a></td>
+            </tr>
+          {% endif %}
+        </tbody>
 
-          </table>
-        </div>
+      </table>
     </div>
   </div>
 </div><!-- content-body -->

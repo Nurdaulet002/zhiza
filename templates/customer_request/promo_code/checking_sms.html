@@ -4,21 +4,47 @@
 {% block title %} sms check{% endblock %}
 
 {% block content %}
-
-<form action="" method="post">
-    {% csrf_token %}
-    <input type="text" name="promocode" {% if promocode %} value="{{promocode}}" {% endif %} placeholder="Введите промокод" disabled >
-    <button type="submit" disabled>
-        поиск
-    </button>
-</form>
-
-<div>
-    <b>{{promocode_obj.promo_code}}</b><br>
-    {{promocode_obj.winner.raffle_prize.comment}}
+<div class="navbar navbar-home d-lg-none">
+    <div class="left d-flex align-items-center">
+      <a id="mobileMenu" href="#" class="content-menu"><i data-feather="menu"></i></a>
+      <h4 class="content-menu-h">Проверка выигрыша</h4>
+    </div>
+    <div class="right">
+       <a href="submenu.html" class="avatar online"><span class="avatar-initial">Е</span></a>
+    </div>
+</div>
+<div class="content-header header-mobile">
+   
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  pb-3  border-bottom">
+        <div>
+            <h4 class="content-menu-h">Проверка выигрыша</h4>
+        </div>
+    </div>
+</div>
+<div class="content-body mobile-content">
     <form action="" method="post">
         {% csrf_token %}
-        <input type="text" id="sms-input" name="sms_code" placeholder="_ _ _ _">
+        <div class="input-group mb-3">
+            <input type="text" name="promocode" {% if promocode %} value="{{promocode}}" {% endif %}
+               placeholder="Введите промокод" id="promocode-input"  class="form-control" aria-describedby="button-addon2" disabled>
+            <button disabled class="btn btn-secondary" type="submit" id="button-addon2">Поиск</button>
+        </div>
+    </form>
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mailing-list">
+                        <p class="mb-2"><b>Код:</b> {{promocode_obj.promo_code}}</p>
+                        <span class="mb-3"><b>Комментарий:</b>{{promocode_obj.winner.raffle_prize.comment}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="mt-3">
+    <form action="" method="post">
+        {% csrf_token %}
         {% if messages %}
             <ul class="messages">
                 {% for message in messages %}
@@ -27,9 +53,10 @@
             </ul>
         {% endif %}
         <input type="hidden" value="{{promocode_obj.winner.id}}" name="winner_id">
-        <button type="submit">
-            Проверить &#10148;
-        </button>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" id="sms-input" name="sms_code" placeholder="_ _ _ _">
+            <button  class="btn btn-secondary" type="submit" >Проверить &#10148;</button>
+        </div>    
     </form>
 </div>
 

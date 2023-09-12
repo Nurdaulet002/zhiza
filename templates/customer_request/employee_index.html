@@ -29,6 +29,7 @@
         <div id="card-list" class="row mt-3 mb-3">
             {% for card in cards %}
                 <div class="col-md-3 col-sm-6 mb-3 col-sx-6">
+
                     <div class="card">
                         <button class="{% get_actual_card_color card branch %} sent-request-button" data-id="{{card}}" >
                             {{card}}
