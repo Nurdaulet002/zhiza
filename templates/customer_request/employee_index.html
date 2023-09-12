@@ -4,22 +4,47 @@
 {% block title %} Zhiza {% endblock %}
 
 {% block content %}
-<input type="search" id="search-input">
-<div id="customer-request-list-content">
-    <div id="card-list" >
-        {% for card in cards %}
-            <button class="{% get_actual_card_color card branch %} sent-request-button"
-                    style="width:400px; height:400px; font-size:180px; color:white; text-align:center; "
-                    data-id="{{card}}" >{{card}}
-            </button>
-        {% endfor %}
+<div class="navbar navbar-home d-lg-none">
+    <div class="left d-flex align-items-center">
+      <a id="mobileMenu" href="#" class="content-menu"><i data-feather="menu"></i></a>
+      <h4 class="content-menu-h">Карточки</h4>
+    </div>
+    <div class="right">
+       <a href="submenu.html" class="avatar online"><span class="avatar-initial">Е</span></a>
     </div>
 </div>
-<div id="branch-id">{{branch}}</div>
+<div class="content-header header-mobile">
+
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  pb-3  border-bottom">
+        <div>
+            <h4 class="content-menu-h"> Карточки</h4>
+        </div>
+
+    </div>
+</div>
+<div class="content-body mobile-content">
+
+    <input type="search" id="search-input" class="form-control" placeholder="Поиск">
+    <div id="customer-request-list-content">
+        <div id="card-list" class="row mt-3 mb-3">
+            {% for card in cards %}
+                <div class="col-md-3 col-sm-6 mb-3 col-sx-6">
+                    <div class="card">
+                        <button class="{% get_actual_card_color card branch %} sent-request-button" data-id="{{card}}" >
+                            {{card}}
+                        </button>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <input type="hidden" id="branch-id" value="{{branch}}">
+
+</div>
 {% endblock %}
 
 {% block domready %}
-var branch_id = document.getElementById('branch-id').textContent;
+var branch_id = document.getElementById('branch-id').value;
 const url = 'wss://' + window.location.host + '/ws/whatsapp/' + branch_id + '/branch/'
 const whatsappSocket = new WebSocket(url)
 
@@ -57,14 +82,11 @@ $(document).on('input', '#search-input', function(){
     cards.each(function () {
         const cardId = $(this).data('id').toString().toLowerCase();
         if (cardId.indexOf(searchValue) > -1) {
-            $(this).show();
+            $(this).parent().parent().show();
         } else {
-            $(this).hide();
+            $(this).parent().parent().hide();
         }
     });
 });
 
 {% endblock %}
-
-
-

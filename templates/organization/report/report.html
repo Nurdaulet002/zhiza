@@ -11,7 +11,7 @@
             <h4 class="content-menu-h">Отчет</h4>
         </div>
         <form method="get" class="btn-group btn-order-group me-2" action="{% url 'organization:report' %}">
-            <select name="branch" class="form-control" id="branch">
+            <select name="branch" class="form-control" id="branch-selectize">
                 <option value="all">Все филиалы</option>
                 {% for branch in branches %}
                 <option value="{{ branch.id }}" {% if branch_id == branch.id %}selected{% endif %}>{{ branch.title }}</option>
@@ -159,7 +159,7 @@ var myChart = new Chart(ctx, {
 
 
 
-var value = $('#branch').val();
+var value = $('#branch-selectize').val();
 if (value == 'all'){
     let ctx2 = document.getElementById('branchRatingsChart').getContext('2d');
 
@@ -298,7 +298,7 @@ var myChart3 = new Chart(ctx3, {
     }
 });
 
-$('#branch').selectize({
+$('#branch-selectize').selectize({
 placeholder: 'Выберите опцию...'
 });
 

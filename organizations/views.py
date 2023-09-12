@@ -220,7 +220,7 @@ class ReportView(TemplateResponseMixin, View):
                                     rating_4_count=Count(Case(When(customerrequest__rating__rating=4, then=1))),
                                     rating_5_count=Count(Case(When(customerrequest__rating__rating=5, then=1)))
                                     )
-                          .values('title', 'avg_rating', 'rating_1_count', 'rating_2_count', 'rating_3_count', 'rating_4_count', 'rating_5_count'))
+                          .values('title', 'avg_rating', 'rating_1_count', 'rating_2_count', 'rating_3_count', 'rating_4_count', 'rating_5_count')).order_by('-avg_rating')
 
         branch_ratings_dates = [item['title'] for item in branch_ratings]
         branch_ratings_avg_ratings = [item['avg_rating'] for item in branch_ratings]

@@ -117,12 +117,30 @@
     border-width: 14px 13px 0 0;
     border-color: #dcf8c6 transparent transparent transparent;
 }
+
+.navbar-home{
+    transition: all 0.3s ease-out 0s;
+    box-shadow: rgba(0, 0, 0, 0.075) 0px 0.125rem 0.25rem;
+    height: 60px;
+    background: #fff;
+    padding: 0 15px;
+}
+.sent-request-button{
+    font-size:88px;
+    width: 100%;
+    height: 250px;
+    color:white; text-align:center; padding: 15px;
+    border: transparent;
+}
 /* Медиа-запрос для более узких экранов */
 @media (max-width: 768px) {
     .card-title {
         font-size: 16px; /* Пример изменения размера шрифта на узких экранах */
     }
-
+    .col-sx-6{
+        width: 50%;
+        flex: 0 0 auto;
+    }
     .btn-light-primary{
         background-color: #eef6ff;
         color: #14274E;
@@ -146,7 +164,7 @@
     .content-menu-h{
         font-size: 17px;
     }
-    .table-responsive {
+    /*.table-responsive {
         overflow-x: auto;
     }
 
@@ -162,7 +180,7 @@
 
     .table tbody td {
         display: block;
-        text-align: right; /* Измените на "left" если нужно выровнять текст по левому краю */
+        text-align: right;
         border-top: none;
     }
 
@@ -175,9 +193,22 @@
         font-weight: bold;
         display: inline-block;
         width: 6rem;
+    }*/
+    .header-mobile{
+        display: none;
+    }
+    .mobile-content{
+        margin-top: 15px;
+    }
+    .sent-request-button{
+        height: 165px;
+        font-size: 70px;
     }
     .form-adaptive {
         flex-direction: column;
         gap: 10px;
     }
 }
+
+
+
