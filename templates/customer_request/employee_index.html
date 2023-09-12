@@ -4,22 +4,6 @@
 {% block title %} Zhiza {% endblock %}
 
 {% block content %}
-<style>
-    .container {
-        position: relative;
-        width: 350px;
-        height: 52px;
-        border: 1px solid #000;
-    }
-    .circle {
-        position: absolute;
-        width: 50px;
-        height: 50px;
-        background-color: #f00;
-        border-radius: 50%;
-        cursor: pointer;
-    }
-</style>
 <div class="navbar navbar-home d-lg-none">
     <div class="left d-flex align-items-center">
       <a id="mobileMenu" href="#" class="content-menu"><i data-feather="menu"></i></a>
@@ -44,13 +28,10 @@
     <div id="customer-request-list-content">
         <div id="card-list" class="row mt-3 mb-3">
             {% for card in cards %}
-                <div class="col-md-3 col-sm-6 mb-3">
+                <div class="col-md-3 col-sm-6 col-sx-6 mb-3">
                     <div class="card">
                         <button class="{% get_actual_card_color card branch %} sent-request-button" data-id="{{card}}" >
                             {{card}}
-                            <div class="container">
-                                <div class="circle" data-id="{{card}}"></div>
-                            </div>
                         </button>
                     </div>
                 </div>
