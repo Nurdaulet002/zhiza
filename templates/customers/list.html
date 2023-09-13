@@ -4,6 +4,19 @@
 {% block title %}База клиентов{% endblock %}
 
 {% block content %}
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css"
+  integrity="sha512-pTaEn+6gF1IeWv3W1+7X7eM60TFu/agjgoHmYhAfLEU8Phuf6JKiiE8YmsNC0aCgQv4192s4Vai8YZ6VNM6vyQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"
+  integrity="sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
 <div class="content-header ">
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  pb-3  border-bottom">
       <div class="mb-3 d-flex align-items-center">
@@ -11,8 +24,9 @@
           <h4 class="content-menu-h">База клиентов</h4>
       </div>
       <form method="get" class="btn-group btn-order-group me-2" action="{% url 'customers:customer_list' %}">
-          <select name="branch" id="branch" class="form-control mr-8">
-              <option value="all">Все филиалы</option>
+          <select name="branch" id="branch" class="mr-8">
+              <option value="" disabled selected hidden></option>
+              <option value="all" {% if branch_id == 'all' %}selected{% endif %}>Все филиалы</option>
               {% for branch in branches %}
               <option value="{{ branch.id }}" {% if branch_id == branch.id %}selected{% endif %}>{{ branch.title }}</option>
               {% endfor %}
@@ -86,6 +100,9 @@ $(document).on('click', '#export-excel', function(){
     // Отправьте форму на сервер
     form.appendTo('body').submit().remove();
 });
+
+$('#branch').selectize({
+placeholder: 'Выберите опцию...'});
 {% endblock %}
 
 

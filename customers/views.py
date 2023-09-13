@@ -29,7 +29,7 @@ class CustomerListView(TemplateResponseMixin, View):
         return start_date, today
 
     def get(self, request, *args, **kwargs):
-        branch_id = request.GET.get('branch', 'all')
+        branch_id = request.GET.get('branch')
         range_type = request.GET.get('range_type', 'month')
         start_date, end_date = self.get_date_range(range_type)
 
@@ -37,7 +37,7 @@ class CustomerListView(TemplateResponseMixin, View):
             'branch__company__companyuser__user': request.user,
             'created_at__range': (start_date, end_date),
         }
-        if branch_id != 'all':
+        if branch_id and branch_id != 'all':
             base_filter['branch_id'] = branch_id
             branch_id = int(branch_id)
         customers = Customer.objects.filter(**base_filter)
