@@ -34,7 +34,7 @@ def get_customers_count(newsletter_id):
         for customer in customers:
             if customer.branch == branch_newsletter.branch:
                 count += 1
-    return f'Количество получатели {count}'
+    return count
 
 
 @register.filter(name='filename')

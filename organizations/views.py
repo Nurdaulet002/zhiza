@@ -325,16 +325,15 @@ class EmployeeListView(EmployeeMixin, ListView):
             return Branch.objects.none()
         return CustomUser.objects.filter(branch__in=branches)
 
-
+from django.contrib import messages
 # Создать филиал
 class EmployeeCreateView(EmployeeMixin, CreateView):
     template_name = 'settings/employees/create.html'
     form_class = CustomUserForm
 
     def form_valid(self, form):
-        user = form.save(commit=False)  # Don't commit the save yet
+        user = form.save(commit=False)
         user.password = make_password(form.cleaned_data['password'])
-        # Hash the password
         user.save()
 
         try:
@@ -344,6 +343,9 @@ class EmployeeCreateView(EmployeeMixin, CreateView):
             pass
 
         return super().form_valid(form)
+
+    def get_form(self, form_class=None):
+        return CustomUserForm(user=self.request.user, **self.get_form_kwargs())
 
 
 # Обновить филиал
@@ -370,6 +372,9 @@ class EmployeeUpdateView(EmployeeMixin, UpdateView):
 
         user.save()
         return super().form_valid(form)
+
+    def get_form(self, form_class=None):
+        return CustomUserUpdateForm(user=self.request.user, **self.get_form_kwargs())
 
 
 # Удалить филиал

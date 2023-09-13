@@ -3,9 +3,9 @@ USERTYPE_MANAGER = 2
 USERTYPE_EMPLOYEE = 3
 
 USER_ROLE_CHOICES = (
-    (USERTYPE_OWNER, 'owner'),
-    (USERTYPE_MANAGER, 'manager'),
-    (USERTYPE_EMPLOYEE, 'employee'),
+    (USERTYPE_OWNER, 'Владелец'),
+    (USERTYPE_MANAGER, 'Админ'),
+    (USERTYPE_EMPLOYEE, 'Работник'),
 )
 
 STATUS_WAITING = 1

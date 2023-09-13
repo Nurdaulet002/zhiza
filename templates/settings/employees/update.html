@@ -25,10 +25,17 @@
       <div class="mb-3">
         <label for="message-text" class="col-form-label">Логин:</label>
         {{form.username}}
+        {{ form.username.errors }}
+      </div>
+      <div class="mb-3">
+        <label for="message-text" class="col-form-label">Старый пароль:</label>
+        {{form.old_password}}
+        {{ form.old_password.errors }}
       </div>
       <div class="mb-3">
         <label for="message-text" class="col-form-label">Пароль:</label>
         {{form.password}}
+        {{ form.password.errors }}
       </div>
 </div>
 

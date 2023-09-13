@@ -174,9 +174,9 @@
                             <h6>БАЗА ПОЛУЧАТЕЛЕЙ</h6>
                             <i data-feather="message-circle"></i>
                         </div>
-                        {% get_count_customers_number newsletter.id as customers_number %}
+                        {% get_customers_count newsletter.id as customers_number %}
                         {% if not customers_number == 'Еще не добавлена! (0)' %}
-                            {{ customers_number }}<br>
+                            Количество получателей рассылки: {{ customers_number }}<br>
                             ФИЛЬТР <br>
                             {% if newsletter.active_last_month == True %}
                                 Активно последний месяц &#10003;
@@ -311,7 +311,7 @@
 
 <div>
     БАЗА ПОЛУЧАТЕЛЕЙ <br>
-    {% get_count_customers_number newsletter.id as customers_number %}
+
     {% if not customers_number == 'Еще не добавлена! (0)' %}
         {{ customers_number }}<br>
         ФИЛЬТР <br>

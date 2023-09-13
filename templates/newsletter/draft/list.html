@@ -40,7 +40,7 @@
                         </div>
                         
                         {% if newsletter.branches.all %}
-                        {% get_count_customers_number newsletter.id %}
+                        {% get_customers_count newsletter.id %}
                         {% else %}
                         <p class="mb-2">Номера получателей не добавлены </p>
                         {% endif %}

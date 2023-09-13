@@ -1,4 +1,12 @@
 {% load widget_tweaks %}
+
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
 <form action="{% url 'organization:employee_create' %}" method="post">
   {% csrf_token %}
   <div class="modal-header">
@@ -26,6 +34,7 @@
       <div class="mb-1">
         <label for="message-text" class="col-form-label">Логин:</label>
         {{form.username|add_class:"form-control"}}
+          {{ form.username.errors }}
       </div>
       <div class="mb-1">
         <label for="message-text" class="col-form-label">Пароль:</label>
