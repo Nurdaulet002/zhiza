@@ -17,13 +17,14 @@
               <option value="{{ branch.id }}" {% if branch_id == branch.id %}selected{% endif %}>{{ branch.title }}</option>
               {% endfor %}
           </select>
-          <select name="range_type" id="range_type"  class="form-control mr-8">
-            <option selected>Выберите период</option>
-              <option value="week" {% if range_type == 'week' %}selected{% endif %}>За неделю</option>
-              <option value="month" {% if range_type == 'month' %}selected{% endif %}>За месяц</option>
-              <option value="half-year" {% if range_type == 'half-year' %}selected{% endif %}>За полгода</option>
-              <option value="year" {% if range_type == 'year' %}selected{% endif %}>За 1 год</option>
-          </select>
+          <select name="range_type" id="range_type" class="form-control mr-8">
+                <option value="all-time" {% if range_type == 'all-time' %}selected{% endif %}>За все время</option>
+                <option value="week" {% if range_type == 'week' %}selected{% endif %}>За неделю</option>
+                <option value="month" {% if range_type == 'month' %}selected{% endif %}>За месяц</option>
+                <option value="quarter" {% if range_type == 'quarter' %}selected{% endif %}>За квартал</option>
+                <option value="half-year" {% if range_type == 'half-year' %}selected{% endif %}>За полгода</option>
+                <option value="year" {% if range_type == 'year' %}selected{% endif %}>За 1 год</option>
+            </select>&nbsp;
           <input class="btn btn-bd-light d-block w-100-sm" type="submit" value="ПОИСК">
       </form>
   </div>
@@ -34,6 +35,7 @@
   <div class="card">
     <div class="card-header">
       <h5 class="card-title mb-0">Список клиентов</h5>
+        <button class="btn btn-primary" id="export-excel">Экспорт в Excel</button>
     </div>
       <div class="table-responsive">
       <table class="table table-striped table-hover">
@@ -71,7 +73,19 @@
 {% endblock %}
 
 {% block domready %}
+$(document).on('click', '#export-excel', function(){
+    var branch = $('#branch').val();
+    var range_type = $('#range_type').val();
+    var url = '{% url 'customers:export_customers' %}';
 
+    // Создайте скрытую форму и добавьте значения branch и range_type в неё
+    var form = $('<form action="' + url + '" method="get"></form>');
+    form.append('<input type="hidden" name="branch" value="' + branch + '">');
+    form.append('<input type="hidden" name="range_type" value="' + range_type + '">');
+
+    // Отправьте форму на сервер
+    form.appendTo('body').submit().remove();
+});
 {% endblock %}
 
 

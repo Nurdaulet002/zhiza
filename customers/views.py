@@ -13,10 +13,14 @@ class CustomerListView(TemplateResponseMixin, View):
     template_name = 'customers/list.html'
 
     def get_date_range(self, range_type):
-        today = datetime.today().date()
+        today = datetime.now()
+        if range_type == "all-time":
+            earliest_date = Customer.objects.all().order_by('created_at').first().created_at.date()
+            return earliest_date, today
         start_date_methods = {
             "week": lambda: today - timedelta(days=6),
             "month": lambda: today.replace(day=1),
+            "quarter": lambda: today.replace(month=((today.month - 1) // 3) * 3 + 1, day=1),
             "half-year": lambda: today.replace(month=1, day=1) if today.month > 6 else today.replace(
                 year=today.year - 1, month=7, day=1),
             "year": lambda: today.replace(month=1, day=1)
@@ -56,14 +60,54 @@ class CustomerListView(TemplateResponseMixin, View):
 class ExportCustomersView(View):
 
     def get(self, request, *args, **kwargs):
+        # Get filter criteria from request
+        branch_id = request.GET.get('branch')
+        range_type = request.GET.get('range_type')
+
+        # Apply filters to fetch customers
+        customers = self.get_filtered_customers(branch_id, range_type)
+
         response = HttpResponse(content_type='application/ms-excel')
         response['Content-Disposition'] = 'attachment; filename="customers.xlsx"'
 
-        wb = self._create_workbook()
+        wb = self._create_workbook(customers)
         wb.save(response)
         return response
 
-    def _create_workbook(self):
+    def get_filtered_customers(self, branch_id, range_type):
+        # Build your filter criteria based on branch_id and range_type
+        filters = {}
+
+        if branch_id != 'all':
+            filters['branch__id'] = branch_id
+
+        if range_type == 'week':
+            # Calculate date range for the past week and add it to filters
+            end_date = datetime.now()
+            start_date = end_date - timedelta(days=7)
+            filters['created_at__range'] = (start_date, end_date)
+        elif range_type == 'month':
+            # Calculate date range for the past month and add it to filters
+            end_date = datetime.now()
+            start_date = end_date - timedelta(days=30)
+            filters['created_at__range'] = (start_date, end_date)
+        elif range_type == 'half-year':
+            # Calculate date range for the past six months and add it to filters
+            end_date = datetime.now()
+            start_date = end_date - timedelta(days=180)
+            filters['created_at__range'] = (start_date, end_date)
+        elif range_type == 'year':
+            # Calculate date range for the past year and add it to filters
+            end_date = datetime.now()
+            start_date = end_date - timedelta(days=365)
+            filters['created_at__range'] = (start_date, end_date)
+
+        # Fetch filtered customers
+        customers = Customer.objects.filter(**filters)
+
+        return customers
+
+    def _create_workbook(self, customers):
         wb = Workbook()
         ws = wb.active
         ws.title = "Клиенты"
@@ -75,7 +119,6 @@ class ExportCustomersView(View):
             ws['{}1'.format(col_letter)] = column_title
             ws.column_dimensions[col_letter].width = 15
 
-        customers = Customer.objects.all()
         for idx, customer in enumerate(customers, 2):
             ws.cell(row=idx, column=1, value=idx-1)
             ws.cell(row=idx, column=2, value=customer.phone_number)
