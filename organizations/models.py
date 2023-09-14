@@ -3,7 +3,7 @@ import string
 from django.db import models
 
 from accounts.models import CustomUser
-from constants import BRANCH_STATUS, NOT_ACTIVE
+from constants import BRANCH_STATUS, NOT_ACTIVE, RATE_CHOICES, RATE_DEFAULT
 
 
 class Branch(models.Model):
@@ -17,6 +17,7 @@ class Branch(models.Model):
     end_date = models.DateField(null=True, blank=True)
     status = models.PositiveSmallIntegerField(choices=BRANCH_STATUS, default=NOT_ACTIVE)
     code = models.CharField(max_length=6, unique=True, null=True, blank=True)
+    rate = models.PositiveSmallIntegerField(choices=RATE_CHOICES, default=RATE_DEFAULT)
 
     def __str__(self):
         return self.title

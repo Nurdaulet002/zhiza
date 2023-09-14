@@ -118,7 +118,7 @@
                     <h4 class="label">Sales Comparison</h4>
                 </div>
                 <div class="card-body">
-                    <canvas id="branchRatingsChart"></canvas>
+                    <canvas id="branchRatingsChart" ></canvas>
                 </div>
             </div>
         </div>
@@ -207,13 +207,11 @@ let chart = new Chart(ctx2, {
                 ticks: {
                     beginAtZero: true,
                     fontSize: 14
-                },
-                barThickness: 15,
-                categoryPercentage: 0.5,
-                barPercentage: 1.0
+                }
             }],
             yAxes: [{
-                barThickness: 50,
+                maxBarThickness: 50, // Установите максимальную толщину столбцов
+                minBarLength: 5,
                 ticks: {
                     fontSize: 16
                 },
@@ -258,12 +256,13 @@ var ctx3 = document.getElementById('branchRatingsCounts').getContext('2d');
 
 // Определите пять цветов для диаграммы
 var colors = [
-    'rgb(255, 99, 132)',   // Красный
-    'rgb(75, 192, 192)',   // Голубой
-    'rgb(255, 205, 86)',   // Желтый
-    'rgb(201, 203, 207)',  // Серый
-    'rgb(54, 162, 235)'    // Синий
+    'rgba(255, 0, 0, 1)',     // Красный
+    'rgba(255, 128, 0, 1)',   // Оранжевый
+    'rgba(255, 255, 0, 1)',   // Желтый
+    'rgba(128, 255, 0, 1)',   // Светло-зеленый
+    'rgba(0, 255, 0, 1)'      // Зеленый
 ];
+
 
 Chart.defaults.global.defaultFontStyle = 'bold';
 var myChart3 = new Chart(ctx3, {
@@ -280,34 +279,34 @@ var myChart3 = new Chart(ctx3, {
         legend: {
             position: 'left'
         },
-        animation: {
-            onComplete: function() {
-                var ctx = this.chart.ctx;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'bottom';
+<!--        animation: {-->
+<!--            onComplete: function() {-->
+<!--                var ctx = this.chart.ctx;-->
+<!--                ctx.textAlign = 'center';-->
+<!--                ctx.textBaseline = 'bottom';-->
 
-                this.data.datasets.forEach(function (dataset) {
-                    for (var i = 0; i < dataset.data.length; i++) {
-                        var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model,
-                            total = dataset._meta[Object.keys(dataset._meta)[0]].total,
-                            mid_radius = model.innerRadius + (model.outerRadius - model.innerRadius) / 2,
-                            start_angle = model.startAngle,
-                            end_angle = model.endAngle,
-                            mid_angle = start_angle + (end_angle - start_angle) / 2;
+<!--                this.data.datasets.forEach(function (dataset) {-->
+<!--                    for (var i = 0; i < dataset.data.length; i++) {-->
+<!--                        var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model,-->
+<!--                            total = dataset._meta[Object.keys(dataset._meta)[0]].total,-->
+<!--                            mid_radius = model.innerRadius + (model.outerRadius - model.innerRadius) / 2,-->
+<!--                            start_angle = model.startAngle,-->
+<!--                            end_angle = model.endAngle,-->
+<!--                            mid_angle = start_angle + (end_angle - start_angle) / 2;-->
 
-                        var x = mid_radius * Math.cos(mid_angle);
-                        var y = mid_radius * Math.sin(mid_angle);
+<!--                        var x = mid_radius * Math.cos(mid_angle);-->
+<!--                        var y = mid_radius * Math.sin(mid_angle);-->
 
-                        ctx.fillStyle = '#fff';
-                        if (i === 3) { // Darker text color for lighter background
-                            ctx.fillStyle = '#444';
-                        }
-                        // Display the label text next to the data point outside
-                        ctx.fillText(dataset.data[i], model.x + x, model.y + y);
-                    }
-                });
-            }
-        }
+<!--                        ctx.fillStyle = '#fff';-->
+<!--                        if (i === 3) { // Darker text color for lighter background-->
+<!--                            ctx.fillStyle = '#444';-->
+<!--                        }-->
+<!--                        // Display the label text next to the data point outside-->
+<!--                        ctx.fillText(dataset.data[i], model.x + x, model.y + y);-->
+<!--                    }-->
+<!--                });-->
+<!--            }-->
+<!--        }-->
     }
 });
 

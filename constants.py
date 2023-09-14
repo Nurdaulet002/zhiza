@@ -60,3 +60,13 @@ BRANCH_STATUS = (
     (NOT_ACTIVE, 'Не активен'),
     (WAITING_PAIMENT, 'Ожидается оплата'),
 )
+
+RATE_DEFAULT = 1
+RATE_STANDARD = 2
+RATE_VIP = 3
+
+RATE_CHOICES = (
+    (RATE_DEFAULT, 'Тариф'),
+    (RATE_STANDARD, 'Стандарт'),
+    (RATE_VIP, 'ВИП'),
+)
