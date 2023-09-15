@@ -185,7 +185,7 @@ def process_customer_rating(greenAPI, customer_request, text_message):
                 send_rating_feedback(greenAPI, customer_request.customer.phone_number)
                 Rating.objects.create(customer_request=customer_request, rating=text_message)
             elif text_message in range(4, 6):
-                send_positive_feedback(greenAPI, customer_request.customer.phone_number)
+                send_positive_feedback(greenAPI, customer_request.customer.phone_number, customer_request.branch.address)
                 Rating.objects.create(customer_request=customer_request, rating=text_message)
                 customer_request.is_active = False
                 customer_request.save()
@@ -200,8 +200,8 @@ def send_rating_feedback(greenAPI, phone_number):
     return JsonResponse({'data': result.data})
 
 
-def send_positive_feedback(greenAPI, phone_number):
-    message = '''Спасибо, что выбрали нас! Мы рады, что вам нравится наш продукт.'''
+def send_positive_feedback(greenAPI, phone_number, address):
+    message = f'Спасибо, что выбрали нас! Мы рады, что вам нравится наш продукт. Можете оставить отзыв в 2 ГИС {address}'
     result = greenAPI.sending.sendMessage(f'{phone_number}@c.us', message)
     return JsonResponse({'data': result.data})
 

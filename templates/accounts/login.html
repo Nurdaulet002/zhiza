@@ -10,6 +10,13 @@
 </head>
 <body class="text-center">
 <main class="form-signin">
+  {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
   <form action="{% url 'accounts:login' %}" method="post">
     {% csrf_token %}
     <h2 style="color: #14274E;font-size: 27px;font-weight: 500;">Zhiza</h2>

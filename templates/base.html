@@ -44,17 +44,27 @@
           </li>
           <li class="nav-item"><a href="{% url 'customers:customer_list' %}" class="nav-link"><i data-feather="users"></i><span>База клиентов</span></a></li>
           <li class="nav-item"><a href="{% url 'organization:feedback_list' %}" class="nav-link"><i data-feather="edit-3"></i><span>Отзывы</span></a></li>
+          {% if request.user.branch.rate == 3 %}
           <li class="nav-item"><a href="{% url 'raffle_prizes:raffle_prize_list' %}" class="nav-link"><i data-feather="briefcase"></i><span>Акция</span></a></li>
+          {% endif %}
           <li class="nav-item"><a href="{% url 'organization:report' %}" class="nav-link"><i data-feather="file-text"></i><span> Отчет</span></a></li>
+          {% if request.user.branch.rate == 3 %}
           <li class="nav-item"><a href="{% url 'newsletter:draft_list' %}" class="nav-link"><i data-feather="file-text"></i><span> Рассылка</span></a></li>
+          {% endif %}
         </ul>
       </div><!-- sidebar-body -->
       <div class="sidebar-footer">
         <a href="submenu.html" class="avatar online"><span class="avatar-initial">Е</span></a>
         <div class="avatar-body">
           <div class="d-flex align-items-center justify-content-between">
-            <h6>Елдос Өмірахын</h6>
-            <a href=""  class="footer-menu dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-settings-4-line"></i></a>
+            {% if user.is_authenticated %}
+            <h6>{{ user.username }}</h6>
+            <form method="post" action="{% url 'accounts:logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="footer-menu dropdown-toggle">Выйти</button>
+            </form>
+            {% endif %}
+<!--            <a href=""  class="footer-menu dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-settings-4-line"></i></a>-->
           </div>
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="#">Action</a></li>

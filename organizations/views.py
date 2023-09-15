@@ -208,8 +208,8 @@ class ReportView(TemplateResponseMixin, View):
 
         customers_purchase_only_once, customers_purchase_more_than_one = self.get_customer_data(branch_id)
         total_purchase = customers_purchase_only_once + customers_purchase_more_than_one
-        purchase_frequency = total_purchase / customers_purchase_only_once if customers_purchase_only_once else 0
-        repeat_purchase_frequency = customers_purchase_more_than_one / total_purchase if total_purchase else 0
+        purchase_frequency = round(total_purchase / customers_purchase_only_once, 2) if customers_purchase_only_once else 0
+        repeat_purchase_frequency = round(customers_purchase_more_than_one / total_purchase, 2) if total_purchase else 0
 
         branch_ratings = (Branch.objects.filter(company__companyuser__user=self.request.user,
                                                 customerrequest__rating__created__range=(start_date, end_date))
