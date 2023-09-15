@@ -4,45 +4,60 @@
 {% block title %}Акция{% endblock %}
 
 {% block content %}
-<div class="content-header d-flex align-items-center">
-  <a id="mobileMenu" href="submenu.html#" class="content-menu d-lg-none"><i data-feather="menu"></i></a>
-  <h4 class="content-menu-h">Акция</h4>
-</div><!-- content-header -->
-<div class="content-body">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">Акция</a></li>
-        <li class="breadcrumb-item"><a href="#">Настройка</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Data</li>
-      </ol>
-    </nav>
+<style type="text/css">
+    input{
+        width: auto;
+    }
+</style>
+<div class="content-header ">
+    <div class="header border-bottom">
+        <div class="d-flex align-items-center mb-2">
+            <a id="mobileMenu" href="submenu.html#" class="content-menu d-lg-none"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></a>
+            <h2 class="header-title mb-0">Акция</h2>
+        </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/dashboard-default">Акция</a></li>
+                <li class="breadcrumb-item"><a href="/dashboard-default">Настройка</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{raffle_prize.title}}</li>
+            </ol>
+        </nav>
+    </div>
 </div>
 
-Участники розыгрыша:
-<a type="button" class="company-branch-list-form" data-bs-toggle="modal"
-        data-bs-target="#exampleModal" data-url="{% url 'raffle_prizes:participating_branch_list' raffle_prize.id %}">
-        Добавить / Удалить
-</a><br>
-{% for participating_branch in raffle_prize.participatingbranch_set.all %}
-    {{participating_branch.branch.title}}
-{% endfor %} <br><br>
+<div class="content-body">
+    <div class="card mt-1">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <h6 style="margin-bottom:0px;" class="text-uppercase">Участники розыгрыша</h6>
+                <div class="mailing-list-btn-gruop mt-1">
+                    <a type="button" class="company-branch-list-form" data-bs-toggle="modal" data-bs-target="#exampleModal" data-url="{% url 'raffle_prizes:participating_branch_list' raffle_prize.id %}">
+                        Добавить / Удалить
+                    </a>
+                </div>
+            </div>
 
-Количество победителей: <br>
-{{raffle_prize.number_winners}} <br><br>
+            <div class="mb-2">
+                {% if raffle_prize.participatingbranch_set.all %}
+                    {% for participating_branch in raffle_prize.participatingbranch_set.all %}
+                        <span style="color:red;font-size: 15px">{{participating_branch.branch.title}}</span> ,
+                    {% endfor %}
+                {% else %}
+                    <div style="color:red;font-size: 15px"> Участники розыгрыша не добавлена</div>
+                {% endif %}
+            </div>
+            <div class="raffle">
+                <p class="mb-2"><b class="mr-8">Количество победителей:</b>{{raffle_prize.number_winners}}</p>
+                <p class="mb-2"><b class="mr-8">Дата начало:</b>{{raffle_prize.date_start}}   &nbsp&nbsp<b class="mr-8">Дата конец:</b> {{raffle_prize.date_end}}</p>
+                <p class="mb-2"><b>Сообщение победителю:</b> {{raffle_prize.message_winner}}</p>
+                <p class="mb-2"><b>Коментарий:</b> {{raffle_prize.comment}} <br></p>
+            </div>
+            
+                <a href="{% url 'raffle_prizes:settings_form' pk=raffle_prize.id %}" class="btn btn-primary mt-2 btn-sm" >Pедактировать</a>
+        </div>
+    </div>
+</div>
 
-Дата начало: <br>
-{{raffle_prize.date_start}} <br><br>
-
-Дата конец: <br>
-{{raffle_prize.date_end}} <br><br>
-
-Сообщение победителю: <br>
-{{raffle_prize.message_winner}} <br><br>
-
-Коментарий: <br>
-{{raffle_prize.comment}} <br>
-
-<a href="{% url 'raffle_prizes:settings_form' pk=raffle_prize.id %}">Редактировать</a>
 {% endblock %}
 
 {% block domready %}
