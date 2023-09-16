@@ -6,8 +6,8 @@ from integrations.models import Integration
 
 
 def my_scheduled_job(phone_number):
-    ID_INSTANCE = '1101817774'
-    API_TOKEN_INSTANCE = 'ecad3cbbda704ea0ab0f1a784f527c06938cf64fb3924895a0'
+    ID_INSTANCE = '1101817797'
+    API_TOKEN_INSTANCE = '444b8de1fd9d4c38a1cf4df0a43770b924f64bf46db349ac95'
     greenAPI = API.GreenApi(ID_INSTANCE, API_TOKEN_INSTANCE)
     message = '''Оцените по  5 балльной шкале: 
         1 - Ужасно

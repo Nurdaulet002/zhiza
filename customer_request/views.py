@@ -57,6 +57,7 @@ def webhookWhatsApp(request):
     data = json.loads(request.body)
     type_webhook = data.get('typeWebhook')
     if type_webhook == 'incomingMessageReceived':
+        print(data)
         process_incoming_message(data)
     return HttpResponse(status=200)
 
@@ -67,19 +68,19 @@ def process_incoming_message(data):
     greenAPI = API.GreenApi(integration.instance_id, integration.token)
     phone_number = data['senderData']['chatId'][:11]
 
-    # message_data = data.get('messageData', {})
-    # type_message = message_data.get('typeMessage')
-    # text_message_data = message_data.get('textMessageData', {})
-    #
+    message_data = data.get('messageData', {})
+    type_message = message_data.get('typeMessage')
+    text_message_data = message_data.get('textMessageData', {})
+
     # if type_message == 'textMessage':
     #     card_number = text_message_data.get('textMessage')
 
-    message_data = data.get('messageData', {})
-    type_message = message_data.get('typeMessage')
-    text_message_data = message_data.get('extendedTextMessageData', {})
+    # message_data = data.get('messageData', {})
+    # type_message = message_data.get('typeMessage')
+    # text_message_data = message_data.get('extendedTextMessageData', {})
 
-    if type_message == 'extendedTextMessage':
-        card_number = text_message_data.get('text')
+    if type_message == 'textMessage':
+        card_number = text_message_data.get('textMessage')
         print(card_number)
         if len(card_number) >= 6:
             try:
