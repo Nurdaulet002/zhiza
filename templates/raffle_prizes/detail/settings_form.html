@@ -2,25 +2,73 @@
 {% load static %}
 {% load organization_tags %}
 {% block title %}Акция{% endblock %}
-
+{% load widget_tweaks %}
 {% block content %}
-
-<form action="{% url 'raffle_prizes:settings_form' pk=pk %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    Количество победителей:
-    {{form.number_winners}}<br>
-    Фото победителю: <br>
-    {{form.image}} <br>
-    Сообщение победителю:
-    {{form.message_winner}}<br>
-    Дата начало:
-    {{form.date_start}}<br>
-    Дата конец:
-    {{form.date_end}}<br>
-    Коментарий:
-    {{form.comment}}
-    <input type="submit" value="Сохранить">
-</form>
+<style type="text/css">
+    textarea{
+        height: 100px;
+    }
+</style>
+<div class="content-header ">
+    <div class="header border-bottom">
+        <div class="d-flex align-items-center mb-2">
+            <a id="mobileMenu" href="submenu.html#" class="content-menu d-lg-none"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></a>
+            <h2 class="header-title mb-1">Акция</h2>
+        </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/dashboard-default">Акция</a></li>
+                <li class="breadcrumb-item"><a href="/dashboard-default">Настройка</a></li>
+                <li class="breadcrumb-item"><a href="/dashboard-default">Акция аты болу керек</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Редактировать</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="content-body">
+    <div class="card mt-1">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Частная информация</h5>
+        </div>
+        <div class="card-body">
+            <form action="{% url 'raffle_prizes:settings_form' pk=pk %}" method="post" enctype="multipart/form-data">{% csrf_token %}
+                <div class="row">
+                    <div class="mb-3 col-md-6">
+                        <label for="inputFirstName">Количество победителей </label>
+                        {{form.number_winners|add_class:"form-control"}}
+                    </div>
+                    <div class="mb-3 col-md-6">
+                        <label for="inputLastName">Фото победителю</label>
+                         {{form.image|add_class:"form-control"}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-md-12">
+                        <label for="inputFirstName">Сообщение победителю:</label>
+                        {{form.message_winner|add_class:"form-control"}}
+                    </div>
+                </div>
+                 <div class="row">
+                    <div class="mb-3 col-md-6">
+                        <label for="inputFirstName">Дата начало </label>
+                        {{form.date_start|add_class:"form-control"}}
+                    </div>
+                    <div class="mb-3 col-md-6">
+                        <label for="inputLastName">Дата конец</label>
+                         {{form.date_end|add_class:"form-control"}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-md-12">
+                        <label for="inputFirstName">Коментарий:</label>
+                        {{form.comment|add_class:"form-control"}}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block domready %}

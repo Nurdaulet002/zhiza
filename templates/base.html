@@ -27,7 +27,7 @@
 
   </head>
   <body class="animate skin-base">
-
+    <span class="loader"></span>
     <div class="sidebar">
       <div class="sidebar-header">
         <a href="submenu.html#" class="sidebar-logo"><span></span></a>
@@ -54,25 +54,20 @@
         </ul>
       </div><!-- sidebar-body -->
       <div class="sidebar-footer">
-        <a href="submenu.html" class="avatar online"><span class="avatar-initial">Е</span></a>
+        {% if user.is_authenticated %}
+        <a href="submenu.html" class="avatar online"><span class="avatar-initial">{{ user.username|first }}</span></a>
         <div class="avatar-body">
           <div class="d-flex align-items-center justify-content-between">
-            {% if user.is_authenticated %}
             <h6>{{ user.username }}</h6>
+          </div>
+          <span>
             <form method="post" action="{% url 'accounts:logout' %}">
               {% csrf_token %}
-              <button type="submit" class="footer-menu dropdown-toggle">Выйти</button>
+              <button type="submit" class="btn-logout">Выйти</button>
             </form>
-            {% endif %}
-<!--            <a href=""  class="footer-menu dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-settings-4-line"></i></a>-->
-          </div>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-          <span>Superuser/Administrator</span>
+          </span>
         </div><!-- avatar-body -->
+        {% endif %}
       </div><!-- sidebar-footer -->
     </div><!-- sidebar -->
 

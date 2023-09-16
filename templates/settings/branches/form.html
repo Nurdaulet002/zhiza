@@ -1,15 +1,17 @@
+{% load widget_tweaks %}
+
 <div class="modal-body">
       <div class="mb-3">
         <label for="recipient-name" class="col-form-label">Название:</label>
-        {{form.title}}
+        {{form.title|add_class:"form-control"}}
       </div>
       <div class="mb-3">
         <label for="message-text" class="col-form-label">Адрес:</label>
-        {{form.address}}
+        {{form.address|add_class:"form-control"}}
       </div>
       <div class="mb-3">
         <label for="message-text" class="col-form-label">Количество карточек:</label>
-        {{form.cards_number}}
+        {{form.cards_number|add_class:"form-control"}}
       </div>
 </div>
 

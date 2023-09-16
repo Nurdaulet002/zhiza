@@ -19,7 +19,7 @@
 <div class="content-header ">
    
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  pb-3  border-bottom">
-        <div>
+        <div class="mb-3 d-flex align-items-center">
             <a id="mobileMenu" href="submenu.html#" class="content-menu d-lg-none"><i data-feather="menu"></i></a>
             <h4 class="content-menu-h">Отчет</h4>
         </div>
@@ -29,15 +29,15 @@
                 {% for branch in branches %}
                 <option value="{{ branch.id }}" {% if branch_id == branch.id %}selected{% endif %}>{{ branch.title }}</option>
                 {% endfor %}
-            </select>&nbsp;&nbsp;
-            <select name="range_type" id="range_type" class="form-control">
+            </select>
+            <select name="range_type" id="range_type" class="form-control mr-8">
                 <option value="all-time" {% if range_type == 'all-time' %}selected{% endif %}>За все время</option>
                 <option value="week" {% if range_type == 'week' %}selected{% endif %}>За неделю</option>
                 <option value="month" {% if range_type == 'month' %}selected{% endif %}>За месяц</option>
                 <option value="quarter" {% if range_type == 'quarter' %}selected{% endif %}>За квартал</option>
                 <option value="half-year" {% if range_type == 'half-year' %}selected{% endif %}>За полгода</option>
                 <option value="year" {% if range_type == 'year' %}selected{% endif %}>За 1 год</option>
-            </select>&nbsp;&nbsp;
+            </select>
             <input type="submit" class="btn btn-bd-light" value="ПОИСК">
         </form>
     </div>
@@ -47,7 +47,7 @@
 
 
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-3 mb-2">
             <div class="card">
                 <div class="card-body">
                     <div class="text-center" style="height:70px;">
@@ -58,7 +58,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 mb-2">
             <div class="card">
                 <div class="card-body">
                     <div class="text-center" style="height:70px;">
@@ -68,7 +68,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 mb-2">
             <div class="card">
                 <div class="card-body ">
                     <div class="text-center" style="height:70px;">
@@ -78,7 +78,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 mb-2">
             <div class="card">
                 <div class="card-body ">
                     <div class="text-center" style="height:70px;">
@@ -90,7 +90,7 @@
         </div>
     </div>
     <div class="row mt-3">
-        <div class="col-md-6">
+        <div class="col-md-6 mb-2">
             <div class="card">
                 <div class="card-header">
                     <h4 class="label">Sales Comparison</h4>
@@ -100,7 +100,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 mb-2">
             <div class="card">
                 <div class="card-header">
                     <h4 class="label">Sales Comparison</h4>
@@ -111,7 +111,7 @@
             </div>
         </div>
     </div>
-    <div class="row mt-3 mb-3">
+    <div class="row mb-3">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
