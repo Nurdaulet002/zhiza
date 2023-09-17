@@ -37,7 +37,7 @@ class EmployeeIndexView(TemplateResponseMixin, View):
 class SendMessageView(View):
 
     def post(self, request, *args, **kwargs):
-        integration = Integration.objects.get(branch=self.request.user.branch)
+        integration = Integration.objects.get(id=self.request.user.branch.integration.id)
         greenAPI = API.GreenApi(integration.instance_id, integration.token)
         message = 'Ваш заказ готов! Забирайте в течений 15 минут!'
         card_number = request.POST.get('card_number')
@@ -70,7 +70,8 @@ def process_incoming_message(data):
 
     message_data = data.get('messageData', {})
     type_message = message_data.get('typeMessage')
-    text_message_data = message_data.get('textMessageData', {})
+    print(type_message)
+    text_message_data = message_data.get('extendedTextMessageData', {})
 
     # if type_message == 'textMessage':
     #     card_number = text_message_data.get('textMessage')
@@ -79,12 +80,11 @@ def process_incoming_message(data):
     # type_message = message_data.get('typeMessage')
     # text_message_data = message_data.get('extendedTextMessageData', {})
 
-    if type_message == 'textMessage':
-        card_number = text_message_data.get('textMessage')
-        print(card_number)
+    if type_message == 'extendedTextMessage':
+        card_number = text_message_data.get('text')
         if len(card_number) >= 6:
             try:
-                branch_code = card_number[0:6]
+                branch_code = card_number[69:75]
                 branch = Branch.objects.get(code=branch_code)
             except ObjectDoesNotExist:
                 last_customer_request = CustomerRequest.objects.filter(customer__phone_number=phone_number,
@@ -102,6 +102,7 @@ def process_incoming_message(data):
         # Если нет последнего запроса клиента, добавьте логику для обработки этой ситуации
 
         card_number = get_card_number_choice(card_number)
+        print('card_number: ', card_number)
 
         if card_number != 'Not Card Number':
 
@@ -220,66 +221,67 @@ def send_feedback_confirmation(greenAPI, phone_number):
 
 
 def get_card_number_choice(card_number):
-    card_number = card_number[8:]
-    if card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 1':
+    card_number = card_number[0:68]
+    print(card_number)
+    if card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 01':
         return 1
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 2':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 02':
         return 2
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 3':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 03':
         return 3
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 4':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 04':
         return 4
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 5':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 05':
         return 5
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 6':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 06':
         return 6
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 7':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 07':
         return 7
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 8':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 08':
         return 8
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 9':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 09':
         return 9
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 10':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 10':
         return 10
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 11':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 11':
         return 11
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 12':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 12':
         return 12
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 13':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 13':
         return 13
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 14':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 14':
         return 14
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 15':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 15':
         return 15
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 16':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 16':
         return 16
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 17':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 17':
         return 17
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 18':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 18':
         return 18
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 19':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 19':
         return 19
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 20':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 20':
         return 20
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 21':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 21':
         return 21
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 22':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 22':
         return 22
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 23':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 23':
         return 23
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 24':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 24':
         return 24
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 25':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 25':
         return 25
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 26':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 26':
         return 26
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 27':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 27':
         return 27
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 28':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 28':
         return 28
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 29':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 29':
         return 29
-    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер карточки - 30':
+    elif card_number == 'Хочу получить уведомление, когда заказ будет готов. Номер заказа: 30':
         return 30
     else:
         return 'Not Card Number'
