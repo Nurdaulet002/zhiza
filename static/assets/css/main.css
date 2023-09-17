@@ -197,7 +197,14 @@ thead, tbody, tfoot, tr, td, th:first-child{
     color: #3e4676;
     font-size: 14px;
 }
-
+#loader{
+    background: rgba(12, 12, 12, 0.8);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    display: none;
+}
 .loader {
     position: fixed; /* Используйте fixed, чтобы элемент оставался посередине, даже при прокрутке страницы */
     top: 50%; /* Разместите верхний край элемента на 50% высоты экрана */
@@ -212,7 +219,7 @@ thead, tbody, tfoot, tr, td, th:first-child{
     position: absolute;
     width: 40px;
     height: 40px;
-    background-color: #3e4676;
+    background-color: #fff;
     left: 50%;
     top: 50%;
     animation: rotate 1s ease-in infinite;

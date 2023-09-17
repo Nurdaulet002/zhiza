@@ -32,7 +32,7 @@
                 <p class="mb-2"><b class="mr-8">Количество участников::</b>{{raffle_prize.number_winners}} &nbsp&nbsp<b class="mr-8">Количество победителей:</b> {{raffle_prize.number_winners}}</p>
                 <p class="mb-2"><b class="mr-8">Дата начало:</b>{{raffle_prize.date_start}}   &nbsp&nbsp<b class="mr-8">Дата конец:</b> {{raffle_prize.date_end}}</p>
             </div>
-            <form action="{% url 'raffle_prizes:participating_branch_choice_winner' raffle_prize.id %}" method="post">
+            <form action="{% url 'raffle_prizes:participating_branch_choice_winner' raffle_prize.id %}" method="post" class="raffle">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-primary mt-2 btn-sm" >Определить победителя</button>
             </form>
