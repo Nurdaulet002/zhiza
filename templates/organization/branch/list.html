@@ -47,33 +47,251 @@
 </div><!-- content-header -->
 
 <div class="content-body">
-  <div class="card flex-fill">
-    <div class="card-header">
-      <h5 class="card-title mb-0">Список филиалы</h5>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card flex-fill">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Список филиалы</h5>
+        </div>
+        <div class="scroll-feedback">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Название</th>
+                  <th scope="col">Адрес</th>
+                  <th scope="col">Рейтинг</th>
+                  <th scope="col">Жалобы</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for branch in branches %}
+                <tr>
+                  <th scope="row">{{forloop.counter}}</th>
+                  <td>{{branch.title}}</td>
+                  <td>{{branch.address}}</td>
+                  <td>{{branch.average_rating}}</td>
+                  <td class="feedback-display-right" data-id="{{branch.id}}" data-url="{% url 'organization:branch_detail' %}">{{branch.num_ratings_with_comment}}</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="table-responsive">
-      <table class="table table-striped table-hover">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Название</th>
-            <th scope="col">Адрес</th>
-            <th scope="col">Рейтинг</th>
-            <th scope="col">Жалобы</th>
-          </tr>
-        </thead>
-        <tbody>
-        {% for branch in branches %}
-          <tr>
-            <th scope="row">{{forloop.counter}}</th>
-            <td>{{branch.title}}</td>
-            <td>{{branch.address}}</td>
-            <td>{{branch.average_rating}}</td>
-            <td class="feedback-display-right" data-id="{{branch.id}}" data-url="{% url 'organization:branch_detail' %}">{{branch.num_ratings_with_comment}}</td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
+    <div class="col-md-4">
+      <div class="card flex-fill">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Жалобы</h5>
+        </div>
+        <div class="card-body p-0 scroll-feedback">
+          <div class="desc">
+            <div class="d-flex justify-content-between mb-10">
+                <div class="d-flex align-items-center">
+                    <span class="font-xs text-muted"> <b>User 789</b> 17 сентября 2023 г. </span>
+                </div>
+                <div class="product-rate d-inline-block">
+                    <div class="stars">
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars"></i>
+                    </div>
+                </div>
+            </div>
+            <p class="mb-10">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, suscipit exercitationem accusantium obcaecati quos voluptate nesciunt facilis itaque modi commodi dignissimos sequi repudiandae minus ab deleniti totam officia id incidunt?</p>
+          </div>
+
+          <div class="desc">
+            <div class="d-flex justify-content-between mb-10">
+                <div class="d-flex align-items-center">
+                    <span class="font-xs text-muted"> <b>User 789</b> 17 сентября 2023 г. </span>
+                </div>
+                <div class="product-rate d-inline-block">
+                    <div class="stars">
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars"></i>
+                    </div>
+                </div>
+            </div>
+            <p class="mb-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, suscipit exercitationem accusantium obcaecati quos voluptate nesciunt facilis itaque modi commodi dignissimos sequi repudiandae minus ab deleniti totam officia id incidunt?</p>
+          </div>
+
+          <div class="desc">
+            <div class="d-flex justify-content-between mb-10">
+                <div class="d-flex align-items-center">
+                    <span class="font-xs text-muted"> <b>User 789</b> 17 сентября 2023 г. </span>
+                </div>
+                <div class="product-rate d-inline-block">
+                    <div class="stars">
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars"></i>
+                    </div>
+                </div>
+            </div>
+            <p class="mb-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, suscipit exercitationem accusantium obcaecati quos voluptate nesciunt facilis itaque modi commodi dignissimos sequi repudiandae minus ab deleniti totam officia id incidunt?</p>
+          </div>
+
+          <div class="desc">
+            <div class="d-flex justify-content-between mb-10">
+                <div class="d-flex align-items-center">
+                    <span class="font-xs text-muted"> <b>User 789</b> 17 сентября 2023 г. </span>
+                </div>
+                <div class="product-rate d-inline-block">
+                    <div class="stars">
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars"></i>
+                    </div>
+                </div>
+            </div>
+            <p class="mb-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, suscipit exercitationem accusantium obcaecati quos voluptate nesciunt facilis itaque modi commodi dignissimos sequi repudiandae minus ab deleniti totam officia id incidunt?</p>
+          </div>
+
+          <div class="desc">
+            <div class="d-flex justify-content-between mb-10">
+                <div class="d-flex align-items-center">
+                    <span class="font-xs text-muted"> <b>User 789</b> 17 сентября 2023 г. </span>
+                </div>
+                <div class="product-rate d-inline-block">
+                    <div class="stars">
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars"></i>
+                    </div>
+                </div>
+            </div>
+            <p class="mb-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, suscipit exercitationem accusantium obcaecati quos voluptate nesciunt facilis itaque modi commodi dignissimos sequi repudiandae minus ab deleniti totam officia id incidunt?</p>
+          </div>
+
+
+          <div class="desc">
+            <div class="d-flex justify-content-between mb-10">
+                <div class="d-flex align-items-center">
+                    <span class="font-xs text-muted"> <b>User 789</b> 17 сентября 2023 г. </span>
+                </div>
+                <div class="product-rate d-inline-block">
+                    <div class="stars">
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars"></i>
+                    </div>
+                </div>
+            </div>
+            <p class="mb-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, suscipit exercitationem accusantium obcaecati quos voluptate nesciunt facilis itaque modi commodi dignissimos sequi repudiandae minus ab deleniti totam officia id incidunt?</p>
+          </div>
+
+
+          <div class="desc">
+            <div class="d-flex justify-content-between mb-10">
+                <div class="d-flex align-items-center">
+                    <span class="font-xs text-muted"> <b>User 789</b> 17 сентября 2023 г. </span>
+                </div>
+                <div class="product-rate d-inline-block">
+                    <div class="stars">
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars"></i>
+                    </div>
+                </div>
+            </div>
+            <p class="mb-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, suscipit exercitationem accusantium obcaecati quos voluptate nesciunt facilis itaque modi commodi dignissimos sequi repudiandae minus ab deleniti totam officia id incidunt?</p>
+          </div>
+
+
+          <div class="desc">
+            <div class="d-flex justify-content-between mb-10">
+                <div class="d-flex align-items-center">
+                    <span class="font-xs text-muted"> <b>User 789</b> 17 сентября 2023 г. </span>
+                </div>
+                <div class="product-rate d-inline-block">
+                    <div class="stars">
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars"></i>
+                    </div>
+                </div>
+            </div>
+            <p class="mb-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, suscipit exercitationem accusantium obcaecati quos voluptate nesciunt facilis itaque modi commodi dignissimos sequi repudiandae minus ab deleniti totam officia id incidunt?</p>
+          </div>
+
+
+          <div class="desc">
+            <div class="d-flex justify-content-between mb-10">
+                <div class="d-flex align-items-center">
+                    <span class="font-xs text-muted"> <b>User 789</b> 17 сентября 2023 г. </span>
+                </div>
+                <div class="product-rate d-inline-block">
+                    <div class="stars">
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars"></i>
+                    </div>
+                </div>
+            </div>
+            <p class="mb-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, suscipit exercitationem accusantium obcaecati quos voluptate nesciunt facilis itaque modi commodi dignissimos sequi repudiandae minus ab deleniti totam officia id incidunt?</p>
+          </div>
+
+
+          <div class="desc">
+            <div class="d-flex justify-content-between mb-10">
+                <div class="d-flex align-items-center">
+                    <span class="font-xs text-muted"> <b>User 789</b> 17 сентября 2023 г. </span>
+                </div>
+                <div class="product-rate d-inline-block">
+                    <div class="stars">
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars"></i>
+                    </div>
+                </div>
+            </div>
+            <p class="mb-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, suscipit exercitationem accusantium obcaecati quos voluptate nesciunt facilis itaque modi commodi dignissimos sequi repudiandae minus ab deleniti totam officia id incidunt?</p>
+          </div>
+
+
+          <div class="desc">
+            <div class="d-flex justify-content-between mb-10">
+                <div class="d-flex align-items-center">
+                    <span class="font-xs text-muted"> <b>User 789</b> 17 сентября 2023 г. </span>
+                </div>
+                <div class="product-rate d-inline-block">
+                    <div class="stars">
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars-active"></i>
+                        <i data-feather="star" class="stars"></i>
+                    </div>
+                </div>
+            </div>
+            <p class="mb-1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, suscipit exercitationem accusantium obcaecati quos voluptate nesciunt facilis itaque modi commodi dignissimos sequi repudiandae minus ab deleniti totam officia id incidunt?</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -106,6 +324,16 @@ $(document).on('click', '.feedback-display-right', function(){
 
 $('.branch-search-select').selectize({
 placeholder: 'Выберите опцию...'});
+
+var scrollFeedback = document.querySelector('.scroll-feedback');
+
+scrollFeedback.addEventListener('scroll', function() {
+    if (scrollFeedback.scrollHeight > scrollFeedback.clientHeight) {
+        scrollFeedback.classList.add('scrollable');
+    } else {
+        scrollFeedback.classList.remove('scrollable');
+    }
+});
 {% endblock %}
 
 
