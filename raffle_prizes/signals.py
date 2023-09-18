@@ -32,12 +32,16 @@ def my_model_post_save(sender, instance, created, **kwargs):
                     data = {
                         'phone_number': instance.customer.phone_number,
                         'message': message,
-                        'file_path': instance.raffle_prize.image.path
+                        'file_path': instance.raffle_prize.image.path,
+                        'instance_id': instance.customer.branch.integration.instance_id,
+                        'token': instance.customer.branch.integration.token
                     }
                 else:
                     data = {
                         'phone_number': instance.customer.phone_number,
-                        'message': message
+                        'message': message,
+                        'instance_id': instance.customer.branch.integration.instance_id,
+                        'token': instance.customer.branch.integration.token
                     }
                 schedule_send_winner_message(data=data)
                 break

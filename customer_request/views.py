@@ -62,75 +62,131 @@ def webhookWhatsApp(request):
     return HttpResponse(status=200)
 
 
-def process_incoming_message(data):
+def process_extended_text_message(data, integration, greenAPI):
     instance_id = data['instanceData']['idInstance']
-    integration = Integration.objects.get(instance_id=instance_id)
-    greenAPI = API.GreenApi(integration.instance_id, integration.token)
     phone_number = data['senderData']['chatId'][:11]
 
     message_data = data.get('messageData', {})
-    type_message = message_data.get('typeMessage')
-    print(type_message)
     text_message_data = message_data.get('extendedTextMessageData', {})
+    card_number = text_message_data.get('text')
 
-    # if type_message == 'textMessage':
-    #     card_number = text_message_data.get('textMessage')
-
-    # message_data = data.get('messageData', {})
-    # type_message = message_data.get('typeMessage')
-    # text_message_data = message_data.get('extendedTextMessageData', {})
-
-    if type_message == 'extendedTextMessage':
-        card_number = text_message_data.get('text')
-        if len(card_number) >= 6:
-            try:
-                branch_code = card_number[69:75]
-                branch = Branch.objects.get(code=branch_code)
-            except ObjectDoesNotExist:
-                last_customer_request = CustomerRequest.objects.filter(customer__phone_number=phone_number,
-                                                                       is_active=True).last()
-                if last_customer_request:
-                    branch = last_customer_request.branch
-                else:
-                    return
-        else:
-            last_customer_request = CustomerRequest.objects.filter(customer__phone_number=phone_number).last()
+    if len(card_number) >= 6:
+        try:
+            branch_code = card_number[69:75]
+            branch = Branch.objects.get(code=branch_code)
+        except ObjectDoesNotExist:
+            last_customer_request = CustomerRequest.objects.filter(customer__phone_number=phone_number,
+                                                                   is_active=True).last()
             if last_customer_request:
                 branch = last_customer_request.branch
             else:
                 return
-        # Если нет последнего запроса клиента, добавьте логику для обработки этой ситуации
-
-        card_number = get_card_number_choice(card_number)
-        print('card_number: ', card_number)
-
-        if card_number != 'Not Card Number':
-
-            customer, created = Customer.objects.get_or_create(phone_number=phone_number, branch=branch)
-            customer_request = get_active_customer_request(customer, branch)
-
-            if customer_request:
-                message = f'Вы уже оставили запрос! Мы сообщим вам, когда ваш заказ будет готов!'
-                greenAPI.sending.sendMessage(f'{phone_number}@c.us', message)
-                return
-            else:
-                create_customer_request(customer, card_number, branch)
-                group_manager = 'whatsapp_socket_%s' % branch.id
-                send_group_message(group_manager, card_number)
-                message = f'Отлично! Мы сообщим вам, когда ваш заказ будет готов!'
-                greenAPI.sending.sendMessage(f'{phone_number}@c.us', message)
-                return
-
-        else:
-            customer, created = Customer.objects.get_or_create(phone_number=phone_number, branch=branch)
-            customer_request = get_active_customer_request(customer, branch)
-            if customer_request:
-                process_customer_rating(greenAPI, customer_request, text_message_data.get('text'))
-            else:
-                return
-
     else:
-        # Действия, выполняемые в случае, если type_message не является 'textMessage'
+        last_customer_request = CustomerRequest.objects.filter(customer__phone_number=phone_number).last()
+        if last_customer_request:
+            branch = last_customer_request.branch
+        else:
+            return
+
+    card_number = get_card_number_choice(card_number)
+    print('card_number:', card_number)
+
+    if card_number != 'Not Card Number':
+        customer, created = Customer.objects.get_or_create(phone_number=phone_number, branch=branch)
+        customer_request = get_active_customer_request(customer, branch)
+
+        if customer_request:
+            message = f'Вы уже оставили запрос! Мы сообщим вам, когда ваш заказ будет готов!'
+            greenAPI.sending.sendMessage(f'{phone_number}@c.us', message)
+            return
+        else:
+            create_customer_request(customer, card_number, branch)
+            group_manager = f'whatsapp_socket_{branch.id}'
+            send_group_message(group_manager, card_number)
+            message = f'Отлично! Мы сообщим вам, когда ваш заказ будет готов!'
+            greenAPI.sending.sendMessage(f'{phone_number}@c.us', message)
+            return
+    else:
+        customer, created = Customer.objects.get_or_create(phone_number=phone_number, branch=branch)
+        customer_request = get_active_customer_request(customer, branch)
+        if customer_request:
+            process_customer_rating(greenAPI, customer_request, text_message_data.get('text'))
+        else:
+            return
+
+
+def process_text_message(data, integration, greenAPI):
+    instance_id = data['instanceData']['idInstance']
+    phone_number = data['senderData']['chatId'][:11]
+
+    message_data = data.get('messageData', {})
+    text_message_data = message_data.get('textMessageData', {})
+    card_number = text_message_data.get('textMessage')
+
+    if len(card_number) >= 6:
+        try:
+            branch_code = card_number[69:75]
+            branch = Branch.objects.get(code=branch_code)
+        except ObjectDoesNotExist:
+            last_customer_request = CustomerRequest.objects.filter(customer__phone_number=phone_number,
+                                                                   is_active=True).last()
+            if last_customer_request:
+                branch = last_customer_request.branch
+            else:
+                return
+    else:
+        last_customer_request = CustomerRequest.objects.filter(customer__phone_number=phone_number).last()
+        if last_customer_request:
+            branch = last_customer_request.branch
+        else:
+            return
+
+    card_number = get_card_number_choice(card_number)
+    print('card_number:', card_number)
+
+    if card_number != 'Not Card Number':
+        customer, created = Customer.objects.get_or_create(phone_number=phone_number, branch=branch)
+        customer_request = get_active_customer_request(customer, branch)
+
+        if customer_request:
+            message = f'Вы уже оставили запрос! Мы сообщим вам, когда ваш заказ будет готов!'
+            greenAPI.sending.sendMessage(f'{phone_number}@c.us', message)
+            return
+        else:
+            create_customer_request(customer, card_number, branch)
+            group_manager = f'whatsapp_socket_{branch.id}'
+            send_group_message(group_manager, card_number)
+            message = f'Отлично! Мы сообщим вам, когда ваш заказ будет готов!'
+            greenAPI.sending.sendMessage(f'{phone_number}@c.us', message)
+            return
+    else:
+        customer, created = Customer.objects.get_or_create(phone_number=phone_number, branch=branch)
+        customer_request = get_active_customer_request(customer, branch)
+        if customer_request:
+            process_customer_rating(greenAPI, customer_request, text_message_data.get('textMessage'))
+        else:
+            return
+
+
+def process_incoming_message(data):
+    try:
+        instance_id = data['instanceData']['idInstance']
+        integration = Integration.objects.get(instance_id=instance_id)
+        greenAPI = API.GreenApi(integration.instance_id, integration.token)
+
+        message_data = data.get('messageData', {})
+        type_message = message_data.get('typeMessage')
+
+        if type_message == 'extendedTextMessage':
+            process_extended_text_message(data, integration, greenAPI)
+        elif type_message == 'textMessage':
+            process_text_message(data, integration, greenAPI)
+        else:
+            # Действия, выполняемые в случае, если type_message не является 'textMessage' или 'extendedTextMessage'
+            return
+    except Exception as e:
+        # Обработка ошибок или логирование исключений
+        print(f"Error processing incoming message: {str(e)}")
         return
 
 

@@ -15,10 +15,10 @@ def get_or_create_scheduler():
     return scheduler
 
 
-def schedule_my_job(phone_number):
+def schedule_my_job(phone_number, instance_id, token):
     scheduler = get_or_create_scheduler()
     run_date = datetime.now() + timedelta(seconds=10)
-    scheduler.add_job(my_scheduled_job, 'date', run_date=run_date, args=[phone_number])
+    scheduler.add_job(my_scheduled_job, 'date', run_date=run_date, args=[phone_number, instance_id, token])
 
 
 def check_requests_without_ratings_after_60_minutes():

@@ -11,6 +11,8 @@ def my_model_post_save(sender, instance, created, **kwargs):
         pass
     else:
         if instance.is_active:
-            schedule_my_job(phone_number=instance.customer.phone_number)
+            schedule_my_job(phone_number=instance.customer.phone_number,
+                            instance_id=instance.branch.integration.instance_id,
+                            token=instance.branch.integration.token)
         else:
             pass
