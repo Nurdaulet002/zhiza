@@ -27,7 +27,9 @@
 
   </head>
   <body class="animate skin-base">
-    <span class="loader"></span>
+    <div id="loader">
+      <span class="loader" ></span>
+    </div>
     <div class="sidebar">
       <div class="sidebar-header">
         <a href="submenu.html#" class="sidebar-logo"><span></span></a>
@@ -130,6 +132,42 @@
       });
         {% block domready %}
         {% endblock %}
+      });
+      // Получите ссылку на элементы формы и спиннера
+      var form = document.querySelector('.raffle');
+      var loader = document.getElementById('loader');
+      console.log(form)
+      // Добавьте обработчик события submit для формы
+      // Добавьте обработчик события submit для формы
+      form.addEventListener('submit', function (event) {
+        event.preventDefault(); // Предотвратите отправку формы по умолчанию
+
+        // Покажите спиннер
+        loader.style.display = 'block';
+
+        // Отправьте форму с помощью AJAX или Fetch
+        fetch(form.action, {
+            method: form.method,
+            body: new FormData(form),
+        })
+        .then(function (response) {
+            return response.text(); // Получите текст ответа
+        })
+        .then(function (data) {
+            // Обработайте ответ от сервера, например, обновите содержимое страницы
+
+            // Установите задержку перед скрытием спиннера (например, 5 секунд)
+            setTimeout(function () {
+                // Скройте спиннер
+                loader.style.display = 'none';
+            }, 5000); // 5000 миллисекунд = 5 секунд
+        })
+        .catch(function (error) {
+            console.error('Произошла ошибка:', error);
+
+            // Скройте спиннер в случае ошибки
+            loader.style.display = 'none';
+        });
       });
     </script>
   </body>

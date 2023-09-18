@@ -197,7 +197,14 @@ thead, tbody, tfoot, tr, td, th:first-child{
     color: #3e4676;
     font-size: 14px;
 }
-
+#loader{
+    background: rgba(12, 12, 12, 0.8);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    display: none;
+}
 .loader {
     position: fixed; /* Используйте fixed, чтобы элемент оставался посередине, даже при прокрутке страницы */
     top: 50%; /* Разместите верхний край элемента на 50% высоты экрана */
@@ -212,7 +219,7 @@ thead, tbody, tfoot, tr, td, th:first-child{
     position: absolute;
     width: 40px;
     height: 40px;
-    background-color: #3e4676;
+    background-color: #fff;
     left: 50%;
     top: 50%;
     animation: rotate 1s ease-in infinite;
@@ -236,6 +243,58 @@ thead, tbody, tfoot, tr, td, th:first-child{
     60%{ transform: translate(-50%, 100%) rotate(180deg) scale(1, 1)}
     75%{ transform: translate(-50%, 0%) rotate(270deg) scale(1 , 1)}
     100%{ transform: translate(-50%, -100%) rotate(360deg) scale(1 , 1)}
+}
+.scroll-feedback {
+    height: 81vh;
+    
+    overflow-x: hidden;
+     overflow-y: hidden;
+}
+.scroll-feedback::-webkit-scrollbar {
+  width: 6px;
+  cursor: pointer;
+  opacity: 0; /* Скрываем полосу прокрутки изначально */
+  transition: opacity 1s ease-in-out; /* Добавляем плавный переход */
+}
+.scroll-feedback:hover{
+  overflow-y: scroll; /* Показываем скролл при наведении курсора */
+  opacity: 1; 
+}
+.scroll-feedback::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+.scroll-feedback::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+.desc{
+    border-bottom: 1px solid #ddd;
+    padding: 0px 15px;
+    margin-bottom: 10px;
+}
+.desc p{
+    font-size: 14px;
+    text-align: justify;
+    line-height: 18px;
+}
+.stars-active{
+    fill: yellow;
+}
+.stars svg{
+    width: 15px;
+}
+.font-xs{
+    font-size: 12px;
+}
+.font-xs b{
+    font-size: 14px;
+}
+
+.body-after{
+    padding: 0 16px;
+    border-left: 2px solid #4cae4f ;
+}
+.sm-none{
+    display: block;
 }
 /* Медиа-запрос для более узких экранов */
 @media (max-width: 768px) {
@@ -340,6 +399,15 @@ thead, tbody, tfoot, tr, td, th:first-child{
     .btn-icon{
         display: block;
         margin-bottom: 8px;
+    }
+    .scroll-feedback{
+        height: 60vh;
+    }
+    .sm-none{
+        display: none;
+    }
+    .btn-sm{
+        font-size: 12px;
     }
 }
 
