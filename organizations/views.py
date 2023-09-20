@@ -60,8 +60,10 @@ class FeedbackListView(TemplateResponseMixin, View):
 
         start_date, end_date = self.get_date_range(date_range)
         date_filter = {}
+        date_filter_rating = {}
         if start_date and end_date:
             date_filter = {"datetime__range": (start_date, end_date)}
+            date_filter_rating = {"created__range": (start_date, end_date)}
 
         branches = list(branches_query)  # Execute the query only once
 
@@ -69,12 +71,14 @@ class FeedbackListView(TemplateResponseMixin, View):
             self.compute_ratings(branch, date_filter)
 
         branches_selectize = Branch.objects.filter(company__companyuser__user=request.user)
-
+        ratings = Rating.objects.filter(customer_request__branch__company__companyuser__user=request.user,
+                                        comment__isnull=False, **date_filter_rating).exclude(comment__exact='').order_by('-id')
         context = {
             'branches': branches,
             'branch_search': branch_search,
             'date_range': date_range,
-            'branches_selectize': branches_selectize
+            'branches_selectize': branches_selectize,
+            'ratings': ratings
         }
 
         return self.render_to_response(context)
@@ -97,7 +101,7 @@ class BranchDetailView(TemplateResponseMixin, View):
         return start_date, today
 
     def get(self, request, *args, **kwargs):
-        branch_id = request.GET.get('branch_id')
+        branch_id = self.kwargs.get('branch_id')
         date_range = request.GET.get('date_range', "")
         print(date_range)
         branch = Branch.objects.get(pk=branch_id)
@@ -110,7 +114,8 @@ class BranchDetailView(TemplateResponseMixin, View):
         context = {
             'branch': branch,
             'ratings': ratings,
-            'rating_count': rating_count
+            'rating_count': rating_count,
+            'date_range':date_range
         }
         return self.render_to_response(context)
 

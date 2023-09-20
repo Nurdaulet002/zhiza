@@ -107,3 +107,34 @@ def get_full_name(first_name, last_name):
     full_name = f'{first_name} {last_name}'
     return full_name
 
+@register.simple_tag
+def get_formatted_date(date_obj):
+    formatted_date = date_obj.strftime('%Y-%m-%d')
+    return formatted_date
+
+@register.simple_tag
+def get_raffle_prize_image_name(image_path):
+    name = image_path[21:]
+    return name
+
+@register.filter
+def generate_stars(value):
+    stars = []
+    for i in range(5):
+        if i < value:
+            stars.append('<i data-feather="star" class="stars-active"></i>')
+        else:
+            stars.append('<i data-feather="star" class="stars"></i>')
+    return ''.join(stars)
+
+@register.filter(name='truncate_chars')
+def truncate_chars(value, max_length=30):
+    try:
+        if len(value) > max_length:
+            return value[:max_length] + '...'
+        else:
+            return value
+    except:
+        return value
+
+

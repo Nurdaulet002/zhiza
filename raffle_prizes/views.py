@@ -98,14 +98,18 @@ class RufflePrizeSettingFormView(UpdateView):
     form_class = RafflePrizeSettingForm
     template_name = 'raffle_prizes/detail/settings_form.html'
 
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['pk'] = self.kwargs.get('pk')
+        context['raffle_prize'] = RafflePrize.objects.get(pk=self.kwargs.get('pk'))
         return context
 
     def get_success_url(self, **kwargs):
         pk = self.kwargs.get('pk')
         return reverse_lazy('raffle_prizes:settings', kwargs={'pk': pk})
+
+
 
 
 class ParticipatingBranchListView(TemplateResponseMixin, View):

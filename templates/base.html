@@ -136,7 +136,6 @@
       // Получите ссылку на элементы формы и спиннера
       var form = document.querySelector('.raffle');
       var loader = document.getElementById('loader');
-      console.log(form)
       // Добавьте обработчик события submit для формы
       // Добавьте обработчик события submit для формы
       form.addEventListener('submit', function (event) {
@@ -155,11 +154,11 @@
         })
         .then(function (data) {
             // Обработайте ответ от сервера, например, обновите содержимое страницы
-
             // Установите задержку перед скрытием спиннера (например, 5 секунд)
             setTimeout(function () {
                 // Скройте спиннер
                 loader.style.display = 'none';
+                location.reload()
             }, 5000); // 5000 миллисекунд = 5 секунд
         })
         .catch(function (error) {

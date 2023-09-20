@@ -1,26 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load organization_tags %}
+{% block title %}Точки{% endblock %}
+
+{% block content %}
+
+<div class="content-header ">
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  pb-3  border-bottom">
+      <div class="mb-2 d-flex align-items-center">
+          <a id="mobileMenu" href="submenu.html#" class="content-menu d-lg-none"><i data-feather="menu"></i></a>
+          <h4 class="header-title mb-0">Жалобы</h4>
+      </div>
+
+      <form method="get" class="btn-group btn-order-group me-2" action="{% url 'organization:branch_detail' branch.id %}">
+          <select name="date_range" id="date-range-select" class="form-control mr-8">
+            <option selected>Выберите период:</option>
+            <option value="all-time" {% if date_range == 'all-time' %}selected{% endif %}>За все время</option>
+                <option value="week" {% if date_range == 'week' %}selected{% endif %}>За неделю</option>
+                <option value="month" {% if date_range == 'month' %}selected{% endif %}>За месяц</option>
+                <option value="quarter" {% if date_range == 'quarter' %}selected{% endif %}>За квартал</option>
+                <option value="half-year" {% if date_range == 'half-year' %}selected{% endif %}>За полгода</option>
+                <option value="year" {% if date_range == 'year' %}selected{% endif %}>За 1 год</option>
+          </select>
+          <input type="submit" class="btn btn-bd-light" value="ПОИСК">
+      </form>
 
 
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Рейтинг</th>
-      <th scope="col">Отзыв</th>
-      <th scope="col">Дата</th>
-    </tr>
-  </thead>
-  <tbody>
+  </div>
+    <br>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'organization:feedback_list' %}">Жалобы</a></li>
+            <!-- <li class="breadcrumb-item"><a href="/dashboard-default">Настройка</a></li> -->
+            <li class="breadcrumb-item active" aria-current="page">{{branch.title}}</li>
+        </ol>
+    </nav>
+</div>
+<!-- content-header -->
+
+<div class="content-body">
+  <div class="row">
+    <div class="col-md-12 sm-none">
+      <div class="card flex-fill">
+        <div class="card-header">
+          <h5 class="card-title mb-0"></h5>
+        </div>
+        <div class="card-body p-0 ">
 {% for rating in ratings %}
-    <tr>
-      <th scope="row">{{forloop.counter}}</th>
-      <td>{{rating.rating}}</td>
-      <td>{{rating.comment}}</td>
-      <td>{{rating.created}}</td>
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
+<div class="desc">
+  <div class="d-flex justify-content-between mb-10">
+      <div class="d-flex align-items-center">
+          <span class="font-xs text-muted"> <b>user@{{rating.customer_request.customer.id}}</b>
+              {{ rating.created|date:"d.m.y G:i" }}</span>
+      </div>
+      <div class="product-rate d-inline-block">
+          <div class="stars">
+              {{ rating.rating|generate_stars|safe }}
+          </div>
+      </div>
+  </div><br>
+  <p class="mb-10">{{rating.comment}}</p>
+</div>
+{% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
+<div id="feedback-content-right">
+
+</div>
+
+
+
+{% endblock %}
 
 
 

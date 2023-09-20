@@ -17,9 +17,9 @@
         </div>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/dashboard-default">Акция</a></li>
-                <li class="breadcrumb-item"><a href="/dashboard-default">Настройка</a></li>
-                <li class="breadcrumb-item active" aria-current="page">{{raffle_prize.title}}</li>
+                <li class="breadcrumb-item"><a href="{% url 'raffle_prizes:raffle_prize_list' %}">Акция</a></li>
+<!--                <li class="breadcrumb-item"><a href="/dashboard-default">Настройка</a></li>-->
+                <li class="breadcrumb-item active" aria-current="page">Настройка {{raffle_prize.title}}</li>
             </ol>
         </nav>
     </div>
@@ -29,10 +29,10 @@
     <div class="card mt-1">
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
-                <h6 style="margin-bottom:0px;" class="text-uppercase">Участники розыгрыша</h6>
+                <h6 style="margin-bottom:0px;" class="text-uppercase">Участвующие филиалы</h6><br><br>
                 <div class="mailing-list-btn-gruop mt-1">
-                    <a type="button" class="company-branch-list-form" data-bs-toggle="modal" data-bs-target="#exampleModal" data-url="{% url 'raffle_prizes:participating_branch_list' raffle_prize.id %}">
-                        Добавить / Удалить
+                    <a href="#" class="company-branch-list-form" data-bs-toggle="modal" data-bs-target="#exampleModal" data-url="{% url 'raffle_prizes:participating_branch_list' raffle_prize.id %}">
+                        изменить
                     </a>
                 </div>
             </div>
@@ -40,22 +40,46 @@
             <div class="mb-2">
                 {% if raffle_prize.participatingbranch_set.all %}
                     {% for participating_branch in raffle_prize.participatingbranch_set.all %}
-                        <span style="color:red;font-size: 15px">{{participating_branch.branch.title}}</span> ,
+                        <span class="badge bg-warning text-dark" style="color:#4CAF50;font-size: 15px">{{participating_branch.branch.title}}</span> <b>/</b>
                     {% endfor %}
                 {% else %}
                     <div style="color:red;font-size: 15px"> Участники розыгрыша не добавлена</div>
                 {% endif %}
             </div>
-            <div class="raffle">
-                <p class="mb-2"><b class="mr-8">Количество победителей:</b>{{raffle_prize.number_winners}}</p>
-                <p class="mb-2"><b class="mr-8">Дата начало:</b>{{raffle_prize.date_start}}   &nbsp&nbsp<b class="mr-8">Дата конец:</b> {{raffle_prize.date_end}}</p>
-                <p class="mb-2"><b>Сообщение победителю:</b> {{raffle_prize.message_winner}}</p>
-                <p class="mb-2"><b>Коментарий:</b> {{raffle_prize.comment}} <br></p>
-            </div>
-            
-                <a href="{% url 'raffle_prizes:settings_form' pk=raffle_prize.id %}" class="btn btn-primary mt-2 btn-sm" >Pедактировать</a>
         </div>
     </div>
+
+</div><br>
+<div class="content-body">
+    <div class="card mt-1">
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center">
+                <h6 style="margin-bottom:0px;" class="text-uppercase">Настройка розыгрыша</h6><br><br>
+                <div class="mailing-list-btn-gruop mt-1">
+                     <a href="{% url 'raffle_prizes:settings_form' pk=raffle_prize.id %}"  >Pедактировать</a>
+                </div>
+            </div>
+
+            <div class="raffle">
+                <p class="mb-2"><b class="mr-8">Количество победителей:</b>{{raffle_prize.number_winners}}</p>
+                <p class="mb-2"><b class="mr-8">Дата начало:</b><input type="date" value="{% get_formatted_date raffle_prize.date_start %}" disabled>   &nbsp&nbsp<b class="mr-8">Дата конец:</b> <input type="date" value="{% get_formatted_date raffle_prize.date_end  %}" disabled></p>
+                <p class="mb-2"><b class="mr-8">Фото победителей:</b>
+                    {% if raffle_prize.image %}
+                    <a href="{{raffle_prize.image.url}}" >{% get_raffle_prize_image_name raffle_prize.image.url %}</a>
+                    {% else %}
+                     не выбрано
+                    {% endif %}
+                </p>
+                <p class="mb-2"><b>Сообщение победителю:</b><br>
+                    <textarea name="" id="" cols="30" rows="10" disabled>{{raffle_prize.message_winner}}</textarea>
+
+                <p class="mb-2"><b>Коментарий:</b><br>
+                <textarea name="" id="" cols="30" rows="10" disabled>{{raffle_prize.comment}}</textarea> </p>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 {% endblock %}

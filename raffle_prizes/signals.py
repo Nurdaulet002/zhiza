@@ -13,10 +13,6 @@ from raffle_prizes.models import Winner, PromoCode
 
 @receiver(post_save, sender=Winner)
 def my_model_post_save(sender, instance, created, **kwargs):
-    integration = Integration.objects.get(branch=instance.customer.branch)
-    ID_INSTANCE = integration.instance_id
-    API_TOKEN_INSTANCE = integration.token
-    greenAPI = API.GreenApi(ID_INSTANCE, API_TOKEN_INSTANCE)
     if created:
         characters = string.ascii_lowercase + string.digits
 

@@ -4,6 +4,11 @@
 {% block title %}Акция{% endblock %}
 
 {% block content %}
+<style>
+    .played-color{
+    background-color: #4CAF50;
+}
+</style>
 
 <div class="content-header ">
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  pb-3  border-bottom">
@@ -29,11 +34,12 @@
                         <div class="card-body">
                             <div class="card-header p-0 d-flex align-items-center justify-content-between">
                                 <div class="d-flex align-items-center">
-                                    <h5 class="card-title mb-0 mr-8">{{ raffle_prize.title }}</h5>
-                                    <span class="badge bg-warning text-dark">{{ raffle_prize.get_status_display }}</span>
+                                    <h5 class="card-title mb-0 mr-8">{{ raffle_prize.title }}  <a href="#" class="raffle-prize-form" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal" data-url="{% url 'raffle_prizes:update' raffle_prize.id %}" style="color:green">&#9998;</a> </h5>
+                                    <span class="badge {% if raffle_prize.status == 2 %} bg-warning {% else %} played-color {% endif %} text-dark">{{ raffle_prize.get_status_display }}</span>
                                 </div>
                                 <div>
-                                    <a href="{% url 'raffle_prizes:settings' raffle_prize.id %}" class="btn btn-secondary btn-sm">Настройки</a>
+                                    <a style="color:red" href="#" class="raffle-prize-form" data-bs-toggle="modal" data-bs-target="#exampleModal" data-url="{% url 'raffle_prizes:delete' raffle_prize.id %}">Удалить</a>
                                 </div>
                             </div>
                             <table class="table table-sm my-2">
@@ -50,7 +56,9 @@
                                     </tr>
                                     <tr>
                                         <th>Участники</th>
-                                        <td>{{ raffle_prize.customer_count }}</td>
+                                        <td>
+                                            <b>{{ raffle_prize.customer_count }}</b>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>Победители</th>
@@ -58,19 +66,19 @@
                                             {% if not raffle_prize.winner_set.all.exists %}
                                                 <a href="{% url 'raffle_prizes:participating_branch_winners' raffle_prize.id %}">Еще на разыграно</a>
                                             {% else %}
-                                                <a href="{% url 'raffle_prizes:participating_branch_winners' raffle_prize.id %}">Победителей ({{raffle_prize.winners_count}}/{{raffle_prize.number_winners}})</a>
+                                                <a href="{% url 'raffle_prizes:participating_branch_winners' raffle_prize.id %}">Победителей ({{raffle_prize.winners_count}}/{{raffle_prize.number_winners}})
+                                                </a>
                                             {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Настройка</th>
+                                        <td>
+                                            <a style="background-color:#8BC34A" href="{% url 'raffle_prizes:settings' raffle_prize.id %}" class="btn btn-secondary btn-sm">Перейти настройку</a>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <div class="mailing-list-btn-gruop mt-1">
-                                <a href="#" class="raffle-prize-form" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal" data-url="{% url 'raffle_prizes:update' raffle_prize.id %}">редактировать</a>
-                                
-                                <a href="#" class="raffle-prize-form" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal" data-url="{% url 'raffle_prizes:delete' raffle_prize.id %}">Удалить</a>
-                            </div>
                         </div>
                     </div>
                 {% endfor %}

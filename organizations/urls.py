@@ -6,7 +6,7 @@ app_name = 'organization'
 urlpatterns = [
     path('feedback/list/', views.FeedbackListView.as_view(),
          name='feedback_list'),
-    path('branch/detail/', views.BranchDetailView.as_view(),
+    path('branch/detail/<branch_id>', views.BranchDetailView.as_view(),
          name='branch_detail'),
     path('report/', views.ReportView.as_view(),
          name='report'),

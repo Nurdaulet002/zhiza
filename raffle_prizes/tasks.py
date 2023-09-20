@@ -25,15 +25,10 @@ class GreenAPIService:
             logger.error(f"Error sending message to {phone_number}: {e}")
 
     def send_file(self, phone_number, file_path, message):
+        file_name = file_path[42:]
+        print(file_name)
         try:
-            upload_response = self.api.sending.uploadFile(file_path)
-            if upload_response.code == 200:
-                url_file = upload_response.data["urlFile"]
-                file_name = basename(urlparse(url_file).path)
-                self.api.sending.sendFileByUrl(f"{phone_number}@c.us", url_file, file_name, message)
-            else:
-                error_message = upload_response.data.get("errorMessage", "Unknown error")
-                logger.warning(f"Failed to upload file for {phone_number}. Status code: {upload_response.code}. Error message: {error_message}")
+            self.api.sending.sendFileByUpload(f"{phone_number}@c.us", file_path, file_name, message)
         except Exception as e:
             capture_exception(e)
             logger.error(f"Error sending file to {phone_number}: {e}")

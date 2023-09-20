@@ -17,9 +17,8 @@
         </div>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/dashboard-default">Акция</a></li>
-                <li class="breadcrumb-item"><a href="/dashboard-default">Настройка</a></li>
-                <li class="breadcrumb-item"><a href="/dashboard-default">Акция аты болу керек</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'raffle_prizes:raffle_prize_list' %}">Акция</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'raffle_prizes:settings' raffle_prize.id %}">Настройка {{raffle_prize.title}}</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Редактировать</li>
             </ol>
         </nav>
