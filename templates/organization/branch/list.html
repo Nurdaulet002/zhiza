@@ -33,7 +33,7 @@
             {% endfor %}
           </select>
           <select name="date_range" id="date-range-select" class="form-control mr-8">
-            <option selected>Выберите период:</option>
+            <option selected>Выберите период</option>
             <option value="all-time" {% if date_range == 'all-time' %}selected{% endif %}>За все время</option>
                 <option value="week" {% if date_range == 'week' %}selected{% endif %}>За неделю</option>
                 <option value="month" {% if date_range == 'month' %}selected{% endif %}>За месяц</option>
@@ -51,7 +51,7 @@
     <div class="col-md-8">
       <div class="card flex-fill">
         <div class="card-header">
-          <h5 class="card-title mb-0">Список филиалы</h5>
+          <h5 class="card-title mb-0">Список филиалов</h5>
         </div>
         <div class="scroll-feedback">
           {% for branch in branches %}

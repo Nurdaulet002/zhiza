@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load newsletter_tags %}
+{% block title %} Новая рассылка{% endblock %}
+{% load widget_tweaks %}
+{% block content %}
+
+<div class="content-header ">
+    <div class="header border-bottom">
+        <div class="d-flex align-items-center mb-2">
+            <a id="mobileMenu" href="submenu.html#" class="content-menu d-lg-none"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></a>
+            <h2 class="header-title mb-0">Редактировать</h2>
+        </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'newsletter:draft_list' %}">Рассылки</a></li>
+<!--                <li class="breadcrumb-item"><a href="/dashboard-default">Настройка</a></li>-->
+                <li class="breadcrumb-item active" aria-current="page">{{object.title}}</li>
+            </ol>
+        </nav>
+    </div>
+</div><!-- content-header -->
+
+<div class="content-body">
+    <div class="card">
+        <div class="card-body">
+            <form action="{% url 'newsletter:newsletter_update' pk=object.id %}" method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label  class="form-label" for="">Название рассылки</label>
+                    {{form.title|add_class:"form-control"}}
+                    <div id="emailHelp" class="form-text">
+                        Оно будет отображаться в списке рассылок и его будете видеть только вы.
+                    </div>
+                </div>
+                <input type="submit" class="btn btn-primary" value="РЕДАКТИРОВАТЬ">
+
+                <input type="hidden" value="False" name="active_last_month">
+                <input type="hidden" value="False" name="active_last_week">
+                <input type="hidden" value="False" name="active_last_day">
+
+                <a class="btn btn-bd-light" style="height: 38px;font-size: 15px;width: 150px;" href="{% url 'newsletter:draft_list' %}">ОТМЕНА</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

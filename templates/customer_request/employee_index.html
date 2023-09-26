@@ -73,6 +73,7 @@ $(document).on('click', '.sent-request-button', function(){
       success: function(data) {
         var card = document.querySelector('#card-list [data-id="' + card_number + '"]');
         card.style.background = "darkgrey";
+        showToast("Заказ номер " + card_number + " был успешно отправлен!");
       }
     });
 });

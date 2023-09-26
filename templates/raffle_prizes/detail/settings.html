@@ -63,18 +63,18 @@
 
             <div class="raffle">
                 <p class="mb-2"><b class="mr-8">Количество победителей:</b>{{raffle_prize.number_winners}}</p>
-                <p class="mb-2"><b class="mr-8">Дата начало:</b><input type="date" value="{% get_formatted_date raffle_prize.date_start %}" disabled>   &nbsp&nbsp<b class="mr-8">Дата конец:</b> <input type="date" value="{% get_formatted_date raffle_prize.date_end  %}" disabled></p>
-                <p class="mb-2"><b class="mr-8">Фото победителей:</b>
+                <p class="mb-2"><b class="mr-8">Дата начала:</b><input type="date" value="{% get_formatted_date raffle_prize.date_start %}" disabled>   &nbsp&nbsp<b class="mr-8">Дата конца:</b> <input type="date" value="{% get_formatted_date raffle_prize.date_end  %}" disabled></p>
+                <p class="mb-2"><b class="mr-8">Прикрепленное фото:</b>
                     {% if raffle_prize.image %}
                     <a href="{{raffle_prize.image.url}}" >{% get_raffle_prize_image_name raffle_prize.image.url %}</a>
                     {% else %}
                      не выбрано
                     {% endif %}
                 </p>
-                <p class="mb-2"><b>Сообщение победителю:</b><br>
+                <p class="mb-2"><b>Сообщение к победителю:</b><br>
                     <textarea name="" id="" cols="30" rows="10" disabled>{{raffle_prize.message_winner}}</textarea>
 
-                <p class="mb-2"><b>Коментарий:</b><br>
+                <p class="mb-2"><b>Комментарий:</b><br>
                 <textarea name="" id="" cols="30" rows="10" disabled>{{raffle_prize.comment}}</textarea> </p>
             </div>
         </div>

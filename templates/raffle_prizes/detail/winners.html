@@ -100,7 +100,7 @@
             </div>
             <div>
                 <p class="mb-2"><b class="mr-8">Количество участников::</b>{{raffle_prize.number_winners}} &nbsp&nbsp<b class="mr-8">Количество победителей:</b> {{raffle_prize.number_winners}}</p>
-                <p class="mb-2"><b class="mr-8">Дата начало:</b>{{raffle_prize.date_start}}   &nbsp&nbsp<b class="mr-8">Дата конец:</b> {{raffle_prize.date_end}}</p>
+                <p class="mb-2"><b class="mr-8">Дата начала:</b>{{raffle_prize.date_start}}   &nbsp&nbsp<b class="mr-8">Дата конца:</b> {{raffle_prize.date_end}}</p>
             </div>
             <form action="{% url 'raffle_prizes:participating_branch_choice_winner' raffle_prize.id %}" method="post" class="raffle">
                 {% csrf_token %}
@@ -129,8 +129,8 @@
                         </div>
                         <div class="card-info-1" style="background-color: #eeeeee;">
                             <div class="winner-name-1">Номер победителя: user@{{winner.customer.id}}</div>
-                            <div class="win-date-1">Дата выигрыша: {{winner.date_win}}</div>
-                            <div class="win-number-1">Номер телефона: {{winner.customer.phone_number}}</div>
+                            <div class="win-date-1">Дата: {{winner.date_win}}</div>
+                            <div class="win-number-1">Телефон: {{winner.customer.phone_number}}</div>
                         </div>
                     </div>
                 <br>

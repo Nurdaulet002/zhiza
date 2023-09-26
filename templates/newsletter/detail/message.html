@@ -12,9 +12,9 @@
         </div>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/dashboard-default">Рассылки</a></li>
-                <li class="breadcrumb-item"><a href="/dashboard-default">{{newsletter.title}}</a></li>
-                <li class="breadcrumb-item active" aria-current="page"> СООБЩЕНИЯ</li>
+                <li class="breadcrumb-item"><a href="{% url 'newsletter:draft_list' %}">Рассылки</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{newsletter.title}}</li>
+                <li class="breadcrumb-item active" aria-current="page">СВОДКА</li>
             </ol>
         </nav>
         {% if newsletter.status == 1 %}
@@ -30,14 +30,14 @@
                    </div>
                 </div>
             {% else %}
-                <p>Чтобы отправить рассылку на проверку, необходимо добавить сообщения </p>
+                <p>Чтобы отправить рассылку на проверку, необходимо добавить сообщение </p>
                 <div>
                     <div class="item-status">
                         {{newsletter.get_status_display}}
                     </div>
                     <i  data-feather="arrow-right"></i>
                    <div class="mailing-list-btn-gruop mt-1" style="display: unset;">
-                       <a href="{% url 'newsletter:detail_message' newsletter.id %}" >Добавить сообщения</a>
+                       <a href="{% url 'newsletter:detail_message' newsletter.id %}" >Добавить сообщение</a>
                    </div>
                 </div>
             {% endif %}
@@ -70,7 +70,7 @@
     <div class="border-bottom">
         <ul class="list-inline">
           <li class="list-inline-item"><a href="{% url 'newsletter:detail_summary' newsletter.id %}">СВОДКА</a></li>
-          <li class="list-inline-item">СООБЩЕНИЯ</li>
+          <li class="list-inline-item">СООБЩЕНИЕ</li>
           <li class="list-inline-item"><a href="{% url 'newsletter:recipient_create_update' newsletter.id %}">ПОЛУЧАТЕЛИ</a></li>
         </ul>
     </div>
@@ -83,15 +83,15 @@
                         {{newsletter.text}}
                     </div>
                     <div class="mailing-list-btn-gruop mt-1">
-                        <a href="{% url 'newsletter:message_create' newsletter.id %}">РЕДАКТИРОВАТЬ СООБЩЕНИЯ</a>
+                        <a href="{% url 'newsletter:message_create' newsletter.id %}">РЕДАКТИРОВАТЬ СООБЩЕНИЕ</a>
                     </div>
                 {% else %}
                     <div style="background-color: #f8f4c6; padding:10px;border-radius:5px;" class="">
-                        Сообщения еще не добавлена
+                        Сообщение еще не добавлено
                     </div>
                     <hr>
                     <div class="mailing-list-btn-gruop mt-1">
-                        <a href="{% url 'newsletter:message_create' newsletter.id %}">Добавить сообщения</a>
+                        <a href="{% url 'newsletter:message_create' newsletter.id %}">Добавить сообщение</a>
                     </div>
                 {% endif %}
             </div>

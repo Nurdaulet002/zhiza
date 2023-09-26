@@ -27,6 +27,10 @@
   </head>
   <body class="animate skin-base">
 
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 11">
+    <!-- Toasts будут добавляться сюда -->
+    </div>
+
     <div class="sidebar">
       <div class="sidebar-header">
         <a href="submenu.html#" class="sidebar-logo"><span></span></a>
@@ -39,19 +43,20 @@
         </ul>
       </div><!-- sidebar-body -->
       <div class="sidebar-footer">
-        <a href="submenu.html" class="avatar online"><span class="avatar-initial">Е</span></a>
+        {% if user.is_authenticated %}
+        <a href="submenu.html" class="avatar online"><span class="avatar-initial">{{ user.username|first }}</span></a>
         <div class="avatar-body">
           <div class="d-flex align-items-center justify-content-between">
-            <h6>Елдос Өмірахын</h6>
-            <a href=""  class="footer-menu dropdown-toggle"  data-bs-toggle="dropdown" aria-expanded="false"><i class="ri-settings-4-line"></i></a>
+            <h6>{{ user.username }}</h6>
           </div>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-          <span>Superuser/Administrator</span>
+          <span>
+            <form method="post" action="{% url 'accounts:logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn-logout">Выйти</button>
+            </form>
+          </span>
         </div><!-- avatar-body -->
+        {% endif %}
       </div><!-- sidebar-footer -->
     </div><!-- sidebar -->
 
@@ -81,6 +86,32 @@
         }
       });
       $(document).ready(function(){
+        function showToast(message) {
+            // Создаем новый элемент для toast
+            let toastElement = $('<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true">\
+                <div class="toast-header">\
+                    <i class="rounded me-2" data-feather="bell"></i>\
+                    <strong class="me-auto">zhiza</strong>\
+                    <small>сейчас</small>\
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>\
+                </div>\
+                <div class="toast-body">'+ message +'</div>\
+            </div>');
+
+            // Добавляем новый toast в контейнер
+            $('.toast-container').append(toastElement);
+
+            // Инициализируем и показываем toast
+            let bsToast = new bootstrap.Toast(toastElement[0]);
+            bsToast.show();
+
+            // Удаляем toast после 5 секунд
+            setTimeout(function () {
+                bsToast.hide();
+                toastElement.remove();
+            }, 5000);
+        }
+
         {% block domready %}
         {% endblock %}
       });

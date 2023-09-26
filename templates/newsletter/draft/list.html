@@ -36,11 +36,17 @@
                     <div class="mailing-list">
                         <div class="d-flex justify-content-between align-items-center">
                             <h4>{{newsletter.title}}</h4>
-                            <i data-feather="more-vertical"></i>
+                            <div class="dropdown">
+                              <i data-feather="more-vertical" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" href="{% url 'newsletter:newsletter_update' newsletter.id %}"><i data-feather="edit"></i>Редактировать</a></li>
+                                <li><a class="dropdown-item" href="{% url 'newsletter:newsletter_delete' newsletter.id %}"><i data-feather="slash"></i>Удалить</a></li>
+                              </ul>
+                            </div>
                         </div>
                         
                         {% if newsletter.branches.all %}
-                        {% get_customers_count newsletter.id %}
+                        Рассылка на {% get_customers_count newsletter.id %} телефонный номер
                         {% else %}
                         <p class="mb-2">Номера получателей не добавлены </p>
                         {% endif %}
@@ -52,14 +58,14 @@
                                 <b>Рассылка готова к отправке на проверку и последующему запуску</b>
                             </span>
                         {% else %}
-                            <span class="d-block"><b>Чтобы отправить рассылку на проверку, необходимо добавить сообщения</b></span>
+                            <span class="d-block"><b>Чтобы отправить рассылку на проверку, необходимо добавить сообщение</b></span>
                         {% endif %}
                             <div class="mailing-list-btn-gruop mt-1">
                                 <a href="{% url 'newsletter:detail_summary' newsletter.id %}">ОТКРЫТЬ</a>
                                 {% if newsletter.text %}
                                     <a href="{% url 'newsletter:under_review_confirm' newsletter.id %}">ОТПРАВИТЬ НА ПРОВЕРКУ</a>
                                 {% else %}
-                                <a href="{% url 'newsletter:message_create' newsletter.id %}">ДОБАВИТЬ СООБЩЕНИЯ</a>
+                                <a href="{% url 'newsletter:message_create' newsletter.id %}">ДОБАВИТЬ СООБЩЕНИЕ</a>
                             </div>
                             
                         {% endif %}

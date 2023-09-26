@@ -6,6 +6,8 @@ app_name = 'newsletter'
 urlpatterns = [
     path('create/', views.NewsletterCreateView.as_view(),
          name='create'),
+    path('newsletter/<int:pk>/update/', views.NewsletterUpdateView.as_view(), name='newsletter_update'),
+    path('newsletter/<int:pk>/delete/', views.NewsletterDeleteView.as_view(), name='newsletter_delete'),
     path('detail/summary/<int:pk>', views.NewsletterDetailSummaryView.as_view(),
          name='detail_summary'),
     path('detail/message/<int:pk>', views.NewsletterDetailMessageView.as_view(),

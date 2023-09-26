@@ -1,13 +1,14 @@
 from django.forms import inlineformset_factory
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import ListView, CreateView, DetailView, UpdateView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 
 from newsletter.forms import NewsletterForm, BranchNewsletterForm, BranchNewsletterSelectForm
-from newsletter.models import Newsletter, BranchNewsletter
+from newsletter.models import Newsletter, BranchNewsletter, Broadcast
 from django.views.generic.base import TemplateResponseMixin
 from django.views import View
 
+from organizations.models import CompanyUser
 
 
 class NewsletterCreateView(CreateView):
@@ -18,11 +19,34 @@ class NewsletterCreateView(CreateView):
     def get_success_url(self):
         return reverse('newsletter:draft_list')
 
+    def form_valid(self, form):
+        company_user = get_object_or_404(CompanyUser, user=self.request.user)
+        form.instance.company = company_user.company
+        return super(NewsletterCreateView, self).form_valid(form)
+
+
+class NewsletterDeleteView(DeleteView):
+    model = Newsletter
+    success_url = reverse_lazy('newsletter:draft_list')
+    template_name = 'newsletter/delete.html'
+
+
+class NewsletterUpdateView(UpdateView):
+    model = Newsletter
+    fields = ['title']
+    success_url = reverse_lazy('newsletter:draft_list')
+    template_name = 'newsletter/update.html'
+
 
 class NewsletterDetailSummaryView(DetailView):
     model = Newsletter
     template_name = 'newsletter/detail/summary.html'
     context_object_name = 'newsletter'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['received_number'] = Broadcast.objects.filter(newsletter=self.object.id, message_sent=True).count()
+        return context
 
 class NewsletterDetailMessageView(DetailView):
     model = Newsletter
@@ -67,7 +91,8 @@ class DraftListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(status=1)
+        company_user = get_object_or_404(CompanyUser, user=self.request.user)
+        queryset = queryset.filter(status=1, company=company_user.company)
         return queryset
 
 
@@ -104,7 +129,8 @@ class UnderReviewListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(status=2)
+        company_user = get_object_or_404(CompanyUser, user=self.request.user)
+        queryset = queryset.filter(status=2, company=company_user.company)
         return queryset
 
 class UnderReviewConfirmView(TemplateResponseMixin, View):
@@ -150,9 +176,12 @@ class ReadyToStartListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(status=3)
+        company_user = get_object_or_404(CompanyUser, user=self.request.user)
+        queryset = queryset.filter(status=3, company=company_user.company)
         return queryset
 
+
+from newsletter.apscheduler import schedule_my_job
 class StartNewsletterView(TemplateResponseMixin, View):
     template_name = 'newsletter/ready_to_start/start_newsletter.html'
 
@@ -169,6 +198,7 @@ class StartNewsletterView(TemplateResponseMixin, View):
         newsletter = get_object_or_404(Newsletter, id=newsletter_id)
         newsletter.status = 5
         newsletter.save()
+        schedule_my_job(newsletter=newsletter, instance_id=request.user.branch.integration.instance_id, token=request.user.branch.integration.token)
         return redirect('newsletter:detail_summary', newsletter_id)
 
 class InProgressListView(ListView):
@@ -178,7 +208,8 @@ class InProgressListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(status=5)
+        company_user = get_object_or_404(CompanyUser, user=self.request.user)
+        queryset = queryset.filter(status=5, company=company_user.company)
         return queryset
 
 class CompletedListView(ListView):
@@ -188,7 +219,8 @@ class CompletedListView(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(status=6)
+        company_user = get_object_or_404(CompanyUser, user=self.request.user)
+        queryset = queryset.filter(status=6, company=company_user.company)
         return queryset
 
 

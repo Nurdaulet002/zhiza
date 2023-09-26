@@ -27,7 +27,7 @@
 <div class="content-body">
     <div class="card mt-1">
         <div class="card-header">
-          <h5 class="card-title mb-0">Частная информация</h5>
+          <h5 class="card-title mb-0"></h5>
         </div>
         <div class="card-body">
             <form action="{% url 'raffle_prizes:settings_form' pk=pk %}" method="post" enctype="multipart/form-data">{% csrf_token %}
@@ -37,29 +37,29 @@
                         {{form.number_winners|add_class:"form-control"}}
                     </div>
                     <div class="mb-3 col-md-6">
-                        <label for="inputLastName">Фото победителю</label>
+                        <label for="inputLastName">Прикрепленное фото</label>
                          {{form.image|add_class:"form-control"}}
                     </div>
                 </div>
                 <div class="row">
                     <div class="mb-3 col-md-12">
-                        <label for="inputFirstName">Сообщение победителю:</label>
+                        <label for="inputFirstName">Сообщение к победителю:</label>
                         {{form.message_winner|add_class:"form-control"}}
                     </div>
                 </div>
                  <div class="row">
                     <div class="mb-3 col-md-6">
-                        <label for="inputFirstName">Дата начало </label>
+                        <label for="inputFirstName">Дата начала </label>
                         {{form.date_start|add_class:"form-control"}}
                     </div>
                     <div class="mb-3 col-md-6">
-                        <label for="inputLastName">Дата конец</label>
+                        <label for="inputLastName">Дата конца</label>
                          {{form.date_end|add_class:"form-control"}}
                     </div>
                 </div>
                 <div class="row">
                     <div class="mb-3 col-md-12">
-                        <label for="inputFirstName">Коментарий:</label>
+                        <label for="inputFirstName">Комментарий:</label>
                         {{form.comment|add_class:"form-control"}}
                     </div>
                 </div>

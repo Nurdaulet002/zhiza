@@ -13,8 +13,8 @@
         Рассылка готова к отправке на проверку и последующему запуску
         <div><b>{{newsletter.get_status_display}}</b> <a href="{% url 'newsletter:under_review_confirm' newsletter.id %}">ОТПРАВИТЬ НА ПРОВЕРКУ</a></div>
     {% else %}
-        Чтобы отправить рассылку на проверку, необходимо добавить сообщения <br>
-        <div><b>{{newsletter.get_status_display}}</b> <a href="{% url 'newsletter:detail_message' newsletter.id %}">Добавить сообщения</a></div>
+        Чтобы отправить рассылку на проверку, необходимо добавить сообщение <br>
+        <div><b>{{newsletter.get_status_display}}</b> <a href="{% url 'newsletter:detail_message' newsletter.id %}">Добавить сообщение</a></div>
     {% endif %}
 {% elif newsletter.status == 2 %}
     Рассылка проходит проверку
@@ -40,19 +40,19 @@
 
 <ul>
     <li><a href="{% url 'newsletter:detail_summary' newsletter.id %}">СВОДКА</a></li>
-    <li><a href="{% url 'newsletter:detail_message' newsletter.id %}">СООБЩЕНИЯ</a></li>
+    <li><a href="{% url 'newsletter:detail_message' newsletter.id %}">СООБЩЕНИЕ</a></li>
     <li><a href="{% url 'newsletter:recipient_create_update' newsletter.id %}">ПОЛУЧАТЕЛИ</a></li>
 </ul>
 {% if newsletter.text %}
     <div style="background-color: #dcf8c6; padding:10px;border-radius:5px;">
         {{newsletter.text}}
     </div>
-    <a href="{% url 'newsletter:message_create' newsletter.id %}">РЕДАКТИРОВАТЬ СООБЩЕНИЯ</a>
+    <a href="{% url 'newsletter:message_create' newsletter.id %}">РЕДАКТИРОВАТЬ СООБЩЕНИЕ</a>
 {% else %}
 <div style="background-color: #f8f4c6; padding:10px;border-radius:5px;">
-        Сообщения еще не добавлена
+        Сообщение еще не добавлено
     </div>
-<a href="{% url 'newsletter:message_create' newsletter.id %}">Добавить сообщения</a>
+<a href="{% url 'newsletter:message_create' newsletter.id %}">Добавить сообщение</a>
 {% endif %}
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">

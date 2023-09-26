@@ -41,8 +41,7 @@
                             </div>
                         </div>
                         {% if newsletter.branches.all %}
-                        <p class="mb-1">Рассылка на {% get_count_customers_number newsletter.id %} телефонных номера</p>
-                        <div style="background-color: #dcf8c6; padding:10px;border-radius:5px;">
+                        <p class="mb-1">Рассылка на {% get_customers_count newsletter.id %} телефонный номер</p>                        <div style="background-color: #dcf8c6; padding:10px;border-radius:5px;">
                             {{newsletter.text}}
                         </div>
                         <div class="mailing-list-btn-gruop mt-1">

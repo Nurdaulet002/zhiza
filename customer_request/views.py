@@ -19,6 +19,7 @@ from feedback.models import Rating
 from integrations.models import Integration
 from organizations.models import Branch
 from .models import CustomerRequest
+from .tasks import task_send_message_order_completed
 
 
 class EmployeeIndexView(TemplateResponseMixin, View):
@@ -38,16 +39,15 @@ class SendMessageView(View):
 
     def post(self, request, *args, **kwargs):
         integration = Integration.objects.get(id=self.request.user.branch.integration.id)
-        greenAPI = API.GreenApi(integration.instance_id, integration.token)
-        message = 'Ваш заказ готов! Забирайте в течений 15 минут!'
         card_number = request.POST.get('card_number')
-        customer_requests = CustomerRequest.objects.filter(
-            card_number=card_number, branch=request.user.branch, status=1)
-        for customer_request in customer_requests:
-            greenAPI.sending.sendMessage(f'{customer_request.customer.phone_number}@c.us', message)
-            customer_request.status = 2
-            customer_request.datetime = timezone.now()
-            customer_request.save()
+        branch = request.user.branch
+        data = {
+            'instance_id': integration.instance_id,
+            'token': integration.token,
+            'card_number': card_number,
+            'branch': branch
+        }
+        task_send_message_order_completed(data=data)
         return JsonResponse({'data': {}})
 
 
@@ -178,8 +178,10 @@ def process_incoming_message(data):
         type_message = message_data.get('typeMessage')
 
         if type_message == 'extendedTextMessage':
+            print('===================', type_message)
             process_extended_text_message(data, integration, greenAPI)
         elif type_message == 'textMessage':
+            print('===================', type_message)
             process_text_message(data, integration, greenAPI)
         else:
             # Действия, выполняемые в случае, если type_message не является 'textMessage' или 'extendedTextMessage'

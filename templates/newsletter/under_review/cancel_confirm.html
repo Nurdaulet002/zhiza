@@ -1,13 +1,54 @@
-<h1>Отмена рассылки</h1>
-Название рассылки: <b>{{newsletter.title}}</b><br>
-Сообщений на получателя: <b>{{newsletter.text}}</b><br>
-<h2>Подтвердите отмену рассылки</h2>
-<p>Рассылка будет перемещена обратно в черновики, вы сможете её редактировать и снова запустить.</p>
-<p>Все списанные и не израсходованные средства за рассылку будут возвращены на баланс Вашего аккаунта.</p>
-<form action="{% url 'newsletter:under_review_cancel_confirm' newsletter.id %}" method="post">
-    {% csrf_token %}
-    <input type="submit" value="ОТМЕНИТЬ">
-</form>
+{% extends 'base.html' %}
+{% load static %}
+{% load newsletter_tags %}
+{% block title %} {{newsletter.title}}{% endblock %}
 
-<a href="{% url 'newsletter:draft_list' %}">ОТМЕНА</a>
+{% block content %}
+<div class="content-header ">
+    <div class="header border-bottom">
+        <div class="d-flex align-items-center mb-2">
+            <a id="mobileMenu" href="submenu.html#" class="content-menu d-lg-none"><i data-feather="menu"></i></a>
+            <h2 class="header-title mb-0">Мои рассылки</h2>
+        </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/dashboard-default">Рассылки</a></li>
+                <li class="breadcrumb-item"><a href="/dashboard-default">{{newsletter.title}}</a></li>
+                <li class="breadcrumb-item active" aria-current="page"> Отправка рассылки на проверку</li>
+            </ol>
+        </nav>
+
+    </div>
+</div>
+<div class="content-body">
+    <div class="card">
+         <div class="card-body">
+            <div class="">
+                <h4>Отмена рассылки</h4>
+                <p class="mb-1">Название рассылки: <b>{{newsletter.title}}</b> </p>
+                <p class="mb-2">Сообщений на получателя: <b>{{newsletter.text}}</b></p>
+                <h4 class="d-block mb-2">
+                    <b style="color:#878787">Подтвердите отмену рассылки</b>
+                </h4>
+                <p class="mb-3">Рассылка будет перемещена обратно в черновики, вы сможете её редактировать и снова запустить.
+            </div>
+            <div class="mt-3">
+                <form action="{% url 'newsletter:under_review_cancel_confirm' newsletter.id %}" method="post" >
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-primary" value="ОТМЕНИТЬ">
+                    <a href="{% url 'newsletter:draft_list' %}" style="height: 38px;font-size: 15px;width: 150px; margin-left: 15px;" class="btn btn-bd-light">ОТМЕНА</a>
+
+                </form>
+            </div>
+         </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+
+
+
 

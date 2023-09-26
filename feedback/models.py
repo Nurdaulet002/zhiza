@@ -6,7 +6,7 @@ class Rating(models.Model):
         CustomerRequest, on_delete=models.CASCADE, related_name='rating')
     rating = models.PositiveSmallIntegerField()
     comment = models.TextField(null=True, blank=True)
-    created = models.DateTimeField(null=True, blank=True)
+    created = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'{self.customer_request} {self.rating}'

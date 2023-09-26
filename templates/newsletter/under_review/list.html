@@ -36,12 +36,18 @@
                     <div class="mailing-list">
                         <div class="d-flex justify-content-between align-items-center">
                             <h4>{{newsletter.title}}</h4>
-                            <i data-feather="more-vertical"></i>
+                            <div class="dropdown">
+                              <i data-feather="more-vertical" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"></i>
+                              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                <li><a class="dropdown-item" href="{% url 'newsletter:newsletter_update' newsletter.id %}"><i data-feather="edit"></i>Редактировать</a></li>
+                                <li><a class="dropdown-item" href="{% url 'newsletter:newsletter_delete' newsletter.id %}"><i data-feather="slash"></i>Удалить</a></li>
+                              </ul>
+                            </div>
                         </div>
                     </div>
 
                     {% if newsletter.branches.all %}
-                        <p class="mb-1">{% get_count_customers_number newsletter.id %} номера добавлены</p>
+                        <p class="mb-1">Рассылка на {% get_customers_count newsletter.id %} телефонный номер</p>
                     {% else %}
                         <p class="mb-1">Номера получателей не добавлены</p>
                     {% endif %}

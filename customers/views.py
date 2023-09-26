@@ -97,7 +97,7 @@ class ExportCustomersView(View):
             'created_at__range': (start_date, end_date),
         }
 
-        if branch_id != 'all':
+        if branch_id and branch_id != 'all':
             filters['branch__id'] = branch_id
 
 

@@ -42,7 +42,7 @@ class FeedbackListView(TemplateResponseMixin, View):
     def compute_ratings(self, branch, date_filter):
         customer_requests = CustomerRequest.objects.filter(branch=branch, **date_filter)
         average_rating = customer_requests.aggregate(Avg('rating__rating'))['rating__rating__avg'] or 0
-        branch.average_rating = average_rating
+        branch.average_rating = round(average_rating, 2)
 
         customer_requests_with_comment = customer_requests.filter(rating__comment__isnull=False).exclude(rating__comment__exact='')
         branch.num_ratings_with_comment = customer_requests_with_comment.count()

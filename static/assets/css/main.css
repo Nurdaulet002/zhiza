@@ -318,6 +318,9 @@ thead, tbody, tfoot, tr, td, th:first-child{
         margin-right: 4px;
         font-size: 14px;
     }
+    .toast-header svg{
+        width: 18px;
+    }
     .btn-light-primary svg{
         width: 15px;
         height: 15px;
