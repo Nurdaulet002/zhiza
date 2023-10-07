@@ -287,7 +287,6 @@ class GenerateCode(View):
                     data = {
                         'phone_number': checking_code.winner.customer.phone_number,
                         'message': message,
-                        'instance_id': checking_code.winner.customer.branch.integration.instance_id,
                         'token': checking_code.winner.customer.branch.integration.token,
                     }
                     schedule_send_winner_message(data=data)

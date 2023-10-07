@@ -198,7 +198,7 @@ class StartNewsletterView(TemplateResponseMixin, View):
         newsletter = get_object_or_404(Newsletter, id=newsletter_id)
         newsletter.status = 5
         newsletter.save()
-        schedule_my_job(newsletter=newsletter, instance_id=request.user.branch.integration.instance_id, token=request.user.branch.integration.token)
+        schedule_my_job(newsletter=newsletter, token=request.user.branch.integration.token)
         return redirect('newsletter:detail_summary', newsletter_id)
 
 class InProgressListView(ListView):

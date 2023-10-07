@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from whatsapp_api_client_python import API as API
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from feedback.models import Rating
@@ -15,10 +14,10 @@ def get_or_create_scheduler():
     return scheduler
 
 
-def schedule_my_job(phone_number, instance_id, token):
+def schedule_my_job(phone_number, token):
     scheduler = get_or_create_scheduler()
     run_date = datetime.now() + timedelta(seconds=10)
-    scheduler.add_job(my_scheduled_job, 'date', run_date=run_date, args=[phone_number, instance_id, token])
+    scheduler.add_job(my_scheduled_job, 'date', run_date=run_date, args=[phone_number, token])
 
 
 def check_requests_without_ratings_after_60_minutes():
